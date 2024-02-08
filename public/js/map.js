@@ -7,27 +7,35 @@ let map, markers = [];
 */
 function initMap() {
 
-    // Mapbox tile layer and its settings
-    const mapBoxToken = "pk.eyJ1IjoidHVtZXJvcmt1biIsImEiOiJjampudWt3OGwwOHg3M3BudWd6YTh6aWs2In0.B0Jq-sVRnIqwVkLQ3C5dyg";
-    const MapBox      = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,
-        maxZoom: 20,
-        id: "mapbox.streets",
-        accessToken: mapBoxToken,
-        noWrap: true
-    });
-
     // OpenStreet tile layer and its settings
-    const OpenStreet  = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    const OpenStreet    = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap",
         noWrap: true
     });
 
-    // Google
-    const Google      = L.tileLayer("http://www.google.cn/maps/vt?lyrs=s@189&gl=tr&x={x}&y={y}&z={z}", {
-        attribution: "google",
-        noWrap: true
-    })
+    // GoogleStrees tile layer
+    const GoogleStreets = L.tileLayer("http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
+        maxZoom: 20,
+        subdomains:["mt0", "mt1", "mt2", "mt3"]
+    });
+
+    // GoogleHybrid tile layer
+    const GoogleHybrid  = L.tileLayer("http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}",{
+        maxZoom: 20,
+        subdomains:["mt0", "mt1", "mt2", "mt3"]
+    });
+
+    // GoogleSat tile layer
+    const GoogleSat     = L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",{
+        maxZoom: 20,
+        subdomains:["mt0", "mt1", "mt2", "mt3"]
+    });
+
+    // GoogleTerrain tile layer
+    const GoogleTerrain = L.tileLayer("http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",{
+        maxZoom: 20,
+        subdomains:["mt0", "mt1", "mt2", "mt3"]
+    });
 
     // Grid tile with div
     const gridDivLayer = L.GridLayer.extend({
@@ -113,7 +121,7 @@ function initMap() {
 
     // Layers control
     const gridsAsOverLay = { gridDiv, gridCanvas };
-    const baseMaps       = { MapBox, Google, OpenStreet };
+    const baseMaps       = { GoogleStreets, GoogleHybrid, GoogleSat, GoogleTerrain, OpenStreet };
     const layers         = L.control.layers(baseMaps, gridsAsOverLay, { position: 'topleft' });
 
     // Scale control
@@ -139,7 +147,7 @@ function initMap() {
     // Leaflet map init
     map = L.map("map", {
 
-        layers: [OpenStreet],
+        layers: [GoogleStreets],
 
     }).setView([11.562108, 104.888535], 13); // lat, lng, zoom
 
@@ -162,7 +170,17 @@ function initMap() {
     map.on("draw:created", (event) => {
 
         let layer = event.layer;
+
         drawnItems.addLayer(layer);
+
+        if (event.layerType = 'polyline') {
+            var coords = layer.getLatLngs();
+            var length = 0;
+            for (var i = 0; i < coords.length - 1; i++) {
+                length += coords[i].distanceTo(coords[i + 1]);
+            }
+            console.log(length);
+        }
 
         if (layer instanceof L.Marker) {
             layer.bindPopup(`Latitude: ${layer.getLatLng().lat}</br>Longitude: ${layer.getLatLng().lng}`).openPopup();
