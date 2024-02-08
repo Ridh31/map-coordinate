@@ -59,7 +59,7 @@ function initMap() {
         }
     });
 
-    const gridDiv = new gridDivLayer({
+    const Division = new gridDivLayer({
         noWrap: true,
         bounds: [[-90, -180], [90, 180]]
     });
@@ -93,7 +93,7 @@ function initMap() {
         }
     });
 
-    const gridCanvas = new gridCanvasLayer({
+    const Canvas = new gridCanvasLayer({
         noWrap: true,
         bounds: [[-90, -180], [90, 180]]
     });
@@ -120,12 +120,12 @@ function initMap() {
     const zoom           = L.control.zoomview({ position: 'topleft' });
 
     // Layers control
-    const gridsAsOverLay = { gridDiv, gridCanvas };
+    const gridsAsOverLay = { Division, Canvas };
     const baseMaps       = { GoogleStreets, GoogleHybrid, GoogleSat, GoogleTerrain, OpenStreet };
     const layers         = L.control.layers(baseMaps, gridsAsOverLay, { position: 'topleft' });
 
     // Scale control
-    const scale          = L.control.scale()
+    const scale          = L.control.scale();
 
     // Draw settings
     let drawnItems = new L.featureGroup();
@@ -142,11 +142,12 @@ function initMap() {
                 showArea: true
             }
         }
-    })
+    });
 
     // Leaflet map init
     map = L.map("map", {
 
+        // Default Map
         layers: [GoogleStreets],
 
     }).setView([11.562108, 104.888535], 13); // lat, lng, zoom
@@ -187,6 +188,7 @@ function initMap() {
         }
     });
 
+    // Map edit handler
     map.on("draw:edited", (event) => {
 
         let layers = event.layers;
@@ -198,12 +200,12 @@ function initMap() {
         });
     });
 
-    // map zoom handler
+    // Map zoom handler
     map.on("zoomend", () => {
         zoomDivRef.innerHTML = `Zoom: ${map.getZoom()}`;
     });
 
-    // map click handler
+    // Map click handler
     map.on("click", mapClicked);
 }
 
