@@ -59,7 +59,7 @@ function initMap() {
         }
     });
 
-    const gridDiv = new gridDivLayer({
+    const Division = new gridDivLayer({
         noWrap: true,
         bounds: [[-90, -180], [90, 180]]
     });
@@ -93,7 +93,7 @@ function initMap() {
         }
     });
 
-    const gridCanvas = new gridCanvasLayer({
+    const Canvas = new gridCanvasLayer({
         noWrap: true,
         bounds: [[-90, -180], [90, 180]]
     });
@@ -120,7 +120,7 @@ function initMap() {
     const zoom           = L.control.zoomview({ position: 'topleft' });
 
     // Layers control
-    const gridsAsOverLay = { gridDiv, gridCanvas };
+    const gridsAsOverLay = { Division, Canvas };
     const baseMaps       = { GoogleStreets, GoogleHybrid, GoogleSat, GoogleTerrain, OpenStreet };
     const layers         = L.control.layers(baseMaps, gridsAsOverLay, { position: 'topleft' });
 
