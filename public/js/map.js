@@ -487,4 +487,3 @@ function utilizeRouting(latlngStart, latlngEnd) {
 // Invoke Routing function
 locateRoutingMarker("#mark-routing");
 generateRoutingMarker("#generate-routing");
-
