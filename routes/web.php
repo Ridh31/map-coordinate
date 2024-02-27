@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\DriverTrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,3 +16,6 @@ use App\Http\Controllers\MapController;
 */
 
 Route::get('/', [MapController::class, 'index']);
+Route::get('/track-driver', [DriverTrackingController::class, 'trackDriver']);
+Route::get('/mapLine', [DriverTrackingController::class, 'mapLine']);
+Route::get('/geoapify', [DriverTrackingController::class, 'geoapifyMap']);
