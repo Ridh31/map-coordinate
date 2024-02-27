@@ -244,7 +244,7 @@ function initMap() {
                             <input
                                 type="text"
                                 id="routing-locate-i"
-                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8 border: 1px solid #D3D3D3"
+                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3"
                                 disabled="disabled"
                                 placeholder="Location Address Here">
                         </div>
