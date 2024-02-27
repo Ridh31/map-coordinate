@@ -11,6 +11,9 @@
 
     {{-- Header --}}
     @include('layouts.header')
+
+    @yield('style')
+    
 </head>
 
 <body>
