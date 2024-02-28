@@ -78,7 +78,7 @@ class PolylineController extends Controller
     }
     public function geoapifyMap(Request $request)
     {
-        $result = polylinModel::geoapifyDataMap();
+        $result = polylinModel::geoapifyDataMap($request);
         return $result;
     }
 
