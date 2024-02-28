@@ -2,29 +2,41 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\responseController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\paginationModel;
+use Illuminate\Support\Facades\DB;
 
 class polylinModel extends Model
 {
     use HasFactory;
-    public static function geoapifyDataMap()
+    public static function geoapifyDataMap($request)
     {
+        
+        $waypoints = $request->waypoints;
+        $mode = $request->mode;
+        $apiKey = env('GEOAPIFY_KEY');
+        $route = 'https://api.geoapify.com/v1/routing?waypoints='. $waypoints. '&mode='. $mode. '&apiKey='.$apiKey;
         $curl = curl_init();
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://api.geoapify.com/v1/routing?waypoints=11.563439963671115,104.91406337699937|11.557007110857569,104.92041484794618&mode=drive&apiKey=c52e09b0f9d7449c8265cb341a1c3b89',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        
+        curl_setopt_array($curl, 
+                        array(
+                            CURLOPT_URL => $route, 
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'GET',
+                        ));
 
         $response = curl_exec($curl);
 
+        // dd($response);
         curl_close($curl);
-        echo $response;
+        return responseController::success($response) ;
+            
     }
 }
