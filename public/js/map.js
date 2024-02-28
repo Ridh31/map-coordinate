@@ -290,7 +290,7 @@ function initMap() {
 
                     <!-- Routing Result -->
                     <textarea
-                        id="routing-response" style="height: 100%; overflow: auto; border: 1px solid lightgray; background-color: #FAFAFA; padding: 5px;"
+                        id="routing-response" style="height: 100vh; overflow: auto; border: 1px solid lightgray; background-color: #FAFAFA; padding: 5px;"
                         disabled="disabled">
                     </textarea>
                 </div>`;
