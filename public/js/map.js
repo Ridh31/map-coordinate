@@ -103,7 +103,9 @@ function initMap() {
     const ZoomView = L.Control.extend({
         onAdd: function(map) {
 
-            var div       = L.DomUtil.create("div", "leaflet-zoom-control leaflet-bar-part leaflet-bar");
+            var div = L.DomUtil.create("div", "leaflet-zoom-control leaflet-bar-part leaflet-bar");
+
+            div.style.cssText = `padding: 3px 7px`;
 
             div.innerHTML = "Zoom: " + map.getZoom();
             zoomDivRef    = div;
@@ -216,8 +218,10 @@ function initMap() {
 
             routing.style.cssText = `
                 background: #FFF;
-                padding: 5px;
+                width: 70vh;
+                height: 100vh;
                 white-space: nowrap;
+                padding: 5px;
                 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
                 margin-top: -5px;
                 margin-right: -5px;
@@ -225,7 +229,7 @@ function initMap() {
 
             routing.innerHTML = `
 
-                <div style="display: flex; flex-direction: column; gap: 20px; width: 50vh; height: 100vh; padding: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 20px; padding: 20px;">
 
                     <!-- Title & Description -->
                     <div style="font-size: 20px;">Routing</div>
@@ -244,7 +248,7 @@ function initMap() {
                             <input
                                 type="text"
                                 id="routing-locate-i"
-                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3"
+                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;"
                                 disabled="disabled"
                                 placeholder="Location Address Here">
                         </div>
@@ -257,7 +261,7 @@ function initMap() {
                             <input
                                 type="text"
                                 id="routing-locate-ii"
-                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3"
+                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;"
                                 disabled="disabled"
                                 placeholder="Location Address Here">
                         </div>
@@ -285,10 +289,7 @@ function initMap() {
                     </div>
 
                     <!-- Routing Result -->
-                    <textarea
-                        id="routing-response" style="height: 100%; overflow: auto; border: 1px solid #D3D3D3; background-color: #FAFAFA; padding: 5px;"
-                        disabled="disabled">
-                    </textarea>
+                    <div id="routing-response" style="height: 100vh; overflow: auto; border: 1px solid lightgray; background-color: #FAFAFA; padding: 5px;"></div>
                 </div>`;
 
             return routing;
@@ -434,25 +435,25 @@ function generateRoutingMarker(generate) {
 
         if (routingLocateI.val() && routingLocateII.val()) {
 
-            routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3");
-            routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3");
+            routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;");
+            routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;");
 
             utilizeRouting(routingLocateI.val(), routingLocateII.val());
 
         } else {
 
             if (!routingLocateI.val()) {
-                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid red");
+                routingLocateI.attr("style", "width: 100%; border: 1px solid red; padding: 7px; color: #1A73E8;");
 
             } else {
-                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3");
+                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;");
             }
 
             if (!routingLocateII.val()) {
-                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid red");
+                routingLocateII.attr("style", "width: 100%; border: 1px solid red; padding: 7px; color: #D56D00;");
 
             } else {
-                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3");
+                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;");
             }
         }
     })
@@ -464,24 +465,116 @@ function utilizeRouting(latlngStart, latlngEnd) {
     $.ajax({
 
         type: "GET",
-        url: "https://api.geoapify.com/v1/routing",
+        url: "api/geoapify",
         data: {
             waypoints: `${latlngStart}|${latlngEnd}`,
-            mode: "drive",
-            apiKey: "cb1ca3fefb1b4ceababe7e472549747d"
+            mode: "drive"
         },
         dataType: "json",
         success: function (response) {
 
-            if (response) {
-                var textedJson = JSON.stringify(response, undefined, 4);
-                routingResponse.text(textedJson);
+            if (response.status == 200) {
+
+                // Invoke connect routes
+                connectRouting(JSON.parse(response.result));
 
             } else {
                 routingResponse.text("There was an error!");
             }
         }
     });
+}
+
+var coordinates  = []
+var steps        = [];
+var instructions = [];
+var stepPoints   = [];
+
+// Connect between routes
+function connectRouting(data) {
+
+    data.features[0].properties.legs.forEach((leg, legIndex) => {
+
+        const legGeometry = data.features[0].geometry.coordinates[legIndex];
+
+        leg.steps.forEach((step, index) => {
+            if (step.instruction) {
+                instructions.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": legGeometry[step.from_index]
+                    },
+                    properties: {
+                        text: step.instruction.text
+                    }
+                });
+            }
+
+            if (index !== 0) {
+                stepPoints.push({
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": legGeometry[step.from_index]
+                    },
+                    properties: step
+                })
+            }
+
+            if (step.from_index === step.to_index) {
+                // destination point
+                return;
+            }
+
+            const stepGeometry = legGeometry.slice(step.from_index, step.to_index + 1);
+            steps.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": stepGeometry
+                },
+                properties: step
+            });
+        });
+    });
+
+    $.each(data.features[0].geometry.coordinates[0], (index, coordinate) => {
+        coordinates.push([coordinate[1], coordinate[0]]);
+    });
+
+    if (coordinates.length > 0) {
+
+        var polylineOptions = {
+            color: "rgba(20, 137, 255, 0.7)",
+            weight: 7,
+            opacity: 0.7
+        };
+
+        var pathLine = new L.polyline(coordinates, polylineOptions).addTo(map);
+        map.fitBounds(pathLine.getBounds());
+
+        routingResponse.empty();
+
+        // Show results in the textarea
+        $.each(instructions, (index, route) => {
+            routingResponse.append(`
+                <div style="display: flex;">
+                    <svg height="20px" width="20px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 280.028 280.028" xml:space="preserve">
+                        <g>
+                            <path style="fill:#324D5B;" d="M131.263,131.263v140.014c0,4.839,3.912,8.751,8.751,8.751s8.751-3.912,8.751-8.751V131.263H131.263z"/>
+                            <path style="fill:#E2574C;" d="M140.014,0c48.331,0,87.509,39.186,87.509,87.509s-39.178,87.517-87.509,87.517c-48.322,0.009-87.509-39.195-87.509-87.517S91.691,0,140.014,0z"/>
+                            <path style="fill:#E87970;" d="M166.266,43.763c14.5,0,26.253,11.744,26.253,26.244S180.767,96.26,166.266,96.26c-14.491,0-26.253-11.752-26.253-26.253C140.014,55.515,151.775,43.763,166.266,43.763z"/>
+                            <path style="fill:#CB4E44;" d="M148.765,166.284c-48.313,0-87.509-39.204-87.509-87.526c0-21.938,8.13-41.934,21.466-57.292C64.24,37.524,52.505,61.125,52.505,87.509c0,48.322,39.186,87.517,87.509,87.517c26.393,0,49.994-11.744,66.043-30.217C190.699,158.163,170.703,166.284,148.765,166.284z"/>
+                        </g>
+                    </svg>
+                    <span style="flex-basis: auto; margin-left: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #758CA3; margin-left: 5px;">
+                        ${route.properties.text}
+                    </span>
+                </div>
+            `);
+        });
+    }
 }
 
 // Invoke Routing function
