@@ -218,8 +218,10 @@ function initMap() {
 
             routing.style.cssText = `
                 background: #FFF;
-                padding: 5px;
+                width: 50vh;
+                height: 100vh;
                 white-space: nowrap;
+                padding: 5px;
                 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
                 margin-top: -5px;
                 margin-right: -5px;
@@ -227,7 +229,7 @@ function initMap() {
 
             routing.innerHTML = `
 
-                <div style="display: flex; flex-direction: column; gap: 20px; width: 50vh; height: 100vh; padding: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 20px; padding: 20px;">
 
                     <!-- Title & Description -->
                     <div style="font-size: 20px;">Routing</div>
