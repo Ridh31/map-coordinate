@@ -103,7 +103,9 @@ function initMap() {
     const ZoomView = L.Control.extend({
         onAdd: function(map) {
 
-            var div       = L.DomUtil.create("div", "leaflet-zoom-control leaflet-bar-part leaflet-bar");
+            var div = L.DomUtil.create("div", "leaflet-zoom-control leaflet-bar-part leaflet-bar");
+
+            div.style.cssText = `padding: 3px 7px`;
 
             div.innerHTML = "Zoom: " + map.getZoom();
             zoomDivRef    = div;
@@ -244,7 +246,7 @@ function initMap() {
                             <input
                                 type="text"
                                 id="routing-locate-i"
-                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3"
+                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;"
                                 disabled="disabled"
                                 placeholder="Location Address Here">
                         </div>
@@ -257,7 +259,7 @@ function initMap() {
                             <input
                                 type="text"
                                 id="routing-locate-ii"
-                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3"
+                                style="width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;"
                                 disabled="disabled"
                                 placeholder="Location Address Here">
                         </div>
@@ -286,7 +288,7 @@ function initMap() {
 
                     <!-- Routing Result -->
                     <textarea
-                        id="routing-response" style="height: 100%; overflow: auto; border: 1px solid #D3D3D3; background-color: #FAFAFA; padding: 5px;"
+                        id="routing-response" style="height: 100%; overflow: auto; border: 1px solid lightgray; background-color: #FAFAFA; padding: 5px;"
                         disabled="disabled">
                     </textarea>
                 </div>`;
@@ -434,25 +436,25 @@ function generateRoutingMarker(generate) {
 
         if (routingLocateI.val() && routingLocateII.val()) {
 
-            routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3");
-            routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3");
+            routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;");
+            routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;");
 
             utilizeRouting(routingLocateI.val(), routingLocateII.val());
 
         } else {
 
             if (!routingLocateI.val()) {
-                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid red");
+                routingLocateI.attr("style", "width: 100%; border: 1px solid red; padding: 7px; color: #1A73E8;");
 
             } else {
-                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8; border: 1px solid #D3D3D3");
+                routingLocateI.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #1A73E8;");
             }
 
             if (!routingLocateII.val()) {
-                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid red");
+                routingLocateII.attr("style", "width: 100%; border: 1px solid red; padding: 7px; color: #D56D00;");
 
             } else {
-                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00; border: 1px solid #D3D3D3");
+                routingLocateII.attr("style", "width: 100%; border: 1px solid lightgray; padding: 7px; color: #D56D00;");
             }
         }
     })
