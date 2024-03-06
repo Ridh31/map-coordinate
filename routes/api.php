@@ -8,6 +8,7 @@ use App\Http\Controllers\OverpassController;
 use App\Http\Controllers\OwnTracksController;
 use App\Http\Controllers\PolylineController;
 use App\Http\Controllers\DriverTrackingController;
+use App\Listeners\DriverLocationUpdatedListener;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +35,6 @@ Route::get('/calculate-distancee', [PolylineController::class, 'calculateDistanc
 Route::post('/owntracks/location', [OwnTracksController::class, 'receiveLocation']);
 Route::get('/owntracks/location', [OwnTracksController::class, 'indexLocation']);
 Route::get('/geoapify', [PolylineController::class, 'geoapifyMap']);
+Route::post('update-driver-location', [OwnTracksController::class, 'handle']);
 
 
