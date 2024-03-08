@@ -18,7 +18,7 @@ class Driver extends Model
             'lon' => $longitude
             // Add more columns and values as needed
         ]);
-        broadcast(new DriverLocationUpdated('',$latitude,$longitude))->toOthers();
+        broadcast(new DriverLocationUpdated($latitude,$longitude))->toOthers();
         // dd($result);
         return responseController::success($result);
     }
