@@ -278,12 +278,19 @@ function initMap() {
                             </button>
                         </div>
 
-                        <div style="display: flex; margin-left: auto;">
+                        <div style="display: flex; gap: 5px; margin-left: auto;">
                             <button
                                 type="button"
                                 id="generate-routing"
                                 style="padding: 7px 15px; border-radius: 5px; background-color: #50C878; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                                 Generate
+                            </button>
+
+                            <button
+                                type="button"
+                                id="start-routing"
+                                style="padding: 7px 15px; border-radius: 5px; background-color: #EDC42E; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; display: none;">
+                                Start
                             </button>
                         </div>
                     </div>
@@ -473,7 +480,7 @@ function utilizeRouting(latlngStart, latlngEnd) {
         dataType: "json",
         success: function (response) {
 
-            if (response.status == 200) {
+            if (response.status == 200 && JSON.parse(response.result).features) {
 
                 // Invoke connect routes
                 connectRouting(JSON.parse(response.result));
@@ -545,8 +552,11 @@ function connectRouting(data) {
 
     if (coordinates.length > 0) {
 
+        // Invoke start
+        startRouting("#start-routing", coordinates);
+
         var polylineOptions = {
-            color: "rgba(20, 137, 255, 0.7)",
+            color: "rgba(66, 133, 244, 0.7)",
             weight: 7,
             opacity: 0.7
         };
@@ -575,6 +585,16 @@ function connectRouting(data) {
             `);
         });
     }
+}
+
+// Start Routing
+function startRouting(start, coordinates) {
+
+    $(start).fadeIn();
+
+    $(start).on("click", function(e) {
+        e.preventDefault();
+    });
 }
 
 // Invoke Routing function
