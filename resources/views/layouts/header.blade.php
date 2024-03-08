@@ -15,3 +15,9 @@
 
 {{-- Clock Font --}}
 <link rel="stylesheet" href="{{ asset('css/digital.css') }}">
+
+{{-- Socket io --}}
+{{-- <script src="{{ asset('js/socket.io.min.js') }}" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script> --}}
+
+{{-- WebSocket --}}
+{{-- <script type="application/javascript" src="{{ asset('js/web_socket.min.js') }}"></script> --}}
