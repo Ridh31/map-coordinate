@@ -53,16 +53,4 @@
     @include('layouts.footer')
 </body>
 
-<script src="https://cdn.socket.io/4.7.4/socket.io.esm.min.js"></script>
-
-<script>
-
-    // var channel = Echo.channel("my-channel");
-
-    const socket = io();
-
-    console.log(socket);
-
-</script>
-
 </html>
