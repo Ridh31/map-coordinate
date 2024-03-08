@@ -278,12 +278,19 @@ function initMap() {
                             </button>
                         </div>
 
-                        <div style="display: flex; margin-left: auto;">
+                        <div style="display: flex; gap: 5px; margin-left: auto;">
                             <button
                                 type="button"
                                 id="generate-routing"
                                 style="padding: 7px 15px; border-radius: 5px; background-color: #50C878; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
                                 Generate
+                            </button>
+
+                            <button
+                                type="button"
+                                id="start-routing"
+                                style="padding: 7px 15px; border-radius: 5px; background-color: #EDC42E; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                                Start
                             </button>
                         </div>
                     </div>

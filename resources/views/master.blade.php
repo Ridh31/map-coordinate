@@ -24,6 +24,7 @@
                 {{-- Logo & title --}}
                 <a href="/" class="flex items-center">
                     <img src="{{ asset('images/map-coordinate.png') }}" class="mr-3 h-6 sm:h-9" alt="Map Coordinate"/>
+                    <h1 class="font-bold text-white hidden sm:block">Map Coordinate</h1>
                 </a>
 
                 {{-- Header Items --}}
@@ -31,7 +32,7 @@
 
                     {{-- Login & Get started --}}
                     <a href="https://www.openstreetmap.org/" target="_blank" class="text-white hover:text-[#EDC42E] focus:ring-0 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-0">OSM</a>
-                    <a href="https://overpass-api.de/" target="_blank" class="text-white bg-[#EDC42E] focus:ring-0 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-[#EDC42E] focus:outline-none dark:focus:ring-0">Overpass API</a>
+                    {{-- <a href="https://overpass-api.de/" target="_blank" class="text-white bg-[#EDC42E] focus:ring-0 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-[#EDC42E] focus:outline-none dark:focus:ring-0">Overpass API</a> --}}
                 </div>
             </div>
         </nav>

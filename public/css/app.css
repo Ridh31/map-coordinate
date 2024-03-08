@@ -547,6 +547,9 @@ video {
 .flex {
   display: flex;
 }
+.hidden {
+  display: none;
+}
 .h-6 {
   height: 1.5rem;
 }
@@ -733,6 +736,10 @@ body, html {
 }
 
 @media (min-width: 640px) {
+
+  .sm\:block {
+    display: block;
+  }
 
   .sm\:h-9 {
     height: 2.25rem;
