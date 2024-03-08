@@ -289,7 +289,7 @@ function initMap() {
                             <button
                                 type="button"
                                 id="start-routing"
-                                style="padding: 7px 15px; border-radius: 5px; background-color: #EDC42E; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+                                style="padding: 7px 15px; border-radius: 5px; background-color: #EDC42E; color: white; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; display: none;">
                                 Start
                             </button>
                         </div>
@@ -552,6 +552,9 @@ function connectRouting(data) {
 
     if (coordinates.length > 0) {
 
+        // Invoke start
+        startRouting("#start-routing", coordinates);
+
         var polylineOptions = {
             color: "rgba(20, 137, 255, 0.7)",
             weight: 7,
@@ -582,6 +585,16 @@ function connectRouting(data) {
             `);
         });
     }
+}
+
+// Start Routing
+function startRouting(start, coordinates) {
+
+    $(start).fadeIn();
+
+    $(start).on("click", function(e) {
+        e.preventDefault();
+    });
 }
 
 // Invoke Routing function
