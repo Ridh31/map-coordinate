@@ -60,9 +60,8 @@ class OwnTracksController extends Controller
         // return $distance;
     }
 
-    public function handle(Request $request)
+    public function insertLocation(Request $request)
     {
-
         $latitude    =  $request->latitude;
         $longitude    =  $request->longitude;
         $result = Driver::getDriver($latitude,$longitude);
