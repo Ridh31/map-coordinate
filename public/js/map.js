@@ -480,7 +480,7 @@ function utilizeRouting(latlngStart, latlngEnd) {
         dataType: "json",
         success: function (response) {
 
-            if (response.status == 200) {
+            if (response.status == 200 && JSON.parse(response.result).features) {
 
                 // Invoke connect routes
                 connectRouting(JSON.parse(response.result));
@@ -556,7 +556,7 @@ function connectRouting(data) {
         startRouting("#start-routing", coordinates);
 
         var polylineOptions = {
-            color: "rgba(20, 137, 255, 0.7)",
+            color: "rgba(66, 133, 244, 0.7)",
             weight: 7,
             opacity: 0.7
         };
