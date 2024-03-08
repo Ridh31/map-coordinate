@@ -1,48 +1,48 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Tracking</title>
-    <style>
-        #map {
-            height: 500px;
-        }
-    </style>
-</head>
-<body>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<div id="map"></div>
+        <title>Laravel EventStream</title>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    var map = L.map('map').setView([0, 0], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+        {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
+    </head>
+    <body>
+        <div class="container w-full mx-auto pt-20">
+            <div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
 
-    function updateDriverLocation() {
-        // Make an HTTP request to get the latest driver coordinates
-        fetch('/track-driver')
-            .then(response => response.json())
-            .then(data => {
-                // Update the marker position on the map
-                if (marker) {
-                    marker.setLatLng([data.lat, data.lon]);
-                } else {
-                    marker = L.marker([data.lat, data.lon]).addTo(map);
-                }
-
-                // Schedule the next update after a delay (adjust as needed)
-                setTimeout(updateDriverLocation, 5000); // Update every 5 seconds
+                <div class="flex flex-wrap">
+                    <div class="w-full md:w-2/2 xl:w-3/3 p-3">
+                        <div class="bg-white border rounded shadow p-2">
+                            <div class="flex flex-row items-center">
+                                <div class="flex-shrink pr-4">
+                                    <div class="rounded p-3 bg-yellow-600"><i class="fas fa-user-plus fa-2x fa-fw fa-inverse"></i></div>
+                                </div>
+                                <div class="flex-1 text-right md:text-center">
+                                    <h5 class="font-bold uppercase text-gray-500">Latest trade</h5>
+                                    <h3 class="font-bold text-3xl">
+                                        <p>
+                                            Name: <span id="latest_trade_user"></span>
+                                        </p>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        Echo.channel('channel-name')
+            .listen('DriverLocationUpdated', (id) => {
+                console.log(id);
+                // document.getElementById('latest_trade_user').innerText = e.trade;
             })
-            .catch(error => console.error('Error:', error));
-    }
-
-    var marker;
-    updateDriverLocation(); // Start the tracking
-</script>
-
-</body>
-</html> --}}
-
+    </script>
+</html>

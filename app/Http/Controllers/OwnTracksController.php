@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
 use Illuminate\Http\Request;
 use App\Models\OwnTracksLocation; // Replace with your own model
 use Illuminate\Support\Facades\DB;
@@ -57,5 +58,15 @@ class OwnTracksController extends Controller
         return "The distance between locations is approximately {$distance} kilometers.";
         // dd($distance);
         // return $distance;
+    }
+
+    public function handle(Request $request)
+    {
+
+        $latitude    =  $request->latitude;
+        $longitude    =  $request->longitude;
+        $result = Driver::getDriver($latitude,$longitude);
+
+        return $result;
     }
 }
