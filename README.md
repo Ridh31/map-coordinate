@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd35d0276-5b80-494a-be9c-8ca6cd9a56fd_480x480.gif" width="300" alt="Map Coordinate">
+    <img src="https://gifdb.com/images/high/map-cartoon-blue-blob-looking-directions-q9b6qv682oqfykjs.gif" width="300" alt="Map Coordinate">
 </p>
 
 ## About map-coordinate
