@@ -15,3 +15,7 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         //
     ]);
+
+mix.js([
+    'resources/js/echo.min.js',
+], 'public/js/echo.min.js');
