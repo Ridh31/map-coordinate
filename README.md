@@ -15,6 +15,9 @@ git clone https://github.com/turbotechlabs/map-coordinate.git
 composer install && composer update
 ```
 ```
+npm install && npm update
+```
+```
 php artisan key:generate
 ```
 ```
