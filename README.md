@@ -18,6 +18,9 @@ composer install && composer update
 php artisan key:generate
 ```
 ```
+php artisan websockets:ser
+```
+```
 php artisan serve
 ```
 
