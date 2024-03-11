@@ -19,8 +19,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-window.Pusher = Pusher;
-window.Echo   = new Echo({
+const options = {
     broadcaster: 'pusher',
     key: '991a49d0e1a6f91f5440',
     wsHost: window.location.hostname,
@@ -28,4 +27,11 @@ window.Echo   = new Echo({
     wssPort: 6001,
     disableStats: true,
     forceTLS: false,
+    encrypted: true,
+}
+
+window.Pusher = Pusher;
+window.Echo   = new Echo({
+    ...options,
+    client: new Pusher(options.key, options)
 });
