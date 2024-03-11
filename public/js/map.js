@@ -597,6 +597,40 @@ function startRouting(start, coordinates) {
     });
 }
 
+// Moving marker
+function movingMarker(lat, lon) {
+
+    var http   = new XMLHttpRequest();
+    var url    = 'api/update-driver-location';
+    var params = `latitude=${lat}&longitude=${lon}`;
+
+    http.open('POST', url, true);
+
+    // Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    http.onreadystatechange = function() {
+        if (http.readyState == 4 && http.status == 200) {
+
+            // Do something here...
+        }
+    }
+    http.send(params);
+}
+
+// Real time
+function echoSocket() {
+
+    window.onload = function() {
+
+        Echo.channel('channel-name').listen('DriverLocationUpdated', (e) => {
+            console.log("Received Data: ");
+            console.log(e);
+        });
+    };
+}
+
 // Invoke Routing function
 locateRoutingMarker("#mark-routing");
 generateRoutingMarker("#generate-routing");
+echoSocket();
