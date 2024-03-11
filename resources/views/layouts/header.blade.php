@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="{{ asset('css/leaflet.draw.css') }}"/>
 <script src="{{ asset('js/leaflet.draw.js') }}"></script>
 
+{{-- Moving Markder --}}
+<script src="{{ asset('js/MovingMarker.min.js') }}"></script>
+
 {{-- Include CSS/JS --}}
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <script src="{{ asset('js/app.js') }}" defer></script>

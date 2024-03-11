@@ -1,2 +1,6499 @@
-/*! For license information please see app.js.LICENSE.txt */
-(()=>{var t,e={420:(t,e,n)=>{"use strict";function i(t){return i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i(t)}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function s(t,e){for(var n=0;n<e.length;n++){var i=e[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(t,i.key,i)}}function o(t,e,n){return e&&s(t.prototype,e),n&&s(t,n),Object.defineProperty(t,"prototype",{writable:!1}),t}function a(){return a=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var i in n)Object.prototype.hasOwnProperty.call(n,i)&&(t[i]=n[i])}return t},a.apply(this,arguments)}function c(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&u(t,e)}function h(t){return h=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)},h(t)}function u(t,e){return u=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t},u(t,e)}function l(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(t)}function d(t){var e=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),!0}catch(t){return!1}}();return function(){var n,i=h(t);if(e){var r=h(this).constructor;n=Reflect.construct(i,arguments,r)}else n=i.apply(this,arguments);return l(this,n)}}var p=function(){function t(){r(this,t)}return o(t,[{key:"listenForWhisper",value:function(t,e){return this.listen(".client-"+t,e)}},{key:"notification",value:function(t){return this.listen(".Illuminate\\Notifications\\Events\\BroadcastNotificationCreated",t)}},{key:"stopListeningForWhisper",value:function(t,e){return this.stopListening(".client-"+t,e)}}]),t}(),f=function(){function t(e){r(this,t),this.namespace=e}return o(t,[{key:"format",value:function(t){return"."===t.charAt(0)||"\\"===t.charAt(0)?t.substr(1):(this.namespace&&(t=this.namespace+"."+t),t.replace(/\./g,"\\"))}},{key:"setNamespace",value:function(t){this.namespace=t}}]),t}(),v=function(t){c(n,t);var e=d(n);function n(t,i,s){var o;return r(this,n),(o=e.call(this)).name=i,o.pusher=t,o.options=s,o.eventFormatter=new f(o.options.namespace),o.subscribe(),o}return o(n,[{key:"subscribe",value:function(){this.subscription=this.pusher.subscribe(this.name)}},{key:"unsubscribe",value:function(){this.pusher.unsubscribe(this.name)}},{key:"listen",value:function(t,e){return this.on(this.eventFormatter.format(t),e),this}},{key:"listenToAll",value:function(t){var e=this;return this.subscription.bind_global((function(n,i){if(!n.startsWith("pusher:")){var r=e.options.namespace.replace(/\./g,"\\"),s=n.startsWith(r)?n.substring(r.length+1):"."+n;t(s,i)}})),this}},{key:"stopListening",value:function(t,e){return e?this.subscription.unbind(this.eventFormatter.format(t),e):this.subscription.unbind(this.eventFormatter.format(t)),this}},{key:"stopListeningToAll",value:function(t){return t?this.subscription.unbind_global(t):this.subscription.unbind_global(),this}},{key:"subscribed",value:function(t){return this.on("pusher:subscription_succeeded",(function(){t()})),this}},{key:"error",value:function(t){return this.on("pusher:subscription_error",(function(e){t(e)})),this}},{key:"on",value:function(t,e){return this.subscription.bind(t,e),this}}]),n}(p),g=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"whisper",value:function(t,e){return this.pusher.channels.channels[this.name].trigger("client-".concat(t),e),this}}]),n}(v),b=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"whisper",value:function(t,e){return this.pusher.channels.channels[this.name].trigger("client-".concat(t),e),this}}]),n}(v),m=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"here",value:function(t){return this.on("pusher:subscription_succeeded",(function(e){t(Object.keys(e.members).map((function(t){return e.members[t]})))})),this}},{key:"joining",value:function(t){return this.on("pusher:member_added",(function(e){t(e.info)})),this}},{key:"whisper",value:function(t,e){return this.pusher.channels.channels[this.name].trigger("client-".concat(t),e),this}},{key:"leaving",value:function(t){return this.on("pusher:member_removed",(function(e){t(e.info)})),this}}]),n}(v),y=function(t){c(n,t);var e=d(n);function n(t,i,s){var o;return r(this,n),(o=e.call(this)).events={},o.listeners={},o.name=i,o.socket=t,o.options=s,o.eventFormatter=new f(o.options.namespace),o.subscribe(),o}return o(n,[{key:"subscribe",value:function(){this.socket.emit("subscribe",{channel:this.name,auth:this.options.auth||{}})}},{key:"unsubscribe",value:function(){this.unbind(),this.socket.emit("unsubscribe",{channel:this.name,auth:this.options.auth||{}})}},{key:"listen",value:function(t,e){return this.on(this.eventFormatter.format(t),e),this}},{key:"stopListening",value:function(t,e){return this.unbindEvent(this.eventFormatter.format(t),e),this}},{key:"subscribed",value:function(t){return this.on("connect",(function(e){t(e)})),this}},{key:"error",value:function(t){return this}},{key:"on",value:function(t,e){var n=this;return this.listeners[t]=this.listeners[t]||[],this.events[t]||(this.events[t]=function(e,i){n.name===e&&n.listeners[t]&&n.listeners[t].forEach((function(t){return t(i)}))},this.socket.on(t,this.events[t])),this.listeners[t].push(e),this}},{key:"unbind",value:function(){var t=this;Object.keys(this.events).forEach((function(e){t.unbindEvent(e)}))}},{key:"unbindEvent",value:function(t,e){this.listeners[t]=this.listeners[t]||[],e&&(this.listeners[t]=this.listeners[t].filter((function(t){return t!==e}))),e&&0!==this.listeners[t].length||(this.events[t]&&(this.socket.removeListener(t,this.events[t]),delete this.events[t]),delete this.listeners[t])}}]),n}(p),k=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"whisper",value:function(t,e){return this.socket.emit("client event",{channel:this.name,event:"client-".concat(t),data:e}),this}}]),n}(y),w=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"here",value:function(t){return this.on("presence:subscribed",(function(e){t(e.map((function(t){return t.user_info})))})),this}},{key:"joining",value:function(t){return this.on("presence:joining",(function(e){return t(e.user_info)})),this}},{key:"whisper",value:function(t,e){return this.socket.emit("client event",{channel:this.name,event:"client-".concat(t),data:e}),this}},{key:"leaving",value:function(t){return this.on("presence:leaving",(function(e){return t(e.user_info)})),this}}]),n}(k),S=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"subscribe",value:function(){}},{key:"unsubscribe",value:function(){}},{key:"listen",value:function(t,e){return this}},{key:"listenToAll",value:function(t){return this}},{key:"stopListening",value:function(t,e){return this}},{key:"subscribed",value:function(t){return this}},{key:"error",value:function(t){return this}},{key:"on",value:function(t,e){return this}}]),n}(p),_=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"whisper",value:function(t,e){return this}}]),n}(S),C=function(t){c(n,t);var e=d(n);function n(){return r(this,n),e.apply(this,arguments)}return o(n,[{key:"here",value:function(t){return this}},{key:"joining",value:function(t){return this}},{key:"whisper",value:function(t,e){return this}},{key:"leaving",value:function(t){return this}}]),n}(S),T=function(){function t(e){r(this,t),this._defaultOptions={auth:{headers:{}},authEndpoint:"/broadcasting/auth",userAuthentication:{endpoint:"/broadcasting/user-auth",headers:{}},broadcaster:"pusher",csrfToken:null,bearerToken:null,host:null,key:null,namespace:"App.Events"},this.setOptions(e),this.connect()}return o(t,[{key:"setOptions",value:function(t){this.options=a(this._defaultOptions,t);var e=this.csrfToken();return e&&(this.options.auth.headers["X-CSRF-TOKEN"]=e,this.options.userAuthentication.headers["X-CSRF-TOKEN"]=e),(e=this.options.bearerToken)&&(this.options.auth.headers.Authorization="Bearer "+e,this.options.userAuthentication.headers.Authorization="Bearer "+e),t}},{key:"csrfToken",value:function(){var t;return"undefined"!=typeof window&&window.Laravel&&window.Laravel.csrfToken?window.Laravel.csrfToken:this.options.csrfToken?this.options.csrfToken:"undefined"!=typeof document&&"function"==typeof document.querySelector&&(t=document.querySelector('meta[name="csrf-token"]'))?t.getAttribute("content"):null}}]),t}(),P=function(t){c(n,t);var e=d(n);function n(){var t;return r(this,n),(t=e.apply(this,arguments)).channels={},t}return o(n,[{key:"connect",value:function(){void 0!==this.options.client?this.pusher=this.options.client:this.options.Pusher?this.pusher=new this.options.Pusher(this.options.key,this.options):this.pusher=new Pusher(this.options.key,this.options)}},{key:"signin",value:function(){this.pusher.signin()}},{key:"listen",value:function(t,e,n){return this.channel(t).listen(e,n)}},{key:"channel",value:function(t){return this.channels[t]||(this.channels[t]=new v(this.pusher,t,this.options)),this.channels[t]}},{key:"privateChannel",value:function(t){return this.channels["private-"+t]||(this.channels["private-"+t]=new g(this.pusher,"private-"+t,this.options)),this.channels["private-"+t]}},{key:"encryptedPrivateChannel",value:function(t){return this.channels["private-encrypted-"+t]||(this.channels["private-encrypted-"+t]=new b(this.pusher,"private-encrypted-"+t,this.options)),this.channels["private-encrypted-"+t]}},{key:"presenceChannel",value:function(t){return this.channels["presence-"+t]||(this.channels["presence-"+t]=new m(this.pusher,"presence-"+t,this.options)),this.channels["presence-"+t]}},{key:"leave",value:function(t){var e=this;[t,"private-"+t,"private-encrypted-"+t,"presence-"+t].forEach((function(t,n){e.leaveChannel(t)}))}},{key:"leaveChannel",value:function(t){this.channels[t]&&(this.channels[t].unsubscribe(),delete this.channels[t])}},{key:"socketId",value:function(){return this.pusher.connection.socket_id}},{key:"disconnect",value:function(){this.pusher.disconnect()}}]),n}(T),O=function(t){c(n,t);var e=d(n);function n(){var t;return r(this,n),(t=e.apply(this,arguments)).channels={},t}return o(n,[{key:"connect",value:function(){var t=this,e=this.getSocketIO();return this.socket=e(this.options.host,this.options),this.socket.on("reconnect",(function(){Object.values(t.channels).forEach((function(t){t.subscribe()}))})),this.socket}},{key:"getSocketIO",value:function(){if(void 0!==this.options.client)return this.options.client;if("undefined"!=typeof io)return io;throw new Error("Socket.io client not found. Should be globally available or passed via options.client")}},{key:"listen",value:function(t,e,n){return this.channel(t).listen(e,n)}},{key:"channel",value:function(t){return this.channels[t]||(this.channels[t]=new y(this.socket,t,this.options)),this.channels[t]}},{key:"privateChannel",value:function(t){return this.channels["private-"+t]||(this.channels["private-"+t]=new k(this.socket,"private-"+t,this.options)),this.channels["private-"+t]}},{key:"presenceChannel",value:function(t){return this.channels["presence-"+t]||(this.channels["presence-"+t]=new w(this.socket,"presence-"+t,this.options)),this.channels["presence-"+t]}},{key:"leave",value:function(t){var e=this;[t,"private-"+t,"presence-"+t].forEach((function(t){e.leaveChannel(t)}))}},{key:"leaveChannel",value:function(t){this.channels[t]&&(this.channels[t].unsubscribe(),delete this.channels[t])}},{key:"socketId",value:function(){return this.socket.id}},{key:"disconnect",value:function(){this.socket.disconnect()}}]),n}(T),E=function(t){c(n,t);var e=d(n);function n(){var t;return r(this,n),(t=e.apply(this,arguments)).channels={},t}return o(n,[{key:"connect",value:function(){}},{key:"listen",value:function(t,e,n){return new S}},{key:"channel",value:function(t){return new S}},{key:"privateChannel",value:function(t){return new _}},{key:"encryptedPrivateChannel",value:function(t){return new _}},{key:"presenceChannel",value:function(t){return new C}},{key:"leave",value:function(t){}},{key:"leaveChannel",value:function(t){}},{key:"socketId",value:function(){return"fake-socket-id"}},{key:"disconnect",value:function(){}}]),n}(T),x=function(){function t(e){r(this,t),this.options=e,this.connect(),this.options.withoutInterceptors||this.registerInterceptors()}return o(t,[{key:"channel",value:function(t){return this.connector.channel(t)}},{key:"connect",value:function(){"reverb"==this.options.broadcaster?this.connector=new P(a(a({},this.options),{cluster:""})):"pusher"==this.options.broadcaster?this.connector=new P(this.options):"socket.io"==this.options.broadcaster?this.connector=new O(this.options):"null"==this.options.broadcaster?this.connector=new E(this.options):"function"==typeof this.options.broadcaster&&(this.connector=new this.options.broadcaster(this.options))}},{key:"disconnect",value:function(){this.connector.disconnect()}},{key:"join",value:function(t){return this.connector.presenceChannel(t)}},{key:"leave",value:function(t){this.connector.leave(t)}},{key:"leaveChannel",value:function(t){this.connector.leaveChannel(t)}},{key:"leaveAllChannels",value:function(){for(var t in this.connector.channels)this.leaveChannel(t)}},{key:"listen",value:function(t,e,n){return this.connector.listen(t,e,n)}},{key:"private",value:function(t){return this.connector.privateChannel(t)}},{key:"encryptedPrivate",value:function(t){return this.connector.encryptedPrivateChannel(t)}},{key:"socketId",value:function(){return this.connector.socketId()}},{key:"registerInterceptors",value:function(){"function"==typeof Vue&&Vue.http&&this.registerVueRequestInterceptor(),"function"==typeof axios&&this.registerAxiosRequestInterceptor(),"function"==typeof jQuery&&this.registerjQueryAjaxSetup(),"object"===("undefined"==typeof Turbo?"undefined":i(Turbo))&&this.registerTurboRequestInterceptor()}},{key:"registerVueRequestInterceptor",value:function(){var t=this;Vue.http.interceptors.push((function(e,n){t.socketId()&&e.headers.set("X-Socket-ID",t.socketId()),n()}))}},{key:"registerAxiosRequestInterceptor",value:function(){var t=this;axios.interceptors.request.use((function(e){return t.socketId()&&(e.headers["X-Socket-Id"]=t.socketId()),e}))}},{key:"registerjQueryAjaxSetup",value:function(){var t=this;void 0!==jQuery.ajax&&jQuery.ajaxPrefilter((function(e,n,i){t.socketId()&&i.setRequestHeader("X-Socket-Id",t.socketId())}))}},{key:"registerTurboRequestInterceptor",value:function(){var t=this;document.addEventListener("turbo:before-fetch-request",(function(e){e.detail.fetchOptions.headers["X-Socket-Id"]=t.socketId()}))}}]),t}();window.Pusher=n(479),window.Echo=new x({broadcaster:"pusher",key:"991a49d0e1a6f91f5440",cluster:"mt1",wsHost:window.location.hostname,wsPort:6001,forceTLS:!1,disableStats:!0,enabledTransports:["ws","wss"]})},547:()=>{},479:t=>{var e;window,e=function(){return function(t){var e={};function n(i){if(e[i])return e[i].exports;var r=e[i]={i,l:!1,exports:{}};return t[i].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var r in t)n.d(i,r,function(e){return t[e]}.bind(null,r));return i},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=2)}([function(t,e,n){"use strict";var i,r=this&&this.__extends||(i=function(t,e){return i=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)e.hasOwnProperty(n)&&(t[n]=e[n])},i(t,e)},function(t,e){function n(){this.constructor=t}i(t,e),t.prototype=null===e?Object.create(e):(n.prototype=e.prototype,new n)});Object.defineProperty(e,"__esModule",{value:!0});var s=256,o=function(){function t(t){void 0===t&&(t="="),this._paddingCharacter=t}return t.prototype.encodedLength=function(t){return this._paddingCharacter?(t+2)/3*4|0:(8*t+5)/6|0},t.prototype.encode=function(t){for(var e="",n=0;n<t.length-2;n+=3){var i=t[n]<<16|t[n+1]<<8|t[n+2];e+=this._encodeByte(i>>>18&63),e+=this._encodeByte(i>>>12&63),e+=this._encodeByte(i>>>6&63),e+=this._encodeByte(i>>>0&63)}var r=t.length-n;return r>0&&(i=t[n]<<16|(2===r?t[n+1]<<8:0),e+=this._encodeByte(i>>>18&63),e+=this._encodeByte(i>>>12&63),e+=2===r?this._encodeByte(i>>>6&63):this._paddingCharacter||"",e+=this._paddingCharacter||""),e},t.prototype.maxDecodedLength=function(t){return this._paddingCharacter?t/4*3|0:(6*t+7)/8|0},t.prototype.decodedLength=function(t){return this.maxDecodedLength(t.length-this._getPaddingLength(t))},t.prototype.decode=function(t){if(0===t.length)return new Uint8Array(0);for(var e=this._getPaddingLength(t),n=t.length-e,i=new Uint8Array(this.maxDecodedLength(n)),r=0,o=0,a=0,c=0,h=0,u=0,l=0;o<n-4;o+=4)c=this._decodeChar(t.charCodeAt(o+0)),h=this._decodeChar(t.charCodeAt(o+1)),u=this._decodeChar(t.charCodeAt(o+2)),l=this._decodeChar(t.charCodeAt(o+3)),i[r++]=c<<2|h>>>4,i[r++]=h<<4|u>>>2,i[r++]=u<<6|l,a|=c&s,a|=h&s,a|=u&s,a|=l&s;if(o<n-1&&(c=this._decodeChar(t.charCodeAt(o)),h=this._decodeChar(t.charCodeAt(o+1)),i[r++]=c<<2|h>>>4,a|=c&s,a|=h&s),o<n-2&&(u=this._decodeChar(t.charCodeAt(o+2)),i[r++]=h<<4|u>>>2,a|=u&s),o<n-3&&(l=this._decodeChar(t.charCodeAt(o+3)),i[r++]=u<<6|l,a|=l&s),0!==a)throw new Error("Base64Coder: incorrect characters for decoding");return i},t.prototype._encodeByte=function(t){var e=t;return e+=65,e+=25-t>>>8&6,e+=51-t>>>8&-75,e+=61-t>>>8&-15,e+=62-t>>>8&3,String.fromCharCode(e)},t.prototype._decodeChar=function(t){var e=s;return e+=(42-t&t-44)>>>8&-256+t-43+62,e+=(46-t&t-48)>>>8&-256+t-47+63,e+=(47-t&t-58)>>>8&-256+t-48+52,e+=(64-t&t-91)>>>8&-256+t-65+0,e+=(96-t&t-123)>>>8&-256+t-97+26},t.prototype._getPaddingLength=function(t){var e=0;if(this._paddingCharacter){for(var n=t.length-1;n>=0&&t[n]===this._paddingCharacter;n--)e++;if(t.length<4||e>2)throw new Error("Base64Coder: incorrect padding")}return e},t}();e.Coder=o;var a=new o;e.encode=function(t){return a.encode(t)},e.decode=function(t){return a.decode(t)};var c=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return r(e,t),e.prototype._encodeByte=function(t){var e=t;return e+=65,e+=25-t>>>8&6,e+=51-t>>>8&-75,e+=61-t>>>8&-13,e+=62-t>>>8&49,String.fromCharCode(e)},e.prototype._decodeChar=function(t){var e=s;return e+=(44-t&t-46)>>>8&-256+t-45+62,e+=(94-t&t-96)>>>8&-256+t-95+63,e+=(47-t&t-58)>>>8&-256+t-48+52,e+=(64-t&t-91)>>>8&-256+t-65+0,e+=(96-t&t-123)>>>8&-256+t-97+26},e}(o);e.URLSafeCoder=c;var h=new c;e.encodeURLSafe=function(t){return h.encode(t)},e.decodeURLSafe=function(t){return h.decode(t)},e.encodedLength=function(t){return a.encodedLength(t)},e.maxDecodedLength=function(t){return a.maxDecodedLength(t)},e.decodedLength=function(t){return a.decodedLength(t)}},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i="utf8: invalid string",r="utf8: invalid source encoding";function s(t){for(var e=0,n=0;n<t.length;n++){var r=t.charCodeAt(n);if(r<128)e+=1;else if(r<2048)e+=2;else if(r<55296)e+=3;else{if(!(r<=57343))throw new Error(i);if(n>=t.length-1)throw new Error(i);n++,e+=4}}return e}e.encode=function(t){for(var e=new Uint8Array(s(t)),n=0,i=0;i<t.length;i++){var r=t.charCodeAt(i);r<128?e[n++]=r:r<2048?(e[n++]=192|r>>6,e[n++]=128|63&r):r<55296?(e[n++]=224|r>>12,e[n++]=128|r>>6&63,e[n++]=128|63&r):(i++,r=(1023&r)<<10,r|=1023&t.charCodeAt(i),r+=65536,e[n++]=240|r>>18,e[n++]=128|r>>12&63,e[n++]=128|r>>6&63,e[n++]=128|63&r)}return e},e.encodedLength=s,e.decode=function(t){for(var e=[],n=0;n<t.length;n++){var i=t[n];if(128&i){var s=void 0;if(i<224){if(n>=t.length)throw new Error(r);if(128!=(192&(o=t[++n])))throw new Error(r);i=(31&i)<<6|63&o,s=128}else if(i<240){if(n>=t.length-1)throw new Error(r);var o=t[++n],a=t[++n];if(128!=(192&o)||128!=(192&a))throw new Error(r);i=(15&i)<<12|(63&o)<<6|63&a,s=2048}else{if(!(i<248))throw new Error(r);if(n>=t.length-2)throw new Error(r);o=t[++n],a=t[++n];var c=t[++n];if(128!=(192&o)||128!=(192&a)||128!=(192&c))throw new Error(r);i=(15&i)<<18|(63&o)<<12|(63&a)<<6|63&c,s=65536}if(i<s||i>=55296&&i<=57343)throw new Error(r);if(i>=65536){if(i>1114111)throw new Error(r);i-=65536,e.push(String.fromCharCode(55296|i>>10)),i=56320|1023&i}}e.push(String.fromCharCode(i))}return e.join("")}},function(t,e,n){t.exports=n(3).default},function(t,e,n){"use strict";n.r(e);class i{constructor(t,e){this.lastId=0,this.prefix=t,this.name=e}create(t){this.lastId++;var e=this.lastId,n=this.prefix+e,i=this.name+"["+e+"]",r=!1,s=function(){r||(t.apply(null,arguments),r=!0)};return this[e]=s,{number:e,id:n,name:i,callback:s}}remove(t){delete this[t.number]}}var r=new i("_pusher_script_","Pusher.ScriptReceivers"),s={VERSION:"8.4.0-rc2",PROTOCOL:7,wsPort:80,wssPort:443,wsPath:"",httpHost:"sockjs.pusher.com",httpPort:80,httpsPort:443,httpPath:"/pusher",stats_host:"stats.pusher.com",authEndpoint:"/pusher/auth",authTransport:"ajax",activityTimeout:12e4,pongTimeout:3e4,unavailableTimeout:1e4,userAuthentication:{endpoint:"/pusher/user-auth",transport:"ajax"},channelAuthorization:{endpoint:"/pusher/auth",transport:"ajax"},cdn_http:"http://js.pusher.com",cdn_https:"https://js.pusher.com",dependency_suffix:""},o=new i("_pusher_dependencies","Pusher.DependenciesReceivers"),a=new class{constructor(t){this.options=t,this.receivers=t.receivers||r,this.loading={}}load(t,e,n){var i=this;if(i.loading[t]&&i.loading[t].length>0)i.loading[t].push(n);else{i.loading[t]=[n];var r=ue.createScriptRequest(i.getPath(t,e)),s=i.receivers.create((function(e){if(i.receivers.remove(s),i.loading[t]){var n=i.loading[t];delete i.loading[t];for(var o=function(t){t||r.cleanup()},a=0;a<n.length;a++)n[a](e,o)}}));r.send(s)}}getRoot(t){var e=ue.getDocument().location.protocol;return(t&&t.useTLS||"https:"===e?this.options.cdn_https:this.options.cdn_http).replace(/\/*$/,"")+"/"+this.options.version}getPath(t,e){return this.getRoot(e)+"/"+t+this.options.suffix+".js"}}({cdn_http:s.cdn_http,cdn_https:s.cdn_https,version:s.VERSION,suffix:s.dependency_suffix,receivers:o});const c={baseUrl:"https://pusher.com",urls:{authenticationEndpoint:{path:"/docs/channels/server_api/authenticating_users"},authorizationEndpoint:{path:"/docs/channels/server_api/authorizing-users/"},javascriptQuickStart:{path:"/docs/javascript_quick_start"},triggeringClientEvents:{path:"/docs/client_api_guide/client_events#trigger-events"},encryptedChannelSupport:{fullUrl:"https://github.com/pusher/pusher-js/tree/cc491015371a4bde5743d1c87a0fbac0feb53195#encrypted-channel-support"}}};var h,u=function(t){const e=c.urls[t];if(!e)return"";let n;return e.fullUrl?n=e.fullUrl:e.path&&(n=c.baseUrl+e.path),n?`See: ${n}`:""};!function(t){t.UserAuthentication="user-authentication",t.ChannelAuthorization="channel-authorization"}(h||(h={}));class l extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class d extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class p extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class f extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class v extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class g extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class b extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class m extends Error{constructor(t){super(t),Object.setPrototypeOf(this,new.target.prototype)}}class y extends Error{constructor(t,e){super(e),this.status=t,Object.setPrototypeOf(this,new.target.prototype)}}for(var k=function(t,e,n,i,r){const s=ue.createXHR();for(var o in s.open("POST",n.endpoint,!0),s.setRequestHeader("Content-Type","application/x-www-form-urlencoded"),n.headers)s.setRequestHeader(o,n.headers[o]);if(null!=n.headersProvider){let t=n.headersProvider();for(var o in t)s.setRequestHeader(o,t[o])}return s.onreadystatechange=function(){if(4===s.readyState)if(200===s.status){let t,e=!1;try{t=JSON.parse(s.responseText),e=!0}catch(t){r(new y(200,`JSON returned from ${i.toString()} endpoint was invalid, yet status code was 200. Data was: ${s.responseText}`),null)}e&&r(null,t)}else{let t="";switch(i){case h.UserAuthentication:t=u("authenticationEndpoint");break;case h.ChannelAuthorization:t=`Clients must be authorized to join private or presence channels. ${u("authorizationEndpoint")}`}r(new y(s.status,`Unable to retrieve auth string from ${i.toString()} endpoint - received status: ${s.status} from ${n.endpoint}. ${t}`),null)}},s.send(e),s},w=String.fromCharCode,S="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",_={},C=0;C<64;C++)_[S.charAt(C)]=C;var T=function(t){var e=t.charCodeAt(0);return e<128?t:e<2048?w(192|e>>>6)+w(128|63&e):w(224|e>>>12&15)+w(128|e>>>6&63)+w(128|63&e)},P=function(t){return t.replace(/[^\x00-\x7F]/g,T)},O=function(t){var e=[0,2,1][t.length%3],n=t.charCodeAt(0)<<16|(t.length>1?t.charCodeAt(1):0)<<8|(t.length>2?t.charCodeAt(2):0);return[S.charAt(n>>>18),S.charAt(n>>>12&63),e>=2?"=":S.charAt(n>>>6&63),e>=1?"=":S.charAt(63&n)].join("")},E=window.btoa||function(t){return t.replace(/[\s\S]{1,3}/g,O)},x=class{constructor(t,e,n,i){this.clear=e,this.timer=t((()=>{this.timer&&(this.timer=i(this.timer))}),n)}isRunning(){return null!==this.timer}ensureAborted(){this.timer&&(this.clear(this.timer),this.timer=null)}};function L(t){window.clearTimeout(t)}function A(t){window.clearInterval(t)}class R extends x{constructor(t,e){super(setTimeout,L,t,(function(t){return e(),null}))}}class I extends x{constructor(t,e){super(setInterval,A,t,(function(t){return e(),t}))}}var j={now:()=>Date.now?Date.now():(new Date).valueOf(),defer:t=>new R(0,t),method(t,...e){var n=Array.prototype.slice.call(arguments,1);return function(e){return e[t].apply(e,n.concat(arguments))}}},D=j;function N(t,...e){for(var n=0;n<e.length;n++){var i=e[n];for(var r in i)i[r]&&i[r].constructor&&i[r].constructor===Object?t[r]=N(t[r]||{},i[r]):t[r]=i[r]}return t}function H(){for(var t=["Pusher"],e=0;e<arguments.length;e++)"string"==typeof arguments[e]?t.push(arguments[e]):t.push(V(arguments[e]));return t.join(" : ")}function U(t,e){var n=Array.prototype.indexOf;if(null===t)return-1;if(n&&t.indexOf===n)return t.indexOf(e);for(var i=0,r=t.length;i<r;i++)if(t[i]===e)return i;return-1}function q(t,e){for(var n in t)Object.prototype.hasOwnProperty.call(t,n)&&e(t[n],n,t)}function M(t){var e=[];return q(t,(function(t,n){e.push(n)})),e}function z(t,e,n){for(var i=0;i<t.length;i++)e.call(n||window,t[i],i,t)}function B(t,e){for(var n=[],i=0;i<t.length;i++)n.push(e(t[i],i,t,n));return n}function F(t,e){e=e||function(t){return!!t};for(var n=[],i=0;i<t.length;i++)e(t[i],i,t,n)&&n.push(t[i]);return n}function X(t,e){var n={};return q(t,(function(i,r){(e&&e(i,r,t,n)||Boolean(i))&&(n[r]=i)})),n}function $(t,e){for(var n=0;n<t.length;n++)if(e(t[n],n,t))return!0;return!1}function J(t){return e=function(t){return"object"==typeof t&&(t=V(t)),encodeURIComponent((e=t.toString(),E(P(e))));var e},n={},q(t,(function(t,i){n[i]=e(t)})),n;var e,n}function W(t){var e,n,i=X(t,(function(t){return void 0!==t}));return B((e=J(i),n=[],q(e,(function(t,e){n.push([e,t])})),n),D.method("join","=")).join("&")}function V(t){try{return JSON.stringify(t)}catch(i){return JSON.stringify((e=[],n=[],function t(i,r){var s,o,a;switch(typeof i){case"object":if(!i)return null;for(s=0;s<e.length;s+=1)if(e[s]===i)return{$ref:n[s]};if(e.push(i),n.push(r),"[object Array]"===Object.prototype.toString.apply(i))for(a=[],s=0;s<i.length;s+=1)a[s]=t(i[s],r+"["+s+"]");else for(o in a={},i)Object.prototype.hasOwnProperty.call(i,o)&&(a[o]=t(i[o],r+"["+JSON.stringify(o)+"]"));return a;case"number":case"string":case"boolean":return i}}(t,"$")))}var e,n}var G=new class{constructor(){this.globalLog=t=>{window.console&&window.console.log&&window.console.log(t)}}debug(...t){this.log(this.globalLog,t)}warn(...t){this.log(this.globalLogWarn,t)}error(...t){this.log(this.globalLogError,t)}globalLogWarn(t){window.console&&window.console.warn?window.console.warn(t):this.globalLog(t)}globalLogError(t){window.console&&window.console.error?window.console.error(t):this.globalLogWarn(t)}log(t,...e){var n=H.apply(this,arguments);Ie.log?Ie.log(n):Ie.logToConsole&&t.bind(this)(n)}},Q=function(t,e,n,i,r){void 0===n.headers&&null==n.headersProvider||G.warn(`To send headers with the ${i.toString()} request, you must use AJAX, rather than JSONP.`);var s=t.nextAuthCallbackID.toString();t.nextAuthCallbackID++;var o=t.getDocument(),a=o.createElement("script");t.auth_callbacks[s]=function(t){r(null,t)};var c="Pusher.auth_callbacks['"+s+"']";a.src=n.endpoint+"?callback="+encodeURIComponent(c)+"&"+e;var h=o.getElementsByTagName("head")[0]||o.documentElement;h.insertBefore(a,h.firstChild)};class K{constructor(t){this.src=t}send(t){var e=this,n="Error loading "+e.src;e.script=document.createElement("script"),e.script.id=t.id,e.script.src=e.src,e.script.type="text/javascript",e.script.charset="UTF-8",e.script.addEventListener?(e.script.onerror=function(){t.callback(n)},e.script.onload=function(){t.callback(null)}):e.script.onreadystatechange=function(){"loaded"!==e.script.readyState&&"complete"!==e.script.readyState||t.callback(null)},void 0===e.script.async&&document.attachEvent&&/opera/i.test(navigator.userAgent)?(e.errorScript=document.createElement("script"),e.errorScript.id=t.id+"_error",e.errorScript.text=t.name+"('"+n+"');",e.script.async=e.errorScript.async=!1):e.script.async=!0;var i=document.getElementsByTagName("head")[0];i.insertBefore(e.script,i.firstChild),e.errorScript&&i.insertBefore(e.errorScript,e.script.nextSibling)}cleanup(){this.script&&(this.script.onload=this.script.onerror=null,this.script.onreadystatechange=null),this.script&&this.script.parentNode&&this.script.parentNode.removeChild(this.script),this.errorScript&&this.errorScript.parentNode&&this.errorScript.parentNode.removeChild(this.errorScript),this.script=null,this.errorScript=null}}class Y{constructor(t,e){this.url=t,this.data=e}send(t){if(!this.request){var e=W(this.data),n=this.url+"/"+t.number+"?"+e;this.request=ue.createScriptRequest(n),this.request.send(t)}}cleanup(){this.request&&this.request.cleanup()}}var Z={name:"jsonp",getAgent:function(t,e){return function(n,i){var s="http"+(e?"s":"")+"://"+(t.host||t.options.host)+t.options.path,o=ue.createJSONPRequest(s,n),a=ue.ScriptReceivers.create((function(e,n){r.remove(a),o.cleanup(),n&&n.host&&(t.host=n.host),i&&i(e,n)}));o.send(a)}}};function tt(t,e,n){return t+(e.useTLS?"s":"")+"://"+(e.useTLS?e.hostTLS:e.hostNonTLS)+n}function et(t,e){return"/app/"+t+"?protocol="+s.PROTOCOL+"&client=js&version="+s.VERSION+(e?"&"+e:"")}var nt={getInitial:function(t,e){return tt("ws",e,(e.httpPath||"")+et(t,"flash=false"))}},it={getInitial:function(t,e){return tt("http",e,(e.httpPath||"/pusher")+et(t))}},rt={getInitial:function(t,e){return tt("http",e,e.httpPath||"/pusher")},getPath:function(t,e){return et(t)}};class st{constructor(){this._callbacks={}}get(t){return this._callbacks[ot(t)]}add(t,e,n){var i=ot(t);this._callbacks[i]=this._callbacks[i]||[],this._callbacks[i].push({fn:e,context:n})}remove(t,e,n){if(t||e||n){var i=t?[ot(t)]:M(this._callbacks);e||n?this.removeCallback(i,e,n):this.removeAllCallbacks(i)}else this._callbacks={}}removeCallback(t,e,n){z(t,(function(t){this._callbacks[t]=F(this._callbacks[t]||[],(function(t){return e&&e!==t.fn||n&&n!==t.context})),0===this._callbacks[t].length&&delete this._callbacks[t]}),this)}removeAllCallbacks(t){z(t,(function(t){delete this._callbacks[t]}),this)}}function ot(t){return"_"+t}class at{constructor(t){this.callbacks=new st,this.global_callbacks=[],this.failThrough=t}bind(t,e,n){return this.callbacks.add(t,e,n),this}bind_global(t){return this.global_callbacks.push(t),this}unbind(t,e,n){return this.callbacks.remove(t,e,n),this}unbind_global(t){return t?(this.global_callbacks=F(this.global_callbacks||[],(e=>e!==t)),this):(this.global_callbacks=[],this)}unbind_all(){return this.unbind(),this.unbind_global(),this}emit(t,e,n){for(var i=0;i<this.global_callbacks.length;i++)this.global_callbacks[i](t,e);var r=this.callbacks.get(t),s=[];if(n?s.push(e,n):e&&s.push(e),r&&r.length>0)for(i=0;i<r.length;i++)r[i].fn.apply(r[i].context||window,s);else this.failThrough&&this.failThrough(t,e);return this}}class ct extends at{constructor(t,e,n,i,r){super(),this.initialize=ue.transportConnectionInitializer,this.hooks=t,this.name=e,this.priority=n,this.key=i,this.options=r,this.state="new",this.timeline=r.timeline,this.activityTimeout=r.activityTimeout,this.id=this.timeline.generateUniqueID()}handlesActivityChecks(){return Boolean(this.hooks.handlesActivityChecks)}supportsPing(){return Boolean(this.hooks.supportsPing)}connect(){if(this.socket||"initialized"!==this.state)return!1;var t=this.hooks.urls.getInitial(this.key,this.options);try{this.socket=this.hooks.getSocket(t,this.options)}catch(t){return D.defer((()=>{this.onError(t),this.changeState("closed")})),!1}return this.bindListeners(),G.debug("Connecting",{transport:this.name,url:t}),this.changeState("connecting"),!0}close(){return!!this.socket&&(this.socket.close(),!0)}send(t){return"open"===this.state&&(D.defer((()=>{this.socket&&this.socket.send(t)})),!0)}ping(){"open"===this.state&&this.supportsPing()&&this.socket.ping()}onOpen(){this.hooks.beforeOpen&&this.hooks.beforeOpen(this.socket,this.hooks.urls.getPath(this.key,this.options)),this.changeState("open"),this.socket.onopen=void 0}onError(t){this.emit("error",{type:"WebSocketError",error:t}),this.timeline.error(this.buildTimelineMessage({error:t.toString()}))}onClose(t){t?this.changeState("closed",{code:t.code,reason:t.reason,wasClean:t.wasClean}):this.changeState("closed"),this.unbindListeners(),this.socket=void 0}onMessage(t){this.emit("message",t)}onActivity(){this.emit("activity")}bindListeners(){this.socket.onopen=()=>{this.onOpen()},this.socket.onerror=t=>{this.onError(t)},this.socket.onclose=t=>{this.onClose(t)},this.socket.onmessage=t=>{this.onMessage(t)},this.supportsPing()&&(this.socket.onactivity=()=>{this.onActivity()})}unbindListeners(){this.socket&&(this.socket.onopen=void 0,this.socket.onerror=void 0,this.socket.onclose=void 0,this.socket.onmessage=void 0,this.supportsPing()&&(this.socket.onactivity=void 0))}changeState(t,e){this.state=t,this.timeline.info(this.buildTimelineMessage({state:t,params:e})),this.emit(t,e)}buildTimelineMessage(t){return N({cid:this.id},t)}}class ht{constructor(t){this.hooks=t}isSupported(t){return this.hooks.isSupported(t)}createConnection(t,e,n,i){return new ct(this.hooks,t,e,n,i)}}var ut=new ht({urls:nt,handlesActivityChecks:!1,supportsPing:!1,isInitialized:function(){return Boolean(ue.getWebSocketAPI())},isSupported:function(){return Boolean(ue.getWebSocketAPI())},getSocket:function(t){return ue.createWebSocket(t)}}),lt={urls:it,handlesActivityChecks:!1,supportsPing:!0,isInitialized:function(){return!0}},dt=N({getSocket:function(t){return ue.HTTPFactory.createStreamingSocket(t)}},lt),pt=N({getSocket:function(t){return ue.HTTPFactory.createPollingSocket(t)}},lt),ft={isSupported:function(){return ue.isXHRSupported()}},vt={ws:ut,xhr_streaming:new ht(N({},dt,ft)),xhr_polling:new ht(N({},pt,ft))},gt=new ht({file:"sockjs",urls:rt,handlesActivityChecks:!0,supportsPing:!1,isSupported:function(){return!0},isInitialized:function(){return void 0!==window.SockJS},getSocket:function(t,e){return new window.SockJS(t,null,{js_path:a.getPath("sockjs",{useTLS:e.useTLS}),ignore_null_origin:e.ignoreNullOrigin})},beforeOpen:function(t,e){t.send(JSON.stringify({path:e}))}}),bt={isSupported:function(t){return ue.isXDRSupported(t.useTLS)}},mt=new ht(N({},dt,bt)),yt=new ht(N({},pt,bt));vt.xdr_streaming=mt,vt.xdr_polling=yt,vt.sockjs=gt;var kt=vt,wt=new class extends at{constructor(){super();var t=this;void 0!==window.addEventListener&&(window.addEventListener("online",(function(){t.emit("online")}),!1),window.addEventListener("offline",(function(){t.emit("offline")}),!1))}isOnline(){return void 0===window.navigator.onLine||window.navigator.onLine}};class St{constructor(t,e,n){this.manager=t,this.transport=e,this.minPingDelay=n.minPingDelay,this.maxPingDelay=n.maxPingDelay,this.pingDelay=void 0}createConnection(t,e,n,i){i=N({},i,{activityTimeout:this.pingDelay});var r=this.transport.createConnection(t,e,n,i),s=null,o=function(){r.unbind("open",o),r.bind("closed",a),s=D.now()},a=t=>{if(r.unbind("closed",a),1002===t.code||1003===t.code)this.manager.reportDeath();else if(!t.wasClean&&s){var e=D.now()-s;e<2*this.maxPingDelay&&(this.manager.reportDeath(),this.pingDelay=Math.max(e/2,this.minPingDelay))}};return r.bind("open",o),r}isSupported(t){return this.manager.isAlive()&&this.transport.isSupported(t)}}const _t={decodeMessage:function(t){try{var e=JSON.parse(t.data),n=e.data;if("string"==typeof n)try{n=JSON.parse(e.data)}catch(t){}var i={event:e.event,channel:e.channel,data:n};return e.user_id&&(i.user_id=e.user_id),i}catch(e){throw{type:"MessageParseError",error:e,data:t.data}}},encodeMessage:function(t){return JSON.stringify(t)},processHandshake:function(t){var e=_t.decodeMessage(t);if("pusher:connection_established"===e.event){if(!e.data.activity_timeout)throw"No activity timeout specified in handshake";return{action:"connected",id:e.data.socket_id,activityTimeout:1e3*e.data.activity_timeout}}if("pusher:error"===e.event)return{action:this.getCloseAction(e.data),error:this.getCloseError(e.data)};throw"Invalid handshake"},getCloseAction:function(t){return t.code<4e3?t.code>=1002&&t.code<=1004?"backoff":null:4e3===t.code?"tls_only":t.code<4100?"refused":t.code<4200?"backoff":t.code<4300?"retry":"refused"},getCloseError:function(t){return 1e3!==t.code&&1001!==t.code?{type:"PusherError",data:{code:t.code,message:t.reason||t.message}}:null}};var Ct=_t;class Tt extends at{constructor(t,e){super(),this.id=t,this.transport=e,this.activityTimeout=e.activityTimeout,this.bindListeners()}handlesActivityChecks(){return this.transport.handlesActivityChecks()}send(t){return this.transport.send(t)}send_event(t,e,n){var i={event:t,data:e};return n&&(i.channel=n),G.debug("Event sent",i),this.send(Ct.encodeMessage(i))}ping(){this.transport.supportsPing()?this.transport.ping():this.send_event("pusher:ping",{})}close(){this.transport.close()}bindListeners(){var t={message:t=>{var e;try{e=Ct.decodeMessage(t)}catch(e){this.emit("error",{type:"MessageParseError",error:e,data:t.data})}if(void 0!==e){switch(G.debug("Event recd",e),e.event){case"pusher:error":this.emit("error",{type:"PusherError",data:e.data});break;case"pusher:ping":this.emit("ping");break;case"pusher:pong":this.emit("pong")}this.emit("message",e)}},activity:()=>{this.emit("activity")},error:t=>{this.emit("error",t)},closed:t=>{e(),t&&t.code&&this.handleCloseEvent(t),this.transport=null,this.emit("closed")}},e=()=>{q(t,((t,e)=>{this.transport.unbind(e,t)}))};q(t,((t,e)=>{this.transport.bind(e,t)}))}handleCloseEvent(t){var e=Ct.getCloseAction(t),n=Ct.getCloseError(t);n&&this.emit("error",n),e&&this.emit(e,{action:e,error:n})}}class Pt{constructor(t,e){this.transport=t,this.callback=e,this.bindListeners()}close(){this.unbindListeners(),this.transport.close()}bindListeners(){this.onMessage=t=>{var e;this.unbindListeners();try{e=Ct.processHandshake(t)}catch(t){return this.finish("error",{error:t}),void this.transport.close()}"connected"===e.action?this.finish("connected",{connection:new Tt(e.id,this.transport),activityTimeout:e.activityTimeout}):(this.finish(e.action,{error:e.error}),this.transport.close())},this.onClosed=t=>{this.unbindListeners();var e=Ct.getCloseAction(t)||"backoff",n=Ct.getCloseError(t);this.finish(e,{error:n})},this.transport.bind("message",this.onMessage),this.transport.bind("closed",this.onClosed)}unbindListeners(){this.transport.unbind("message",this.onMessage),this.transport.unbind("closed",this.onClosed)}finish(t,e){this.callback(N({transport:this.transport,action:t},e))}}class Ot{constructor(t,e){this.timeline=t,this.options=e||{}}send(t,e){this.timeline.isEmpty()||this.timeline.send(ue.TimelineTransport.getAgent(this,t),e)}}class Et extends at{constructor(t,e){super((function(e,n){G.debug("No callbacks on "+t+" for "+e)})),this.name=t,this.pusher=e,this.subscribed=!1,this.subscriptionPending=!1,this.subscriptionCancelled=!1}authorize(t,e){return e(null,{auth:""})}trigger(t,e){if(0!==t.indexOf("client-"))throw new l("Event '"+t+"' does not start with 'client-'");if(!this.subscribed){var n=u("triggeringClientEvents");G.warn(`Client event triggered before channel 'subscription_succeeded' event . ${n}`)}return this.pusher.send_event(t,e,this.name)}disconnect(){this.subscribed=!1,this.subscriptionPending=!1}handleEvent(t){var e=t.event,n=t.data;"pusher_internal:subscription_succeeded"===e?this.handleSubscriptionSucceededEvent(t):"pusher_internal:subscription_count"===e?this.handleSubscriptionCountEvent(t):0!==e.indexOf("pusher_internal:")&&this.emit(e,n,{})}handleSubscriptionSucceededEvent(t){this.subscriptionPending=!1,this.subscribed=!0,this.subscriptionCancelled?this.pusher.unsubscribe(this.name):this.emit("pusher:subscription_succeeded",t.data)}handleSubscriptionCountEvent(t){t.data.subscription_count&&(this.subscriptionCount=t.data.subscription_count),this.emit("pusher:subscription_count",t.data)}subscribe(){this.subscribed||(this.subscriptionPending=!0,this.subscriptionCancelled=!1,this.authorize(this.pusher.connection.socket_id,((t,e)=>{t?(this.subscriptionPending=!1,G.error(t.toString()),this.emit("pusher:subscription_error",Object.assign({},{type:"AuthError",error:t.message},t instanceof y?{status:t.status}:{}))):this.pusher.send_event("pusher:subscribe",{auth:e.auth,channel_data:e.channel_data,channel:this.name})})))}unsubscribe(){this.subscribed=!1,this.pusher.send_event("pusher:unsubscribe",{channel:this.name})}cancelSubscription(){this.subscriptionCancelled=!0}reinstateSubscription(){this.subscriptionCancelled=!1}}class xt extends Et{authorize(t,e){return this.pusher.config.channelAuthorizer({channelName:this.name,socketId:t},e)}}class Lt{constructor(){this.reset()}get(t){return Object.prototype.hasOwnProperty.call(this.members,t)?{id:t,info:this.members[t]}:null}each(t){q(this.members,((e,n)=>{t(this.get(n))}))}setMyID(t){this.myID=t}onSubscription(t){this.members=t.presence.hash,this.count=t.presence.count,this.me=this.get(this.myID)}addMember(t){return null===this.get(t.user_id)&&this.count++,this.members[t.user_id]=t.user_info,this.get(t.user_id)}removeMember(t){var e=this.get(t.user_id);return e&&(delete this.members[t.user_id],this.count--),e}reset(){this.members={},this.count=0,this.myID=null,this.me=null}}var At=function(t,e,n,i){return new(n||(n=Promise))((function(r,s){function o(t){try{c(i.next(t))}catch(t){s(t)}}function a(t){try{c(i.throw(t))}catch(t){s(t)}}function c(t){var e;t.done?r(t.value):(e=t.value,e instanceof n?e:new n((function(t){t(e)}))).then(o,a)}c((i=i.apply(t,e||[])).next())}))};class Rt extends xt{constructor(t,e){super(t,e),this.members=new Lt}authorize(t,e){super.authorize(t,((t,n)=>At(this,void 0,void 0,(function*(){if(!t)if(null!=n.channel_data){var i=JSON.parse(n.channel_data);this.members.setMyID(i.user_id)}else{if(yield this.pusher.user.signinDonePromise,null==this.pusher.user.user_data){let t=u("authorizationEndpoint");return G.error(`Invalid auth response for channel '${this.name}', expected 'channel_data' field. ${t}, or the user should be signed in.`),void e("Invalid auth response")}this.members.setMyID(this.pusher.user.user_data.id)}e(t,n)}))))}handleEvent(t){var e=t.event;if(0===e.indexOf("pusher_internal:"))this.handleInternalEvent(t);else{var n=t.data,i={};t.user_id&&(i.user_id=t.user_id),this.emit(e,n,i)}}handleInternalEvent(t){var e=t.event,n=t.data;switch(e){case"pusher_internal:subscription_succeeded":this.handleSubscriptionSucceededEvent(t);break;case"pusher_internal:subscription_count":this.handleSubscriptionCountEvent(t);break;case"pusher_internal:member_added":var i=this.members.addMember(n);this.emit("pusher:member_added",i);break;case"pusher_internal:member_removed":var r=this.members.removeMember(n);r&&this.emit("pusher:member_removed",r)}}handleSubscriptionSucceededEvent(t){this.subscriptionPending=!1,this.subscribed=!0,this.subscriptionCancelled?this.pusher.unsubscribe(this.name):(this.members.onSubscription(t.data),this.emit("pusher:subscription_succeeded",this.members))}disconnect(){this.members.reset(),super.disconnect()}}var It=n(1),jt=n(0);class Dt extends xt{constructor(t,e,n){super(t,e),this.key=null,this.nacl=n}authorize(t,e){super.authorize(t,((t,n)=>{if(t)return void e(t,n);let i=n.shared_secret;i?(this.key=Object(jt.decode)(i),delete n.shared_secret,e(null,n)):e(new Error(`No shared_secret key in auth payload for encrypted channel: ${this.name}`),null)}))}trigger(t,e){throw new g("Client events are not currently supported for encrypted channels")}handleEvent(t){var e=t.event,n=t.data;0!==e.indexOf("pusher_internal:")&&0!==e.indexOf("pusher:")?this.handleEncryptedEvent(e,n):super.handleEvent(t)}handleEncryptedEvent(t,e){if(!this.key)return void G.debug("Received encrypted event before key has been retrieved from the authEndpoint");if(!e.ciphertext||!e.nonce)return void G.error("Unexpected format for encrypted event, expected object with `ciphertext` and `nonce` fields, got: "+e);let n=Object(jt.decode)(e.ciphertext);if(n.length<this.nacl.secretbox.overheadLength)return void G.error(`Expected encrypted event ciphertext length to be ${this.nacl.secretbox.overheadLength}, got: ${n.length}`);let i=Object(jt.decode)(e.nonce);if(i.length<this.nacl.secretbox.nonceLength)return void G.error(`Expected encrypted event nonce length to be ${this.nacl.secretbox.nonceLength}, got: ${i.length}`);let r=this.nacl.secretbox.open(n,i,this.key);if(null===r)return G.debug("Failed to decrypt an event, probably because it was encrypted with a different key. Fetching a new key from the authEndpoint..."),void this.authorize(this.pusher.connection.socket_id,((e,s)=>{e?G.error(`Failed to make a request to the authEndpoint: ${s}. Unable to fetch new key, so dropping encrypted event`):(r=this.nacl.secretbox.open(n,i,this.key),null!==r?this.emit(t,this.getDataToEmit(r)):G.error("Failed to decrypt event with new key. Dropping encrypted event"))}));this.emit(t,this.getDataToEmit(r))}getDataToEmit(t){let e=Object(It.decode)(t);try{return JSON.parse(e)}catch(t){return e}}}class Nt extends at{constructor(t,e){super(),this.state="initialized",this.connection=null,this.key=t,this.options=e,this.timeline=this.options.timeline,this.usingTLS=this.options.useTLS,this.errorCallbacks=this.buildErrorCallbacks(),this.connectionCallbacks=this.buildConnectionCallbacks(this.errorCallbacks),this.handshakeCallbacks=this.buildHandshakeCallbacks(this.errorCallbacks);var n=ue.getNetwork();n.bind("online",(()=>{this.timeline.info({netinfo:"online"}),"connecting"!==this.state&&"unavailable"!==this.state||this.retryIn(0)})),n.bind("offline",(()=>{this.timeline.info({netinfo:"offline"}),this.connection&&this.sendActivityCheck()})),this.updateStrategy()}switchCluster(t){this.key=t,this.updateStrategy(),this.retryIn(0)}connect(){this.connection||this.runner||(this.strategy.isSupported()?(this.updateState("connecting"),this.startConnecting(),this.setUnavailableTimer()):this.updateState("failed"))}send(t){return!!this.connection&&this.connection.send(t)}send_event(t,e,n){return!!this.connection&&this.connection.send_event(t,e,n)}disconnect(){this.disconnectInternally(),this.updateState("disconnected")}isUsingTLS(){return this.usingTLS}startConnecting(){var t=(e,n)=>{e?this.runner=this.strategy.connect(0,t):"error"===n.action?(this.emit("error",{type:"HandshakeError",error:n.error}),this.timeline.error({handshakeError:n.error})):(this.abortConnecting(),this.handshakeCallbacks[n.action](n))};this.runner=this.strategy.connect(0,t)}abortConnecting(){this.runner&&(this.runner.abort(),this.runner=null)}disconnectInternally(){this.abortConnecting(),this.clearRetryTimer(),this.clearUnavailableTimer(),this.connection&&this.abandonConnection().close()}updateStrategy(){this.strategy=this.options.getStrategy({key:this.key,timeline:this.timeline,useTLS:this.usingTLS})}retryIn(t){this.timeline.info({action:"retry",delay:t}),t>0&&this.emit("connecting_in",Math.round(t/1e3)),this.retryTimer=new R(t||0,(()=>{this.disconnectInternally(),this.connect()}))}clearRetryTimer(){this.retryTimer&&(this.retryTimer.ensureAborted(),this.retryTimer=null)}setUnavailableTimer(){this.unavailableTimer=new R(this.options.unavailableTimeout,(()=>{this.updateState("unavailable")}))}clearUnavailableTimer(){this.unavailableTimer&&this.unavailableTimer.ensureAborted()}sendActivityCheck(){this.stopActivityCheck(),this.connection.ping(),this.activityTimer=new R(this.options.pongTimeout,(()=>{this.timeline.error({pong_timed_out:this.options.pongTimeout}),this.retryIn(0)}))}resetActivityCheck(){this.stopActivityCheck(),this.connection&&!this.connection.handlesActivityChecks()&&(this.activityTimer=new R(this.activityTimeout,(()=>{this.sendActivityCheck()})))}stopActivityCheck(){this.activityTimer&&this.activityTimer.ensureAborted()}buildConnectionCallbacks(t){return N({},t,{message:t=>{this.resetActivityCheck(),this.emit("message",t)},ping:()=>{this.send_event("pusher:pong",{})},activity:()=>{this.resetActivityCheck()},error:t=>{this.emit("error",t)},closed:()=>{this.abandonConnection(),this.shouldRetry()&&this.retryIn(1e3)}})}buildHandshakeCallbacks(t){return N({},t,{connected:t=>{this.activityTimeout=Math.min(this.options.activityTimeout,t.activityTimeout,t.connection.activityTimeout||1/0),this.clearUnavailableTimer(),this.setConnection(t.connection),this.socket_id=this.connection.id,this.updateState("connected",{socket_id:this.socket_id})}})}buildErrorCallbacks(){let t=t=>e=>{e.error&&this.emit("error",{type:"WebSocketError",error:e.error}),t(e)};return{tls_only:t((()=>{this.usingTLS=!0,this.updateStrategy(),this.retryIn(0)})),refused:t((()=>{this.disconnect()})),backoff:t((()=>{this.retryIn(1e3)})),retry:t((()=>{this.retryIn(0)}))}}setConnection(t){for(var e in this.connection=t,this.connectionCallbacks)this.connection.bind(e,this.connectionCallbacks[e]);this.resetActivityCheck()}abandonConnection(){if(this.connection){for(var t in this.stopActivityCheck(),this.connectionCallbacks)this.connection.unbind(t,this.connectionCallbacks[t]);var e=this.connection;return this.connection=null,e}}updateState(t,e){var n=this.state;if(this.state=t,n!==t){var i=t;"connected"===i&&(i+=" with new socket ID "+e.socket_id),G.debug("State changed",n+" -> "+i),this.timeline.info({state:t,params:e}),this.emit("state_change",{previous:n,current:t}),this.emit(t,e)}}shouldRetry(){return"connecting"===this.state||"connected"===this.state}}class Ht{constructor(){this.channels={}}add(t,e){return this.channels[t]||(this.channels[t]=function(t,e){if(0===t.indexOf("private-encrypted-")){if(e.config.nacl)return Ut.createEncryptedChannel(t,e,e.config.nacl);let n="Tried to subscribe to a private-encrypted- channel but no nacl implementation available",i=u("encryptedChannelSupport");throw new g(`${n}. ${i}`)}if(0===t.indexOf("private-"))return Ut.createPrivateChannel(t,e);if(0===t.indexOf("presence-"))return Ut.createPresenceChannel(t,e);if(0===t.indexOf("#"))throw new d('Cannot create a channel with name "'+t+'".');return Ut.createChannel(t,e)}(t,e)),this.channels[t]}all(){return function(t){var e=[];return q(t,(function(t){e.push(t)})),e}(this.channels)}find(t){return this.channels[t]}remove(t){var e=this.channels[t];return delete this.channels[t],e}disconnect(){q(this.channels,(function(t){t.disconnect()}))}}var Ut={createChannels:()=>new Ht,createConnectionManager:(t,e)=>new Nt(t,e),createChannel:(t,e)=>new Et(t,e),createPrivateChannel:(t,e)=>new xt(t,e),createPresenceChannel:(t,e)=>new Rt(t,e),createEncryptedChannel:(t,e,n)=>new Dt(t,e,n),createTimelineSender:(t,e)=>new Ot(t,e),createHandshake:(t,e)=>new Pt(t,e),createAssistantToTheTransportManager:(t,e,n)=>new St(t,e,n)};class qt{constructor(t){this.options=t||{},this.livesLeft=this.options.lives||1/0}getAssistant(t){return Ut.createAssistantToTheTransportManager(this,t,{minPingDelay:this.options.minPingDelay,maxPingDelay:this.options.maxPingDelay})}isAlive(){return this.livesLeft>0}reportDeath(){this.livesLeft-=1}}class Mt{constructor(t,e){this.strategies=t,this.loop=Boolean(e.loop),this.failFast=Boolean(e.failFast),this.timeout=e.timeout,this.timeoutLimit=e.timeoutLimit}isSupported(){return $(this.strategies,D.method("isSupported"))}connect(t,e){var n=this.strategies,i=0,r=this.timeout,s=null,o=(a,c)=>{c?e(null,c):(i+=1,this.loop&&(i%=n.length),i<n.length?(r&&(r*=2,this.timeoutLimit&&(r=Math.min(r,this.timeoutLimit))),s=this.tryStrategy(n[i],t,{timeout:r,failFast:this.failFast},o)):e(!0))};return s=this.tryStrategy(n[i],t,{timeout:r,failFast:this.failFast},o),{abort:function(){s.abort()},forceMinPriority:function(e){t=e,s&&s.forceMinPriority(e)}}}tryStrategy(t,e,n,i){var r=null,s=null;return n.timeout>0&&(r=new R(n.timeout,(function(){s.abort(),i(!0)}))),s=t.connect(e,(function(t,e){t&&r&&r.isRunning()&&!n.failFast||(r&&r.ensureAborted(),i(t,e))})),{abort:function(){r&&r.ensureAborted(),s.abort()},forceMinPriority:function(t){s.forceMinPriority(t)}}}}class zt{constructor(t){this.strategies=t}isSupported(){return $(this.strategies,D.method("isSupported"))}connect(t,e){return function(t,e,n){var i=B(t,(function(t,i,r,s){return t.connect(e,n(i,s))}));return{abort:function(){z(i,Bt)},forceMinPriority:function(t){z(i,(function(e){e.forceMinPriority(t)}))}}}(this.strategies,t,(function(t,n){return function(i,r){n[t].error=i,i?function(t){return function(t,e){for(var n=0;n<t.length;n++)if(!e(t[n],n,t))return!1;return!0}(t,(function(t){return Boolean(t.error)}))}(n)&&e(!0):(z(n,(function(t){t.forceMinPriority(r.transport.priority)})),e(null,r))}}))}}function Bt(t){t.error||t.aborted||(t.abort(),t.aborted=!0)}class Ft{constructor(t,e,n){this.strategy=t,this.transports=e,this.ttl=n.ttl||18e5,this.usingTLS=n.useTLS,this.timeline=n.timeline}isSupported(){return this.strategy.isSupported()}connect(t,e){var n=this.usingTLS,i=function(t){var e=ue.getLocalStorage();if(e)try{var n=e[Xt(t)];if(n)return JSON.parse(n)}catch(e){$t(t)}return null}(n),r=i&&i.cacheSkipCount?i.cacheSkipCount:0,s=[this.strategy];if(i&&i.timestamp+this.ttl>=D.now()){var o=this.transports[i.transport];o&&(["ws","wss"].includes(i.transport)||r>3?(this.timeline.info({cached:!0,transport:i.transport,latency:i.latency}),s.push(new Mt([o],{timeout:2*i.latency+1e3,failFast:!0}))):r++)}var a=D.now(),c=s.pop().connect(t,(function i(o,h){o?($t(n),s.length>0?(a=D.now(),c=s.pop().connect(t,i)):e(o)):(function(t,e,n,i){var r=ue.getLocalStorage();if(r)try{r[Xt(t)]=V({timestamp:D.now(),transport:e,latency:n,cacheSkipCount:i})}catch(t){}}(n,h.transport.name,D.now()-a,r),e(null,h))}));return{abort:function(){c.abort()},forceMinPriority:function(e){t=e,c&&c.forceMinPriority(e)}}}}function Xt(t){return"pusherTransport"+(t?"TLS":"NonTLS")}function $t(t){var e=ue.getLocalStorage();if(e)try{delete e[Xt(t)]}catch(t){}}class Jt{constructor(t,{delay:e}){this.strategy=t,this.options={delay:e}}isSupported(){return this.strategy.isSupported()}connect(t,e){var n,i=this.strategy,r=new R(this.options.delay,(function(){n=i.connect(t,e)}));return{abort:function(){r.ensureAborted(),n&&n.abort()},forceMinPriority:function(e){t=e,n&&n.forceMinPriority(e)}}}}class Wt{constructor(t,e,n){this.test=t,this.trueBranch=e,this.falseBranch=n}isSupported(){return(this.test()?this.trueBranch:this.falseBranch).isSupported()}connect(t,e){return(this.test()?this.trueBranch:this.falseBranch).connect(t,e)}}class Vt{constructor(t){this.strategy=t}isSupported(){return this.strategy.isSupported()}connect(t,e){var n=this.strategy.connect(t,(function(t,i){i&&n.abort(),e(t,i)}));return n}}function Gt(t){return function(){return t.isSupported()}}var Qt,Kt=function(t,e,n){var i={};function r(e,r,s,o,a){var c=n(t,e,r,s,o,a);return i[e]=c,c}var s,o=Object.assign({},e,{hostNonTLS:t.wsHost+":"+t.wsPort,hostTLS:t.wsHost+":"+t.wssPort,httpPath:t.wsPath}),a=Object.assign({},o,{useTLS:!0}),c=Object.assign({},e,{hostNonTLS:t.httpHost+":"+t.httpPort,hostTLS:t.httpHost+":"+t.httpsPort,httpPath:t.httpPath}),h={loop:!0,timeout:15e3,timeoutLimit:6e4},u=new qt({minPingDelay:1e4,maxPingDelay:t.activityTimeout}),l=new qt({lives:2,minPingDelay:1e4,maxPingDelay:t.activityTimeout}),d=r("ws","ws",3,o,u),p=r("wss","ws",3,a,u),f=r("sockjs","sockjs",1,c),v=r("xhr_streaming","xhr_streaming",1,c,l),g=r("xdr_streaming","xdr_streaming",1,c,l),b=r("xhr_polling","xhr_polling",1,c),m=r("xdr_polling","xdr_polling",1,c),y=new Mt([d],h),k=new Mt([p],h),w=new Mt([f],h),S=new Mt([new Wt(Gt(v),v,g)],h),_=new Mt([new Wt(Gt(b),b,m)],h),C=new Mt([new Wt(Gt(S),new zt([S,new Jt(_,{delay:4e3})]),_)],h),T=new Wt(Gt(C),C,w);return s=e.useTLS?new zt([y,new Jt(T,{delay:2e3})]):new zt([y,new Jt(k,{delay:2e3}),new Jt(T,{delay:5e3})]),new Ft(new Vt(new Wt(Gt(d),s,T)),i,{ttl:18e5,timeline:e.timeline,useTLS:e.useTLS})},Yt={getRequest:function(t){var e=new window.XDomainRequest;return e.ontimeout=function(){t.emit("error",new p),t.close()},e.onerror=function(e){t.emit("error",e),t.close()},e.onprogress=function(){e.responseText&&e.responseText.length>0&&t.onChunk(200,e.responseText)},e.onload=function(){e.responseText&&e.responseText.length>0&&t.onChunk(200,e.responseText),t.emit("finished",200),t.close()},e},abortRequest:function(t){t.ontimeout=t.onerror=t.onprogress=t.onload=null,t.abort()}};class Zt extends at{constructor(t,e,n){super(),this.hooks=t,this.method=e,this.url=n}start(t){this.position=0,this.xhr=this.hooks.getRequest(this),this.unloader=()=>{this.close()},ue.addUnloadListener(this.unloader),this.xhr.open(this.method,this.url,!0),this.xhr.setRequestHeader&&this.xhr.setRequestHeader("Content-Type","application/json"),this.xhr.send(t)}close(){this.unloader&&(ue.removeUnloadListener(this.unloader),this.unloader=null),this.xhr&&(this.hooks.abortRequest(this.xhr),this.xhr=null)}onChunk(t,e){for(;;){var n=this.advanceBuffer(e);if(!n)break;this.emit("chunk",{status:t,data:n})}this.isBufferTooLong(e)&&this.emit("buffer_too_long")}advanceBuffer(t){var e=t.slice(this.position),n=e.indexOf("\n");return-1!==n?(this.position+=n+1,e.slice(0,n)):null}isBufferTooLong(t){return this.position===t.length&&t.length>262144}}!function(t){t[t.CONNECTING=0]="CONNECTING",t[t.OPEN=1]="OPEN",t[t.CLOSED=3]="CLOSED"}(Qt||(Qt={}));var te=Qt,ee=1;function ne(t){var e=-1===t.indexOf("?")?"?":"&";return t+e+"t="+ +new Date+"&n="+ee++}function ie(t){return ue.randomInt(t)}var re,se=class{constructor(t,e){this.hooks=t,this.session=ie(1e3)+"/"+function(t){for(var e=[],n=0;n<t;n++)e.push(ie(32).toString(32));return e.join("")}(8),this.location=function(t){var e=/([^\?]*)\/*(\??.*)/.exec(t);return{base:e[1],queryString:e[2]}}(e),this.readyState=te.CONNECTING,this.openStream()}send(t){return this.sendRaw(JSON.stringify([t]))}ping(){this.hooks.sendHeartbeat(this)}close(t,e){this.onClose(t,e,!0)}sendRaw(t){if(this.readyState!==te.OPEN)return!1;try{return ue.createSocketRequest("POST",ne((e=this.location,n=this.session,e.base+"/"+n+"/xhr_send"))).start(t),!0}catch(t){return!1}var e,n}reconnect(){this.closeStream(),this.openStream()}onClose(t,e,n){this.closeStream(),this.readyState=te.CLOSED,this.onclose&&this.onclose({code:t,reason:e,wasClean:n})}onChunk(t){var e;if(200===t.status)switch(this.readyState===te.OPEN&&this.onActivity(),t.data.slice(0,1)){case"o":e=JSON.parse(t.data.slice(1)||"{}"),this.onOpen(e);break;case"a":e=JSON.parse(t.data.slice(1)||"[]");for(var n=0;n<e.length;n++)this.onEvent(e[n]);break;case"m":e=JSON.parse(t.data.slice(1)||"null"),this.onEvent(e);break;case"h":this.hooks.onHeartbeat(this);break;case"c":e=JSON.parse(t.data.slice(1)||"[]"),this.onClose(e[0],e[1],!0)}}onOpen(t){var e,n,i;this.readyState===te.CONNECTING?(t&&t.hostname&&(this.location.base=(e=this.location.base,n=t.hostname,(i=/(https?:\/\/)([^\/:]+)((\/|:)?.*)/.exec(e))[1]+n+i[3])),this.readyState=te.OPEN,this.onopen&&this.onopen()):this.onClose(1006,"Server lost session",!0)}onEvent(t){this.readyState===te.OPEN&&this.onmessage&&this.onmessage({data:t})}onActivity(){this.onactivity&&this.onactivity()}onError(t){this.onerror&&this.onerror(t)}openStream(){this.stream=ue.createSocketRequest("POST",ne(this.hooks.getReceiveURL(this.location,this.session))),this.stream.bind("chunk",(t=>{this.onChunk(t)})),this.stream.bind("finished",(t=>{this.hooks.onFinished(this,t)})),this.stream.bind("buffer_too_long",(()=>{this.reconnect()}));try{this.stream.start()}catch(t){D.defer((()=>{this.onError(t),this.onClose(1006,"Could not start streaming",!1)}))}}closeStream(){this.stream&&(this.stream.unbind_all(),this.stream.close(),this.stream=null)}},oe={getReceiveURL:function(t,e){return t.base+"/"+e+"/xhr_streaming"+t.queryString},onHeartbeat:function(t){t.sendRaw("[]")},sendHeartbeat:function(t){t.sendRaw("[]")},onFinished:function(t,e){t.onClose(1006,"Connection interrupted ("+e+")",!1)}},ae={getReceiveURL:function(t,e){return t.base+"/"+e+"/xhr"+t.queryString},onHeartbeat:function(){},sendHeartbeat:function(t){t.sendRaw("[]")},onFinished:function(t,e){200===e?t.reconnect():t.onClose(1006,"Connection interrupted ("+e+")",!1)}},ce={getRequest:function(t){var e=new(ue.getXHRAPI());return e.onreadystatechange=e.onprogress=function(){switch(e.readyState){case 3:e.responseText&&e.responseText.length>0&&t.onChunk(e.status,e.responseText);break;case 4:e.responseText&&e.responseText.length>0&&t.onChunk(e.status,e.responseText),t.emit("finished",e.status),t.close()}},e},abortRequest:function(t){t.onreadystatechange=null,t.abort()}},he={createStreamingSocket(t){return this.createSocket(oe,t)},createPollingSocket(t){return this.createSocket(ae,t)},createSocket:(t,e)=>new se(t,e),createXHR(t,e){return this.createRequest(ce,t,e)},createRequest:(t,e,n)=>new Zt(t,e,n),createXDR:function(t,e){return this.createRequest(Yt,t,e)}},ue={nextAuthCallbackID:1,auth_callbacks:{},ScriptReceivers:r,DependenciesReceivers:o,getDefaultStrategy:Kt,Transports:kt,transportConnectionInitializer:function(){var t=this;t.timeline.info(t.buildTimelineMessage({transport:t.name+(t.options.useTLS?"s":"")})),t.hooks.isInitialized()?t.changeState("initialized"):t.hooks.file?(t.changeState("initializing"),a.load(t.hooks.file,{useTLS:t.options.useTLS},(function(e,n){t.hooks.isInitialized()?(t.changeState("initialized"),n(!0)):(e&&t.onError(e),t.onClose(),n(!1))}))):t.onClose()},HTTPFactory:he,TimelineTransport:Z,getXHRAPI:()=>window.XMLHttpRequest,getWebSocketAPI:()=>window.WebSocket||window.MozWebSocket,setup(t){window.Pusher=t;var e=()=>{this.onDocumentBody(t.ready)};window.JSON?e():a.load("json2",{},e)},getDocument:()=>document,getProtocol(){return this.getDocument().location.protocol},getAuthorizers:()=>({ajax:k,jsonp:Q}),onDocumentBody(t){document.body?t():setTimeout((()=>{this.onDocumentBody(t)}),0)},createJSONPRequest:(t,e)=>new Y(t,e),createScriptRequest:t=>new K(t),getLocalStorage(){try{return window.localStorage}catch(t){return}},createXHR(){return this.getXHRAPI()?this.createXMLHttpRequest():this.createMicrosoftXHR()},createXMLHttpRequest(){return new(this.getXHRAPI())},createMicrosoftXHR:()=>new ActiveXObject("Microsoft.XMLHTTP"),getNetwork:()=>wt,createWebSocket(t){return new(this.getWebSocketAPI())(t)},createSocketRequest(t,e){if(this.isXHRSupported())return this.HTTPFactory.createXHR(t,e);if(this.isXDRSupported(0===e.indexOf("https:")))return this.HTTPFactory.createXDR(t,e);throw"Cross-origin HTTP requests are not supported"},isXHRSupported(){var t=this.getXHRAPI();return Boolean(t)&&void 0!==(new t).withCredentials},isXDRSupported(t){var e=t?"https:":"http:",n=this.getProtocol();return Boolean(window.XDomainRequest)&&n===e},addUnloadListener(t){void 0!==window.addEventListener?window.addEventListener("unload",t,!1):void 0!==window.attachEvent&&window.attachEvent("onunload",t)},removeUnloadListener(t){void 0!==window.addEventListener?window.removeEventListener("unload",t,!1):void 0!==window.detachEvent&&window.detachEvent("onunload",t)},randomInt:t=>Math.floor((window.crypto||window.msCrypto).getRandomValues(new Uint32Array(1))[0]/Math.pow(2,32)*t)};!function(t){t[t.ERROR=3]="ERROR",t[t.INFO=6]="INFO",t[t.DEBUG=7]="DEBUG"}(re||(re={}));var le=re;class de{constructor(t,e,n){this.key=t,this.session=e,this.events=[],this.options=n||{},this.sent=0,this.uniqueID=0}log(t,e){t<=this.options.level&&(this.events.push(N({},e,{timestamp:D.now()})),this.options.limit&&this.events.length>this.options.limit&&this.events.shift())}error(t){this.log(le.ERROR,t)}info(t){this.log(le.INFO,t)}debug(t){this.log(le.DEBUG,t)}isEmpty(){return 0===this.events.length}send(t,e){var n=N({session:this.session,bundle:this.sent+1,key:this.key,lib:"js",version:this.options.version,cluster:this.options.cluster,features:this.options.features,timeline:this.events},this.options.params);return this.events=[],t(n,((t,n)=>{t||this.sent++,e&&e(t,n)})),!0}generateUniqueID(){return this.uniqueID++,this.uniqueID}}class pe{constructor(t,e,n,i){this.name=t,this.priority=e,this.transport=n,this.options=i||{}}isSupported(){return this.transport.isSupported({useTLS:this.options.useTLS})}connect(t,e){if(!this.isSupported())return fe(new m,e);if(this.priority<t)return fe(new f,e);var n=!1,i=this.transport.createConnection(this.name,this.priority,this.options.key,this.options),r=null,s=function(){i.unbind("initialized",s),i.connect()},o=function(){r=Ut.createHandshake(i,(function(t){n=!0,h(),e(null,t)}))},a=function(t){h(),e(t)},c=function(){var t;h(),t=V(i),e(new v(t))},h=function(){i.unbind("initialized",s),i.unbind("open",o),i.unbind("error",a),i.unbind("closed",c)};return i.bind("initialized",s),i.bind("open",o),i.bind("error",a),i.bind("closed",c),i.initialize(),{abort:()=>{n||(h(),r?r.close():i.close())},forceMinPriority:t=>{n||this.priority<t&&(r?r.close():i.close())}}}}function fe(t,e){return D.defer((function(){e(t)})),{abort:function(){},forceMinPriority:function(){}}}const{Transports:ve}=ue;var ge=function(t,e,n,i,r,s){var o,a=ve[n];if(!a)throw new b(n);return t.enabledTransports&&-1===U(t.enabledTransports,e)||t.disabledTransports&&-1!==U(t.disabledTransports,e)?o=be:(r=Object.assign({ignoreNullOrigin:t.ignoreNullOrigin},r),o=new pe(e,i,s?s.getAssistant(a):a,r)),o},be={isSupported:function(){return!1},connect:function(t,e){var n=D.defer((function(){e(new m)}));return{abort:function(){n.ensureAborted()},forceMinPriority:function(){}}}},me=t=>{if(void 0===ue.getAuthorizers()[t.transport])throw`'${t.transport}' is not a recognized auth transport`;return(e,n)=>{const i=((t,e)=>{var n="socket_id="+encodeURIComponent(t.socketId);for(var i in e.params)n+="&"+encodeURIComponent(i)+"="+encodeURIComponent(e.params[i]);if(null!=e.paramsProvider){let t=e.paramsProvider();for(var i in t)n+="&"+encodeURIComponent(i)+"="+encodeURIComponent(t[i])}return n})(e,t);ue.getAuthorizers()[t.transport](ue,i,t,h.UserAuthentication,n)}},ye=t=>{if(void 0===ue.getAuthorizers()[t.transport])throw`'${t.transport}' is not a recognized auth transport`;return(e,n)=>{const i=((t,e)=>{var n="socket_id="+encodeURIComponent(t.socketId);for(var i in n+="&channel_name="+encodeURIComponent(t.channelName),e.params)n+="&"+encodeURIComponent(i)+"="+encodeURIComponent(e.params[i]);if(null!=e.paramsProvider){let t=e.paramsProvider();for(var i in t)n+="&"+encodeURIComponent(i)+"="+encodeURIComponent(t[i])}return n})(e,t);ue.getAuthorizers()[t.transport](ue,i,t,h.ChannelAuthorization,n)}};const ke=(t,e,n)=>{const i={authTransport:e.transport,authEndpoint:e.endpoint,auth:{params:e.params,headers:e.headers}};return(e,r)=>{const s=t.channel(e.channelName);n(s,i).authorize(e.socketId,r)}};function we(t,e){let n={activityTimeout:t.activityTimeout||s.activityTimeout,cluster:t.cluster,httpPath:t.httpPath||s.httpPath,httpPort:t.httpPort||s.httpPort,httpsPort:t.httpsPort||s.httpsPort,pongTimeout:t.pongTimeout||s.pongTimeout,statsHost:t.statsHost||s.stats_host,unavailableTimeout:t.unavailableTimeout||s.unavailableTimeout,wsPath:t.wsPath||s.wsPath,wsPort:t.wsPort||s.wsPort,wssPort:t.wssPort||s.wssPort,enableStats:Te(t),httpHost:Se(t),useTLS:Ce(t),wsHost:_e(t),userAuthenticator:Oe(t),channelAuthorizer:Ee(t,e)};return"disabledTransports"in t&&(n.disabledTransports=t.disabledTransports),"enabledTransports"in t&&(n.enabledTransports=t.enabledTransports),"ignoreNullOrigin"in t&&(n.ignoreNullOrigin=t.ignoreNullOrigin),"timelineParams"in t&&(n.timelineParams=t.timelineParams),"nacl"in t&&(n.nacl=t.nacl),n}function Se(t){return t.httpHost?t.httpHost:t.cluster?`sockjs-${t.cluster}.pusher.com`:s.httpHost}function _e(t){return t.wsHost?t.wsHost:`ws-${t.cluster}.pusher.com`}function Ce(t){return"https:"===ue.getProtocol()||!1!==t.forceTLS}function Te(t){return"enableStats"in t?t.enableStats:"disableStats"in t&&!t.disableStats}const Pe=t=>"customHandler"in t&&null!=t.customHandler;function Oe(t){const e=Object.assign(Object.assign({},s.userAuthentication),t.userAuthentication);return Pe(e)?e.customHandler:me(e)}function Ee(t,e){const n=function(t,e){let n;if("channelAuthorization"in t)n=Object.assign(Object.assign({},s.channelAuthorization),t.channelAuthorization);else if(n={transport:t.authTransport||s.authTransport,endpoint:t.authEndpoint||s.authEndpoint},"auth"in t&&("params"in t.auth&&(n.params=t.auth.params),"headers"in t.auth&&(n.headers=t.auth.headers)),"authorizer"in t)return{customHandler:ke(e,n,t.authorizer)};return n}(t,e);return Pe(n)?n.customHandler:ye(n)}class xe extends at{constructor(t){super((function(t,e){G.debug(`No callbacks on watchlist events for ${t}`)})),this.pusher=t,this.bindWatchlistInternalEvent()}handleEvent(t){t.data.events.forEach((t=>{this.emit(t.name,t)}))}bindWatchlistInternalEvent(){this.pusher.connection.bind("message",(t=>{"pusher_internal:watchlist_events"===t.event&&this.handleEvent(t)}))}}var Le=function(){let t,e;return{promise:new Promise(((n,i)=>{t=n,e=i})),resolve:t,reject:e}};class Ae extends at{constructor(t){super((function(t,e){G.debug("No callbacks on user for "+t)})),this.signin_requested=!1,this.user_data=null,this.serverToUserChannel=null,this.signinDonePromise=null,this._signinDoneResolve=null,this._onAuthorize=(t,e)=>{if(t)return G.warn(`Error during signin: ${t}`),void this._cleanup();this.pusher.send_event("pusher:signin",{auth:e.auth,user_data:e.user_data})},this.pusher=t,this.pusher.connection.bind("state_change",(({previous:t,current:e})=>{"connected"!==t&&"connected"===e&&this._signin(),"connected"===t&&"connected"!==e&&(this._cleanup(),this._newSigninPromiseIfNeeded())})),this.watchlist=new xe(t),this.pusher.connection.bind("message",(t=>{"pusher:signin_success"===t.event&&this._onSigninSuccess(t.data),this.serverToUserChannel&&this.serverToUserChannel.name===t.channel&&this.serverToUserChannel.handleEvent(t)}))}signin(){this.signin_requested||(this.signin_requested=!0,this._signin())}_signin(){this.signin_requested&&(this._newSigninPromiseIfNeeded(),"connected"===this.pusher.connection.state&&this.pusher.config.userAuthenticator({socketId:this.pusher.connection.socket_id},this._onAuthorize))}_onSigninSuccess(t){try{this.user_data=JSON.parse(t.user_data)}catch(e){return G.error(`Failed parsing user data after signin: ${t.user_data}`),void this._cleanup()}if("string"!=typeof this.user_data.id||""===this.user_data.id)return G.error(`user_data doesn't contain an id. user_data: ${this.user_data}`),void this._cleanup();this._signinDoneResolve(),this._subscribeChannels()}_subscribeChannels(){this.serverToUserChannel=new Et(`#server-to-user-${this.user_data.id}`,this.pusher),this.serverToUserChannel.bind_global(((t,e)=>{0!==t.indexOf("pusher_internal:")&&0!==t.indexOf("pusher:")&&this.emit(t,e)})),(t=>{t.subscriptionPending&&t.subscriptionCancelled?t.reinstateSubscription():t.subscriptionPending||"connected"!==this.pusher.connection.state||t.subscribe()})(this.serverToUserChannel)}_cleanup(){this.user_data=null,this.serverToUserChannel&&(this.serverToUserChannel.unbind_all(),this.serverToUserChannel.disconnect(),this.serverToUserChannel=null),this.signin_requested&&this._signinDoneResolve()}_newSigninPromiseIfNeeded(){if(!this.signin_requested)return;if(this.signinDonePromise&&!this.signinDonePromise.done)return;const{promise:t,resolve:e,reject:n}=Le();t.done=!1;const i=()=>{t.done=!0};t.then(i).catch(i),this.signinDonePromise=t,this._signinDoneResolve=e}}class Re{static ready(){Re.isReady=!0;for(var t=0,e=Re.instances.length;t<e;t++)Re.instances[t].connect()}static getClientFeatures(){return M(X({ws:ue.Transports.ws},(function(t){return t.isSupported({})})))}constructor(t,e){!function(t){if(null==t)throw"You must pass your app key when you instantiate Pusher."}(t),function(t){if(null==t)throw"You must pass an options object";if(null==t.cluster)throw"Options object must provide a cluster";"disableStats"in t&&G.warn("The disableStats option is deprecated in favor of enableStats")}(e),this.key=t,this.options=e,this.config=we(this.options,this),this.channels=Ut.createChannels(),this.global_emitter=new at,this.sessionID=ue.randomInt(1e9),this.timeline=new de(this.key,this.sessionID,{cluster:this.config.cluster,features:Re.getClientFeatures(),params:this.config.timelineParams||{},limit:50,level:le.INFO,version:s.VERSION}),this.config.enableStats&&(this.timelineSender=Ut.createTimelineSender(this.timeline,{host:this.config.statsHost,path:"/timeline/v2/"+ue.TimelineTransport.name})),this.connection=Ut.createConnectionManager(this.key,{getStrategy:t=>ue.getDefaultStrategy(this.config,t,ge),timeline:this.timeline,activityTimeout:this.config.activityTimeout,pongTimeout:this.config.pongTimeout,unavailableTimeout:this.config.unavailableTimeout,useTLS:Boolean(this.config.useTLS)}),this.connection.bind("connected",(()=>{this.subscribeAll(),this.timelineSender&&this.timelineSender.send(this.connection.isUsingTLS())})),this.connection.bind("message",(t=>{var e=0===t.event.indexOf("pusher_internal:");if(t.channel){var n=this.channel(t.channel);n&&n.handleEvent(t)}e||this.global_emitter.emit(t.event,t.data)})),this.connection.bind("connecting",(()=>{this.channels.disconnect()})),this.connection.bind("disconnected",(()=>{this.channels.disconnect()})),this.connection.bind("error",(t=>{G.warn(t)})),Re.instances.push(this),this.timeline.info({instances:Re.instances.length}),this.user=new Ae(this),Re.isReady&&this.connect()}switchCluster(t){const{appKey:e,cluster:n}=t;this.key=e,this.options=Object.assign(Object.assign({},this.options),{cluster:n}),this.config=we(this.options,this),this.connection.switchCluster(this.key)}channel(t){return this.channels.find(t)}allChannels(){return this.channels.all()}connect(){if(this.connection.connect(),this.timelineSender&&!this.timelineSenderTimer){var t=this.connection.isUsingTLS(),e=this.timelineSender;this.timelineSenderTimer=new I(6e4,(function(){e.send(t)}))}}disconnect(){this.connection.disconnect(),this.timelineSenderTimer&&(this.timelineSenderTimer.ensureAborted(),this.timelineSenderTimer=null)}bind(t,e,n){return this.global_emitter.bind(t,e,n),this}unbind(t,e,n){return this.global_emitter.unbind(t,e,n),this}bind_global(t){return this.global_emitter.bind_global(t),this}unbind_global(t){return this.global_emitter.unbind_global(t),this}unbind_all(t){return this.global_emitter.unbind_all(),this}subscribeAll(){var t;for(t in this.channels.channels)this.channels.channels.hasOwnProperty(t)&&this.subscribe(t)}subscribe(t){var e=this.channels.add(t,this);return e.subscriptionPending&&e.subscriptionCancelled?e.reinstateSubscription():e.subscriptionPending||"connected"!==this.connection.state||e.subscribe(),e}unsubscribe(t){var e=this.channels.find(t);e&&e.subscriptionPending?e.cancelSubscription():(e=this.channels.remove(t))&&e.subscribed&&e.unsubscribe()}send_event(t,e,n){return this.connection.send_event(t,e,n)}shouldUseTLS(){return this.config.useTLS}signin(){this.user.signin()}}Re.instances=[],Re.isReady=!1,Re.logToConsole=!1,Re.Runtime=ue,Re.ScriptReceivers=ue.ScriptReceivers,Re.DependenciesReceivers=ue.DependenciesReceivers,Re.auth_callbacks=ue.auth_callbacks;var Ie=e.default=Re;ue.setup(Re)}])},t.exports=e()}},n={};function i(t){var r=n[t];if(void 0!==r)return r.exports;var s=n[t]={exports:{}};return e[t](s,s.exports,i),s.exports}i.m=e,t=[],i.O=(e,n,r,s)=>{if(!n){var o=1/0;for(u=0;u<t.length;u++){for(var[n,r,s]=t[u],a=!0,c=0;c<n.length;c++)(!1&s||o>=s)&&Object.keys(i.O).every((t=>i.O[t](n[c])))?n.splice(c--,1):(a=!1,s<o&&(o=s));if(a){t.splice(u--,1);var h=r();void 0!==h&&(e=h)}}return e}s=s||0;for(var u=t.length;u>0&&t[u-1][2]>s;u--)t[u]=t[u-1];t[u]=[n,r,s]},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),(()=>{var t={847:0,252:0};i.O.j=e=>0===t[e];var e=(e,n)=>{var r,s,[o,a,c]=n,h=0;if(o.some((e=>0!==t[e]))){for(r in a)i.o(a,r)&&(i.m[r]=a[r]);if(c)var u=c(i)}for(e&&e(n);h<o.length;h++)s=o[h],i.o(t,s)&&t[s]&&t[s][0](),t[s]=0;return i.O(u)},n=self.webpackChunk=self.webpackChunk||[];n.forEach(e.bind(null,0)),n.push=e.bind(null,n.push.bind(n))})(),i.O(void 0,[252],(()=>i(420)));var r=i.O(void 0,[252],(()=>i(547)));r=i.O(r)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/app.js":
+/*!*****************************!*\
+  !*** ./resources/js/app.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  broadcaster: 'pusher',
+  key: '991a49d0e1a6f91f5440',
+  cluster: 'mt1',
+  // encrypted: true,
+  // forceTLS: true,
+  wsHost: window.location.hostname,
+  wsPort: 6001,
+  forceTLS: false,
+  disableStats: true,
+  enabledTransports: ['ws', 'wss']
+});
+
+/***/ }),
+
+/***/ "./node_modules/laravel-echo/dist/echo.js":
+/*!************************************************!*\
+  !*** ./node_modules/laravel-echo/dist/echo.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Channel: () => (/* binding */ Channel),
+/* harmony export */   Connector: () => (/* binding */ Connector),
+/* harmony export */   EventFormatter: () => (/* binding */ EventFormatter),
+/* harmony export */   "default": () => (/* binding */ Echo)
+/* harmony export */ });
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+/**
+ * This class represents a basic channel.
+ */
+var Channel = /*#__PURE__*/function () {
+  function Channel() {
+    _classCallCheck(this, Channel);
+  }
+
+  _createClass(Channel, [{
+    key: "listenForWhisper",
+    value:
+    /**
+     * Listen for a whisper event on the channel instance.
+     */
+    function listenForWhisper(event, callback) {
+      return this.listen('.client-' + event, callback);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "notification",
+    value: function notification(callback) {
+      return this.listen('.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', callback);
+    }
+    /**
+     * Stop listening for a whisper event on the channel instance.
+     */
+
+  }, {
+    key: "stopListeningForWhisper",
+    value: function stopListeningForWhisper(event, callback) {
+      return this.stopListening('.client-' + event, callback);
+    }
+  }]);
+
+  return Channel;
+}();
+
+/**
+ * Event name formatter
+ */
+var EventFormatter = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function EventFormatter(namespace) {
+    _classCallCheck(this, EventFormatter);
+
+    this.namespace = namespace; //
+  }
+  /**
+   * Format the given event name.
+   */
+
+
+  _createClass(EventFormatter, [{
+    key: "format",
+    value: function format(event) {
+      if (event.charAt(0) === '.' || event.charAt(0) === '\\') {
+        return event.substr(1);
+      } else if (this.namespace) {
+        event = this.namespace + '.' + event;
+      }
+
+      return event.replace(/\./g, '\\');
+    }
+    /**
+     * Set the event namespace.
+     */
+
+  }, {
+    key: "setNamespace",
+    value: function setNamespace(value) {
+      this.namespace = value;
+    }
+  }]);
+
+  return EventFormatter;
+}();
+
+/**
+ * This class represents a Pusher channel.
+ */
+
+var PusherChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(PusherChannel, _Channel);
+
+  var _super = _createSuper(PusherChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function PusherChannel(pusher, name, options) {
+    var _this;
+
+    _classCallCheck(this, PusherChannel);
+
+    _this = _super.call(this);
+    _this.name = name;
+    _this.pusher = pusher;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Pusher channel.
+   */
+
+
+  _createClass(PusherChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.subscription = this.pusher.subscribe(this.name);
+    }
+    /**
+     * Unsubscribe from a Pusher channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.pusher.unsubscribe(this.name);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Listen for all events on the channel instance.
+     */
+
+  }, {
+    key: "listenToAll",
+    value: function listenToAll(callback) {
+      var _this2 = this;
+
+      this.subscription.bind_global(function (event, data) {
+        if (event.startsWith('pusher:')) {
+          return;
+        }
+
+        var namespace = _this2.options.namespace.replace(/\./g, '\\');
+
+        var formattedEvent = event.startsWith(namespace) ? event.substring(namespace.length + 1) : '.' + event;
+        callback(formattedEvent, data);
+      });
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event, callback) {
+      if (callback) {
+        this.subscription.unbind(this.eventFormatter.format(event), callback);
+      } else {
+        this.subscription.unbind(this.eventFormatter.format(event));
+      }
+
+      return this;
+    }
+    /**
+     * Stop listening for all events on the channel instance.
+     */
+
+  }, {
+    key: "stopListeningToAll",
+    value: function stopListeningToAll(callback) {
+      if (callback) {
+        this.subscription.unbind_global(callback);
+      } else {
+        this.subscription.unbind_global();
+      }
+
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      this.on('pusher:subscription_succeeded', function () {
+        callback();
+      });
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      this.on('pusher:subscription_error', function (status) {
+        callback(status);
+      });
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      this.subscription.bind(event, callback);
+      return this;
+    }
+  }]);
+
+  return PusherChannel;
+}(Channel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPrivateChannel);
+
+  function PusherPrivateChannel() {
+    _classCallCheck(this, PusherPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPrivateChannel, [{
+    key: "whisper",
+    value:
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+    function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherEncryptedPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherEncryptedPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherEncryptedPrivateChannel);
+
+  function PusherEncryptedPrivateChannel() {
+    _classCallCheck(this, PusherEncryptedPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherEncryptedPrivateChannel, [{
+    key: "whisper",
+    value:
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+    function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherEncryptedPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher presence channel.
+ */
+
+var PusherPresenceChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPresenceChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPresenceChannel);
+
+  function PusherPresenceChannel() {
+    _classCallCheck(this, PusherPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPresenceChannel, [{
+    key: "here",
+    value:
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    function here(callback) {
+      this.on('pusher:subscription_succeeded', function (data) {
+        callback(Object.keys(data.members).map(function (k) {
+          return data.members[k];
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('pusher:member_added', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('pusher:member_removed', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+  }]);
+
+  return PusherPresenceChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Socket.io channel.
+ */
+
+var SocketIoChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(SocketIoChannel, _Channel);
+
+  var _super = _createSuper(SocketIoChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function SocketIoChannel(socket, name, options) {
+    var _this;
+
+    _classCallCheck(this, SocketIoChannel);
+
+    _this = _super.call(this);
+    /**
+     * The event callbacks applied to the socket.
+     */
+
+    _this.events = {};
+    /**
+     * User supplied callbacks for events on this channel.
+     */
+
+    _this.listeners = {};
+    _this.name = name;
+    _this.socket = socket;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Socket.io channel.
+   */
+
+
+  _createClass(SocketIoChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.socket.emit('subscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Unsubscribe from channel and ubind event callbacks.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.unbind();
+      this.socket.emit('unsubscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event, callback) {
+      this.unbindEvent(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      this.on('connect', function (socket) {
+        callback(socket);
+      });
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind the channel's socket to an event and store the callback.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      var _this2 = this;
+
+      this.listeners[event] = this.listeners[event] || [];
+
+      if (!this.events[event]) {
+        this.events[event] = function (channel, data) {
+          if (_this2.name === channel && _this2.listeners[event]) {
+            _this2.listeners[event].forEach(function (cb) {
+              return cb(data);
+            });
+          }
+        };
+
+        this.socket.on(event, this.events[event]);
+      }
+
+      this.listeners[event].push(callback);
+      return this;
+    }
+    /**
+     * Unbind the channel's socket from all stored event callbacks.
+     */
+
+  }, {
+    key: "unbind",
+    value: function unbind() {
+      var _this3 = this;
+
+      Object.keys(this.events).forEach(function (event) {
+        _this3.unbindEvent(event);
+      });
+    }
+    /**
+     * Unbind the listeners for the given event.
+     */
+
+  }, {
+    key: "unbindEvent",
+    value: function unbindEvent(event, callback) {
+      this.listeners[event] = this.listeners[event] || [];
+
+      if (callback) {
+        this.listeners[event] = this.listeners[event].filter(function (cb) {
+          return cb !== callback;
+        });
+      }
+
+      if (!callback || this.listeners[event].length === 0) {
+        if (this.events[event]) {
+          this.socket.removeListener(event, this.events[event]);
+          delete this.events[event];
+        }
+
+        delete this.listeners[event];
+      }
+    }
+  }]);
+
+  return SocketIoChannel;
+}(Channel);
+
+/**
+ * This class represents a Socket.io private channel.
+ */
+
+var SocketIoPrivateChannel = /*#__PURE__*/function (_SocketIoChannel) {
+  _inherits(SocketIoPrivateChannel, _SocketIoChannel);
+
+  var _super = _createSuper(SocketIoPrivateChannel);
+
+  function SocketIoPrivateChannel() {
+    _classCallCheck(this, SocketIoPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPrivateChannel, [{
+    key: "whisper",
+    value:
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+    function whisper(eventName, data) {
+      this.socket.emit('client event', {
+        channel: this.name,
+        event: "client-".concat(eventName),
+        data: data
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPrivateChannel;
+}(SocketIoChannel);
+
+/**
+ * This class represents a Socket.io presence channel.
+ */
+
+var SocketIoPresenceChannel = /*#__PURE__*/function (_SocketIoPrivateChann) {
+  _inherits(SocketIoPresenceChannel, _SocketIoPrivateChann);
+
+  var _super = _createSuper(SocketIoPresenceChannel);
+
+  function SocketIoPresenceChannel() {
+    _classCallCheck(this, SocketIoPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPresenceChannel, [{
+    key: "here",
+    value:
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    function here(callback) {
+      this.on('presence:subscribed', function (members) {
+        callback(members.map(function (m) {
+          return m.user_info;
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('presence:joining', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      this.socket.emit('client event', {
+        channel: this.name,
+        event: "client-".concat(eventName),
+        data: data
+      });
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('presence:leaving', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPresenceChannel;
+}(SocketIoPrivateChannel);
+
+/**
+ * This class represents a null channel.
+ */
+
+var NullChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(NullChannel, _Channel);
+
+  var _super = _createSuper(NullChannel);
+
+  function NullChannel() {
+    _classCallCheck(this, NullChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullChannel, [{
+    key: "subscribe",
+    value:
+    /**
+     * Subscribe to a channel.
+     */
+    function subscribe() {//
+    }
+    /**
+     * Unsubscribe from a channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {//
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      return this;
+    }
+    /**
+     * Listen for all events on the channel instance.
+     */
+
+  }, {
+    key: "listenToAll",
+    value: function listenToAll(callback) {
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event, callback) {
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription succeeds.
+     */
+
+  }, {
+    key: "subscribed",
+    value: function subscribed(callback) {
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      return this;
+    }
+  }]);
+
+  return NullChannel;
+}(Channel);
+
+/**
+ * This class represents a null private channel.
+ */
+
+var NullPrivateChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPrivateChannel, _NullChannel);
+
+  var _super = _createSuper(NullPrivateChannel);
+
+  function NullPrivateChannel() {
+    _classCallCheck(this, NullPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPrivateChannel, [{
+    key: "whisper",
+    value:
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+    function whisper(eventName, data) {
+      return this;
+    }
+  }]);
+
+  return NullPrivateChannel;
+}(NullChannel);
+
+/**
+ * This class represents a null presence channel.
+ */
+
+var NullPresenceChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPresenceChannel, _NullChannel);
+
+  var _super = _createSuper(NullPresenceChannel);
+
+  function NullPresenceChannel() {
+    _classCallCheck(this, NullPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPresenceChannel, [{
+    key: "here",
+    value:
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    function here(callback) {
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      return this;
+    }
+    /**
+     * Send a whisper event to other clients in the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      return this;
+    }
+  }]);
+
+  return NullPresenceChannel;
+}(NullChannel);
+
+var Connector = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Connector(options) {
+    _classCallCheck(this, Connector);
+
+    /**
+     * Default connector options.
+     */
+    this._defaultOptions = {
+      auth: {
+        headers: {}
+      },
+      authEndpoint: '/broadcasting/auth',
+      userAuthentication: {
+        endpoint: '/broadcasting/user-auth',
+        headers: {}
+      },
+      broadcaster: 'pusher',
+      csrfToken: null,
+      bearerToken: null,
+      host: null,
+      key: null,
+      namespace: 'App.Events'
+    };
+    this.setOptions(options);
+    this.connect();
+  }
+  /**
+   * Merge the custom options with the defaults.
+   */
+
+
+  _createClass(Connector, [{
+    key: "setOptions",
+    value: function setOptions(options) {
+      this.options = _extends(this._defaultOptions, options);
+      var token = this.csrfToken();
+
+      if (token) {
+        this.options.auth.headers['X-CSRF-TOKEN'] = token;
+        this.options.userAuthentication.headers['X-CSRF-TOKEN'] = token;
+      }
+
+      token = this.options.bearerToken;
+
+      if (token) {
+        this.options.auth.headers['Authorization'] = 'Bearer ' + token;
+        this.options.userAuthentication.headers['Authorization'] = 'Bearer ' + token;
+      }
+
+      return options;
+    }
+    /**
+     * Extract the CSRF token from the page.
+     */
+
+  }, {
+    key: "csrfToken",
+    value: function csrfToken() {
+      var selector;
+
+      if (typeof window !== 'undefined' && window['Laravel'] && window['Laravel'].csrfToken) {
+        return window['Laravel'].csrfToken;
+      } else if (this.options.csrfToken) {
+        return this.options.csrfToken;
+      } else if (typeof document !== 'undefined' && typeof document.querySelector === 'function' && (selector = document.querySelector('meta[name="csrf-token"]'))) {
+        return selector.getAttribute('content');
+      }
+
+      return null;
+    }
+  }]);
+
+  return Connector;
+}();
+
+/**
+ * This class creates a connector to Pusher.
+ */
+
+var PusherConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(PusherConnector, _Connector);
+
+  var _super = _createSuper(PusherConnector);
+
+  function PusherConnector() {
+    var _this;
+
+    _classCallCheck(this, PusherConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Pusher connection.
+   */
+
+
+  _createClass(PusherConnector, [{
+    key: "connect",
+    value: function connect() {
+      if (typeof this.options.client !== 'undefined') {
+        this.pusher = this.options.client;
+      } else if (this.options.Pusher) {
+        this.pusher = new this.options.Pusher(this.options.key, this.options);
+      } else {
+        this.pusher = new Pusher(this.options.key, this.options);
+      }
+    }
+    /**
+     * Sign in the user via Pusher user authentication (https://pusher.com/docs/channels/using_channels/user-authentication/).
+     */
+
+  }, {
+    key: "signin",
+    value: function signin() {
+      this.pusher.signin();
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new PusherChannel(this.pusher, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new PusherPrivateChannel(this.pusher, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivateChannel",
+    value: function encryptedPrivateChannel(name) {
+      if (!this.channels['private-encrypted-' + name]) {
+        this.channels['private-encrypted-' + name] = new PusherEncryptedPrivateChannel(this.pusher, 'private-encrypted-' + name, this.options);
+      }
+
+      return this.channels['private-encrypted-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new PusherPresenceChannel(this.pusher, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this2 = this;
+
+      var channels = [name, 'private-' + name, 'private-encrypted-' + name, 'presence-' + name];
+      channels.forEach(function (name, index) {
+        _this2.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.pusher.connection.socket_id;
+    }
+    /**
+     * Disconnect Pusher connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.pusher.disconnect();
+    }
+  }]);
+
+  return PusherConnector;
+}(Connector);
+
+/**
+ * This class creates a connnector to a Socket.io server.
+ */
+
+var SocketIoConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(SocketIoConnector, _Connector);
+
+  var _super = _createSuper(SocketIoConnector);
+
+  function SocketIoConnector() {
+    var _this;
+
+    _classCallCheck(this, SocketIoConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Socket.io connection.
+   */
+
+
+  _createClass(SocketIoConnector, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      var io = this.getSocketIO();
+      this.socket = io(this.options.host, this.options);
+      this.socket.on('reconnect', function () {
+        Object.values(_this2.channels).forEach(function (channel) {
+          channel.subscribe();
+        });
+      });
+      return this.socket;
+    }
+    /**
+     * Get socket.io module from global scope or options.
+     */
+
+  }, {
+    key: "getSocketIO",
+    value: function getSocketIO() {
+      if (typeof this.options.client !== 'undefined') {
+        return this.options.client;
+      }
+
+      if (typeof io !== 'undefined') {
+        return io;
+      }
+
+      throw new Error('Socket.io client not found. Should be globally available or passed via options.client');
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new SocketIoChannel(this.socket, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new SocketIoPrivateChannel(this.socket, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new SocketIoPresenceChannel(this.socket, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this3 = this;
+
+      var channels = [name, 'private-' + name, 'presence-' + name];
+      channels.forEach(function (name) {
+        _this3.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.socket.id;
+    }
+    /**
+     * Disconnect Socketio connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.socket.disconnect();
+    }
+  }]);
+
+  return SocketIoConnector;
+}(Connector);
+
+/**
+ * This class creates a null connector.
+ */
+
+var NullConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(NullConnector, _Connector);
+
+  var _super = _createSuper(NullConnector);
+
+  function NullConnector() {
+    var _this;
+
+    _classCallCheck(this, NullConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh connection.
+   */
+
+
+  _createClass(NullConnector, [{
+    key: "connect",
+    value: function connect() {//
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return new NullChannel();
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      return new NullChannel();
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      return new NullPrivateChannel();
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivateChannel",
+    value: function encryptedPrivateChannel(name) {
+      return new NullPrivateChannel();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      return new NullPresenceChannel();
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {//
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {//
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return 'fake-socket-id';
+    }
+    /**
+     * Disconnect the connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {//
+    }
+  }]);
+
+  return NullConnector;
+}(Connector);
+
+/**
+ * This class is the primary API for interacting with broadcasting.
+ */
+
+var Echo = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Echo(options) {
+    _classCallCheck(this, Echo);
+
+    this.options = options;
+    this.connect();
+
+    if (!this.options.withoutInterceptors) {
+      this.registerInterceptors();
+    }
+  }
+  /**
+   * Get a channel instance by name.
+   */
+
+
+  _createClass(Echo, [{
+    key: "channel",
+    value: function channel(_channel) {
+      return this.connector.channel(_channel);
+    }
+    /**
+     * Create a new connection.
+     */
+
+  }, {
+    key: "connect",
+    value: function connect() {
+      if (this.options.broadcaster == 'reverb') {
+        this.connector = new PusherConnector(_extends(_extends({}, this.options), {
+          cluster: ''
+        }));
+      } else if (this.options.broadcaster == 'pusher') {
+        this.connector = new PusherConnector(this.options);
+      } else if (this.options.broadcaster == 'socket.io') {
+        this.connector = new SocketIoConnector(this.options);
+      } else if (this.options.broadcaster == 'null') {
+        this.connector = new NullConnector(this.options);
+      } else if (typeof this.options.broadcaster == 'function') {
+        this.connector = new this.options.broadcaster(this.options);
+      }
+    }
+    /**
+     * Disconnect from the Echo server.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.connector.disconnect();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "join",
+    value: function join(channel) {
+      return this.connector.presenceChannel(channel);
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(channel) {
+      this.connector.leave(channel);
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(channel) {
+      this.connector.leaveChannel(channel);
+    }
+    /**
+     * Leave all channels.
+     */
+
+  }, {
+    key: "leaveAllChannels",
+    value: function leaveAllChannels() {
+      for (var channel in this.connector.channels) {
+        this.leaveChannel(channel);
+      }
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(channel, event, callback) {
+      return this.connector.listen(channel, event, callback);
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "private",
+    value: function _private(channel) {
+      return this.connector.privateChannel(channel);
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivate",
+    value: function encryptedPrivate(channel) {
+      return this.connector.encryptedPrivateChannel(channel);
+    }
+    /**
+     * Get the Socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.connector.socketId();
+    }
+    /**
+     * Register 3rd party request interceptiors. These are used to automatically
+     * send a connections socket id to a Laravel app with a X-Socket-Id header.
+     */
+
+  }, {
+    key: "registerInterceptors",
+    value: function registerInterceptors() {
+      if (typeof Vue === 'function' && Vue.http) {
+        this.registerVueRequestInterceptor();
+      }
+
+      if (typeof axios === 'function') {
+        this.registerAxiosRequestInterceptor();
+      }
+
+      if (typeof jQuery === 'function') {
+        this.registerjQueryAjaxSetup();
+      }
+
+      if ((typeof Turbo === "undefined" ? "undefined" : _typeof(Turbo)) === 'object') {
+        this.registerTurboRequestInterceptor();
+      }
+    }
+    /**
+     * Register a Vue HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerVueRequestInterceptor",
+    value: function registerVueRequestInterceptor() {
+      var _this = this;
+
+      Vue.http.interceptors.push(function (request, next) {
+        if (_this.socketId()) {
+          request.headers.set('X-Socket-ID', _this.socketId());
+        }
+
+        next();
+      });
+    }
+    /**
+     * Register an Axios HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerAxiosRequestInterceptor",
+    value: function registerAxiosRequestInterceptor() {
+      var _this2 = this;
+
+      axios.interceptors.request.use(function (config) {
+        if (_this2.socketId()) {
+          config.headers['X-Socket-Id'] = _this2.socketId();
+        }
+
+        return config;
+      });
+    }
+    /**
+     * Register jQuery AjaxPrefilter to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerjQueryAjaxSetup",
+    value: function registerjQueryAjaxSetup() {
+      var _this3 = this;
+
+      if (typeof jQuery.ajax != 'undefined') {
+        jQuery.ajaxPrefilter(function (options, originalOptions, xhr) {
+          if (_this3.socketId()) {
+            xhr.setRequestHeader('X-Socket-Id', _this3.socketId());
+          }
+        });
+      }
+    }
+    /**
+     * Register the Turbo Request interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerTurboRequestInterceptor",
+    value: function registerTurboRequestInterceptor() {
+      var _this4 = this;
+
+      document.addEventListener('turbo:before-fetch-request', function (event) {
+        event.detail.fetchOptions.headers['X-Socket-Id'] = _this4.socketId();
+      });
+    }
+  }]);
+
+  return Echo;
+}();
+
+
+
+
+/***/ }),
+
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/pusher-js/dist/web/pusher.js":
+/*!***************************************************!*\
+  !*** ./node_modules/pusher-js/dist/web/pusher.js ***!
+  \***************************************************/
+/***/ ((module) => {
+
+/*!
+ * Pusher JavaScript Library v8.4.0-rc2
+ * https://pusher.com/
+ *
+ * Copyright 2020, Pusher
+ * Released under the MIT licence.
+ */
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __nested_webpack_require_673__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_673__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__nested_webpack_require_673__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__nested_webpack_require_673__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__nested_webpack_require_673__.d = function(exports, name, getter) {
+/******/ 		if(!__nested_webpack_require_673__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__nested_webpack_require_673__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__nested_webpack_require_673__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __nested_webpack_require_673__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__nested_webpack_require_673__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __nested_webpack_require_673__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__nested_webpack_require_673__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__nested_webpack_require_673__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__nested_webpack_require_673__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__nested_webpack_require_673__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __nested_webpack_require_673__(__nested_webpack_require_673__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package base64 implements Base64 encoding and decoding.
+ */
+// Invalid character used in decoding to indicate
+// that the character to decode is out of range of
+// alphabet and cannot be decoded.
+var INVALID_BYTE = 256;
+/**
+ * Implements standard Base64 encoding.
+ *
+ * Operates in constant time.
+ */
+var Coder = /** @class */ (function () {
+    // TODO(dchest): methods to encode chunk-by-chunk.
+    function Coder(_paddingCharacter) {
+        if (_paddingCharacter === void 0) { _paddingCharacter = "="; }
+        this._paddingCharacter = _paddingCharacter;
+    }
+    Coder.prototype.encodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 8 + 5) / 6 | 0;
+        }
+        return (length + 2) / 3 * 4 | 0;
+    };
+    Coder.prototype.encode = function (data) {
+        var out = "";
+        var i = 0;
+        for (; i < data.length - 2; i += 3) {
+            var c = (data[i] << 16) | (data[i + 1] << 8) | (data[i + 2]);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            out += this._encodeByte((c >>> 1 * 6) & 63);
+            out += this._encodeByte((c >>> 0 * 6) & 63);
+        }
+        var left = data.length - i;
+        if (left > 0) {
+            var c = (data[i] << 16) | (left === 2 ? data[i + 1] << 8 : 0);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            if (left === 2) {
+                out += this._encodeByte((c >>> 1 * 6) & 63);
+            }
+            else {
+                out += this._paddingCharacter || "";
+            }
+            out += this._paddingCharacter || "";
+        }
+        return out;
+    };
+    Coder.prototype.maxDecodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 6 + 7) / 8 | 0;
+        }
+        return length / 4 * 3 | 0;
+    };
+    Coder.prototype.decodedLength = function (s) {
+        return this.maxDecodedLength(s.length - this._getPaddingLength(s));
+    };
+    Coder.prototype.decode = function (s) {
+        if (s.length === 0) {
+            return new Uint8Array(0);
+        }
+        var paddingLength = this._getPaddingLength(s);
+        var length = s.length - paddingLength;
+        var out = new Uint8Array(this.maxDecodedLength(length));
+        var op = 0;
+        var i = 0;
+        var haveBad = 0;
+        var v0 = 0, v1 = 0, v2 = 0, v3 = 0;
+        for (; i < length - 4; i += 4) {
+            v0 = this._decodeChar(s.charCodeAt(i + 0));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+            haveBad |= v2 & INVALID_BYTE;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (i < length - 1) {
+            v0 = this._decodeChar(s.charCodeAt(i));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+        }
+        if (i < length - 2) {
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            haveBad |= v2 & INVALID_BYTE;
+        }
+        if (i < length - 3) {
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (haveBad !== 0) {
+            throw new Error("Base64Coder: incorrect characters for decoding");
+        }
+        return out;
+    };
+    // Standard encoding have the following encoded/decoded ranges,
+    // which we need to convert between.
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  +   /
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   43  47
+    //
+    // Encode 6 bits in b into a new character.
+    Coder.prototype._encodeByte = function (b) {
+        // Encoding uses constant time operations as follows:
+        //
+        // 1. Define comparison of A with B using (A - B) >>> 8:
+        //          if A > B, then result is positive integer
+        //          if A <= B, then result is 0
+        //
+        // 2. Define selection of C or 0 using bitwise AND: X & C:
+        //          if X == 0, then result is 0
+        //          if X != 0, then result is C
+        //
+        // 3. Start with the smallest comparison (b >= 0), which is always
+        //    true, so set the result to the starting ASCII value (65).
+        //
+        // 4. Continue comparing b to higher ASCII values, and selecting
+        //    zero if comparison isn't true, otherwise selecting a value
+        //    to add to result, which:
+        //
+        //          a) undoes the previous addition
+        //          b) provides new value to add
+        //
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 43);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 43) - 63 + 47);
+        return String.fromCharCode(result);
+    };
+    // Decode a character code into a byte.
+    // Must return 256 if character is out of alphabet range.
+    Coder.prototype._decodeChar = function (c) {
+        // Decoding works similar to encoding: using the same comparison
+        // function, but now it works on ranges: result is always incremented
+        // by value, but this value becomes zero if the range is not
+        // satisfied.
+        //
+        // Decoding starts with invalid value, 256, which is then
+        // subtracted when the range is satisfied. If none of the ranges
+        // apply, the function returns 256, which is then checked by
+        // the caller to throw error.
+        var result = INVALID_BYTE; // start with invalid character
+        // c == 43 (c > 42 and c < 44)
+        result += (((42 - c) & (c - 44)) >>> 8) & (-INVALID_BYTE + c - 43 + 62);
+        // c == 47 (c > 46 and c < 48)
+        result += (((46 - c) & (c - 48)) >>> 8) & (-INVALID_BYTE + c - 47 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    Coder.prototype._getPaddingLength = function (s) {
+        var paddingLength = 0;
+        if (this._paddingCharacter) {
+            for (var i = s.length - 1; i >= 0; i--) {
+                if (s[i] !== this._paddingCharacter) {
+                    break;
+                }
+                paddingLength++;
+            }
+            if (s.length < 4 || paddingLength > 2) {
+                throw new Error("Base64Coder: incorrect padding");
+            }
+        }
+        return paddingLength;
+    };
+    return Coder;
+}());
+exports.Coder = Coder;
+var stdCoder = new Coder();
+function encode(data) {
+    return stdCoder.encode(data);
+}
+exports.encode = encode;
+function decode(s) {
+    return stdCoder.decode(s);
+}
+exports.decode = decode;
+/**
+ * Implements URL-safe Base64 encoding.
+ * (Same as Base64, but '+' is replaced with '-', and '/' with '_').
+ *
+ * Operates in constant time.
+ */
+var URLSafeCoder = /** @class */ (function (_super) {
+    __extends(URLSafeCoder, _super);
+    function URLSafeCoder() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    // URL-safe encoding have the following encoded/decoded ranges:
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  -   _
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   45  95
+    //
+    URLSafeCoder.prototype._encodeByte = function (b) {
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 45);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 45) - 63 + 95);
+        return String.fromCharCode(result);
+    };
+    URLSafeCoder.prototype._decodeChar = function (c) {
+        var result = INVALID_BYTE;
+        // c == 45 (c > 44 and c < 46)
+        result += (((44 - c) & (c - 46)) >>> 8) & (-INVALID_BYTE + c - 45 + 62);
+        // c == 95 (c > 94 and c < 96)
+        result += (((94 - c) & (c - 96)) >>> 8) & (-INVALID_BYTE + c - 95 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    return URLSafeCoder;
+}(Coder));
+exports.URLSafeCoder = URLSafeCoder;
+var urlSafeCoder = new URLSafeCoder();
+function encodeURLSafe(data) {
+    return urlSafeCoder.encode(data);
+}
+exports.encodeURLSafe = encodeURLSafe;
+function decodeURLSafe(s) {
+    return urlSafeCoder.decode(s);
+}
+exports.decodeURLSafe = decodeURLSafe;
+exports.encodedLength = function (length) {
+    return stdCoder.encodedLength(length);
+};
+exports.maxDecodedLength = function (length) {
+    return stdCoder.maxDecodedLength(length);
+};
+exports.decodedLength = function (s) {
+    return stdCoder.decodedLength(s);
+};
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package utf8 implements UTF-8 encoding and decoding.
+ */
+var INVALID_UTF16 = "utf8: invalid string";
+var INVALID_UTF8 = "utf8: invalid source encoding";
+/**
+ * Encodes the given string into UTF-8 byte array.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encode(s) {
+    // Calculate result length and allocate output array.
+    // encodedLength() also validates string and throws errors,
+    // so we don't need repeat validation here.
+    var arr = new Uint8Array(encodedLength(s));
+    var pos = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            arr[pos++] = c;
+        }
+        else if (c < 0x800) {
+            arr[pos++] = 0xc0 | c >> 6;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else if (c < 0xd800) {
+            arr[pos++] = 0xe0 | c >> 12;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else {
+            i++; // get one more character
+            c = (c & 0x3ff) << 10;
+            c |= s.charCodeAt(i) & 0x3ff;
+            c += 0x10000;
+            arr[pos++] = 0xf0 | c >> 18;
+            arr[pos++] = 0x80 | (c >> 12) & 0x3f;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+    }
+    return arr;
+}
+exports.encode = encode;
+/**
+ * Returns the number of bytes required to encode the given string into UTF-8.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encodedLength(s) {
+    var result = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            result += 1;
+        }
+        else if (c < 0x800) {
+            result += 2;
+        }
+        else if (c < 0xd800) {
+            result += 3;
+        }
+        else if (c <= 0xdfff) {
+            if (i >= s.length - 1) {
+                throw new Error(INVALID_UTF16);
+            }
+            i++; // "eat" next character
+            result += 4;
+        }
+        else {
+            throw new Error(INVALID_UTF16);
+        }
+    }
+    return result;
+}
+exports.encodedLength = encodedLength;
+/**
+ * Decodes the given byte array from UTF-8 into a string.
+ * Throws if encoding is invalid.
+ */
+function decode(arr) {
+    var chars = [];
+    for (var i = 0; i < arr.length; i++) {
+        var b = arr[i];
+        if (b & 0x80) {
+            var min = void 0;
+            if (b < 0xe0) {
+                // Need 1 more byte.
+                if (i >= arr.length) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x1f) << 6 | (n1 & 0x3f);
+                min = 0x80;
+            }
+            else if (b < 0xf0) {
+                // Need 2 more bytes.
+                if (i >= arr.length - 1) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 12 | (n1 & 0x3f) << 6 | (n2 & 0x3f);
+                min = 0x800;
+            }
+            else if (b < 0xf8) {
+                // Need 3 more bytes.
+                if (i >= arr.length - 2) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                var n3 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80 || (n3 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 18 | (n1 & 0x3f) << 12 | (n2 & 0x3f) << 6 | (n3 & 0x3f);
+                min = 0x10000;
+            }
+            else {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b < min || (b >= 0xd800 && b <= 0xdfff)) {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b >= 0x10000) {
+                // Surrogate pair.
+                if (b > 0x10ffff) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b -= 0x10000;
+                chars.push(String.fromCharCode(0xd800 | (b >> 10)));
+                b = 0xdc00 | (b & 0x3ff);
+            }
+        }
+        chars.push(String.fromCharCode(b));
+    }
+    return chars.join("");
+}
+exports.decode = decode;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __nested_webpack_require_19905__) {
+
+// required so we don't have to do require('pusher').default etc.
+module.exports = __nested_webpack_require_19905__(3).default;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __nested_webpack_exports__, __nested_webpack_require_20109__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__nested_webpack_require_20109__.r(__nested_webpack_exports__);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_receiver_factory.ts
+class ScriptReceiverFactory {
+    constructor(prefix, name) {
+        this.lastId = 0;
+        this.prefix = prefix;
+        this.name = name;
+    }
+    create(callback) {
+        this.lastId++;
+        var number = this.lastId;
+        var id = this.prefix + number;
+        var name = this.name + '[' + number + ']';
+        var called = false;
+        var callbackWrapper = function () {
+            if (!called) {
+                callback.apply(null, arguments);
+                called = true;
+            }
+        };
+        this[number] = callbackWrapper;
+        return { number: number, id: id, name: name, callback: callbackWrapper };
+    }
+    remove(receiver) {
+        delete this[receiver.number];
+    }
+}
+var ScriptReceivers = new ScriptReceiverFactory('_pusher_script_', 'Pusher.ScriptReceivers');
+
+// CONCATENATED MODULE: ./src/core/defaults.ts
+var Defaults = {
+    VERSION: "8.4.0-rc2",
+    PROTOCOL: 7,
+    wsPort: 80,
+    wssPort: 443,
+    wsPath: '',
+    httpHost: 'sockjs.pusher.com',
+    httpPort: 80,
+    httpsPort: 443,
+    httpPath: '/pusher',
+    stats_host: 'stats.pusher.com',
+    authEndpoint: '/pusher/auth',
+    authTransport: 'ajax',
+    activityTimeout: 120000,
+    pongTimeout: 30000,
+    unavailableTimeout: 10000,
+    userAuthentication: {
+        endpoint: '/pusher/user-auth',
+        transport: 'ajax'
+    },
+    channelAuthorization: {
+        endpoint: '/pusher/auth',
+        transport: 'ajax'
+    },
+    cdn_http: "http://js.pusher.com",
+    cdn_https: "https://js.pusher.com",
+    dependency_suffix: ""
+};
+/* harmony default export */ var defaults = (Defaults);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependency_loader.ts
+
+
+class dependency_loader_DependencyLoader {
+    constructor(options) {
+        this.options = options;
+        this.receivers = options.receivers || ScriptReceivers;
+        this.loading = {};
+    }
+    load(name, options, callback) {
+        var self = this;
+        if (self.loading[name] && self.loading[name].length > 0) {
+            self.loading[name].push(callback);
+        }
+        else {
+            self.loading[name] = [callback];
+            var request = runtime.createScriptRequest(self.getPath(name, options));
+            var receiver = self.receivers.create(function (error) {
+                self.receivers.remove(receiver);
+                if (self.loading[name]) {
+                    var callbacks = self.loading[name];
+                    delete self.loading[name];
+                    var successCallback = function (wasSuccessful) {
+                        if (!wasSuccessful) {
+                            request.cleanup();
+                        }
+                    };
+                    for (var i = 0; i < callbacks.length; i++) {
+                        callbacks[i](error, successCallback);
+                    }
+                }
+            });
+            request.send(receiver);
+        }
+    }
+    getRoot(options) {
+        var cdn;
+        var protocol = runtime.getDocument().location.protocol;
+        if ((options && options.useTLS) || protocol === 'https:') {
+            cdn = this.options.cdn_https;
+        }
+        else {
+            cdn = this.options.cdn_http;
+        }
+        return cdn.replace(/\/*$/, '') + '/' + this.options.version;
+    }
+    getPath(name, options) {
+        return this.getRoot(options) + '/' + name + this.options.suffix + '.js';
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependencies.ts
+
+
+
+var DependenciesReceivers = new ScriptReceiverFactory('_pusher_dependencies', 'Pusher.DependenciesReceivers');
+var Dependencies = new dependency_loader_DependencyLoader({
+    cdn_http: defaults.cdn_http,
+    cdn_https: defaults.cdn_https,
+    version: defaults.VERSION,
+    suffix: defaults.dependency_suffix,
+    receivers: DependenciesReceivers
+});
+
+// CONCATENATED MODULE: ./src/core/utils/url_store.ts
+const urlStore = {
+    baseUrl: 'https://pusher.com',
+    urls: {
+        authenticationEndpoint: {
+            path: '/docs/channels/server_api/authenticating_users'
+        },
+        authorizationEndpoint: {
+            path: '/docs/channels/server_api/authorizing-users/'
+        },
+        javascriptQuickStart: {
+            path: '/docs/javascript_quick_start'
+        },
+        triggeringClientEvents: {
+            path: '/docs/client_api_guide/client_events#trigger-events'
+        },
+        encryptedChannelSupport: {
+            fullUrl: 'https://github.com/pusher/pusher-js/tree/cc491015371a4bde5743d1c87a0fbac0feb53195#encrypted-channel-support'
+        }
+    }
+};
+const buildLogSuffix = function (key) {
+    const urlPrefix = 'See:';
+    const urlObj = urlStore.urls[key];
+    if (!urlObj)
+        return '';
+    let url;
+    if (urlObj.fullUrl) {
+        url = urlObj.fullUrl;
+    }
+    else if (urlObj.path) {
+        url = urlStore.baseUrl + urlObj.path;
+    }
+    if (!url)
+        return '';
+    return `${urlPrefix} ${url}`;
+};
+/* harmony default export */ var url_store = ({ buildLogSuffix });
+
+// CONCATENATED MODULE: ./src/core/auth/options.ts
+var AuthRequestType;
+(function (AuthRequestType) {
+    AuthRequestType["UserAuthentication"] = "user-authentication";
+    AuthRequestType["ChannelAuthorization"] = "channel-authorization";
+})(AuthRequestType || (AuthRequestType = {}));
+
+// CONCATENATED MODULE: ./src/core/errors.ts
+class BadEventName extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class BadChannelName extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class RequestTimedOut extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class TransportPriorityTooLow extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class TransportClosed extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class UnsupportedFeature extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class UnsupportedTransport extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class UnsupportedStrategy extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+class HTTPAuthError extends Error {
+    constructor(status, msg) {
+        super(msg);
+        this.status = status;
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/auth/xhr_auth.ts
+
+
+
+
+const ajax = function (context, query, authOptions, authRequestType, callback) {
+    const xhr = runtime.createXHR();
+    xhr.open('POST', authOptions.endpoint, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    for (var headerName in authOptions.headers) {
+        xhr.setRequestHeader(headerName, authOptions.headers[headerName]);
+    }
+    if (authOptions.headersProvider != null) {
+        let dynamicHeaders = authOptions.headersProvider();
+        for (var headerName in dynamicHeaders) {
+            xhr.setRequestHeader(headerName, dynamicHeaders[headerName]);
+        }
+    }
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                let data;
+                let parsed = false;
+                try {
+                    data = JSON.parse(xhr.responseText);
+                    parsed = true;
+                }
+                catch (e) {
+                    callback(new HTTPAuthError(200, `JSON returned from ${authRequestType.toString()} endpoint was invalid, yet status code was 200. Data was: ${xhr.responseText}`), null);
+                }
+                if (parsed) {
+                    callback(null, data);
+                }
+            }
+            else {
+                let suffix = '';
+                switch (authRequestType) {
+                    case AuthRequestType.UserAuthentication:
+                        suffix = url_store.buildLogSuffix('authenticationEndpoint');
+                        break;
+                    case AuthRequestType.ChannelAuthorization:
+                        suffix = `Clients must be authorized to join private or presence channels. ${url_store.buildLogSuffix('authorizationEndpoint')}`;
+                        break;
+                }
+                callback(new HTTPAuthError(xhr.status, `Unable to retrieve auth string from ${authRequestType.toString()} endpoint - ` +
+                    `received status: ${xhr.status} from ${authOptions.endpoint}. ${suffix}`), null);
+            }
+        }
+    };
+    xhr.send(query);
+    return xhr;
+};
+/* harmony default export */ var xhr_auth = (ajax);
+
+// CONCATENATED MODULE: ./src/core/base64.ts
+function encode(s) {
+    return btoa(utob(s));
+}
+var fromCharCode = String.fromCharCode;
+var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+var b64tab = {};
+for (var base64_i = 0, l = b64chars.length; base64_i < l; base64_i++) {
+    b64tab[b64chars.charAt(base64_i)] = base64_i;
+}
+var cb_utob = function (c) {
+    var cc = c.charCodeAt(0);
+    return cc < 0x80
+        ? c
+        : cc < 0x800
+            ? fromCharCode(0xc0 | (cc >>> 6)) + fromCharCode(0x80 | (cc & 0x3f))
+            : fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) +
+                fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
+                fromCharCode(0x80 | (cc & 0x3f));
+};
+var utob = function (u) {
+    return u.replace(/[^\x00-\x7F]/g, cb_utob);
+};
+var cb_encode = function (ccc) {
+    var padlen = [0, 2, 1][ccc.length % 3];
+    var ord = (ccc.charCodeAt(0) << 16) |
+        ((ccc.length > 1 ? ccc.charCodeAt(1) : 0) << 8) |
+        (ccc.length > 2 ? ccc.charCodeAt(2) : 0);
+    var chars = [
+        b64chars.charAt(ord >>> 18),
+        b64chars.charAt((ord >>> 12) & 63),
+        padlen >= 2 ? '=' : b64chars.charAt((ord >>> 6) & 63),
+        padlen >= 1 ? '=' : b64chars.charAt(ord & 63)
+    ];
+    return chars.join('');
+};
+var btoa = window.btoa ||
+    function (b) {
+        return b.replace(/[\s\S]{1,3}/g, cb_encode);
+    };
+
+// CONCATENATED MODULE: ./src/core/utils/timers/abstract_timer.ts
+class Timer {
+    constructor(set, clear, delay, callback) {
+        this.clear = clear;
+        this.timer = set(() => {
+            if (this.timer) {
+                this.timer = callback(this.timer);
+            }
+        }, delay);
+    }
+    isRunning() {
+        return this.timer !== null;
+    }
+    ensureAborted() {
+        if (this.timer) {
+            this.clear(this.timer);
+            this.timer = null;
+        }
+    }
+}
+/* harmony default export */ var abstract_timer = (Timer);
+
+// CONCATENATED MODULE: ./src/core/utils/timers/index.ts
+
+function timers_clearTimeout(timer) {
+    window.clearTimeout(timer);
+}
+function timers_clearInterval(timer) {
+    window.clearInterval(timer);
+}
+class timers_OneOffTimer extends abstract_timer {
+    constructor(delay, callback) {
+        super(setTimeout, timers_clearTimeout, delay, function (timer) {
+            callback();
+            return null;
+        });
+    }
+}
+class timers_PeriodicTimer extends abstract_timer {
+    constructor(delay, callback) {
+        super(setInterval, timers_clearInterval, delay, function (timer) {
+            callback();
+            return timer;
+        });
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/util.ts
+
+var Util = {
+    now() {
+        if (Date.now) {
+            return Date.now();
+        }
+        else {
+            return new Date().valueOf();
+        }
+    },
+    defer(callback) {
+        return new timers_OneOffTimer(0, callback);
+    },
+    method(name, ...args) {
+        var boundArguments = Array.prototype.slice.call(arguments, 1);
+        return function (object) {
+            return object[name].apply(object, boundArguments.concat(arguments));
+        };
+    }
+};
+/* harmony default export */ var util = (Util);
+
+// CONCATENATED MODULE: ./src/core/utils/collections.ts
+
+
+function extend(target, ...sources) {
+    for (var i = 0; i < sources.length; i++) {
+        var extensions = sources[i];
+        for (var property in extensions) {
+            if (extensions[property] &&
+                extensions[property].constructor &&
+                extensions[property].constructor === Object) {
+                target[property] = extend(target[property] || {}, extensions[property]);
+            }
+            else {
+                target[property] = extensions[property];
+            }
+        }
+    }
+    return target;
+}
+function stringify() {
+    var m = ['Pusher'];
+    for (var i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] === 'string') {
+            m.push(arguments[i]);
+        }
+        else {
+            m.push(safeJSONStringify(arguments[i]));
+        }
+    }
+    return m.join(' : ');
+}
+function arrayIndexOf(array, item) {
+    var nativeIndexOf = Array.prototype.indexOf;
+    if (array === null) {
+        return -1;
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) {
+        return array.indexOf(item);
+    }
+    for (var i = 0, l = array.length; i < l; i++) {
+        if (array[i] === item) {
+            return i;
+        }
+    }
+    return -1;
+}
+function objectApply(object, f) {
+    for (var key in object) {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
+            f(object[key], key, object);
+        }
+    }
+}
+function keys(object) {
+    var keys = [];
+    objectApply(object, function (_, key) {
+        keys.push(key);
+    });
+    return keys;
+}
+function values(object) {
+    var values = [];
+    objectApply(object, function (value) {
+        values.push(value);
+    });
+    return values;
+}
+function apply(array, f, context) {
+    for (var i = 0; i < array.length; i++) {
+        f.call(context || window, array[i], i, array);
+    }
+}
+function map(array, f) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        result.push(f(array[i], i, array, result));
+    }
+    return result;
+}
+function mapObject(object, f) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        result[key] = f(value);
+    });
+    return result;
+}
+function filter(array, test) {
+    test =
+        test ||
+            function (value) {
+                return !!value;
+            };
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array, result)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+function filterObject(object, test) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        if ((test && test(value, key, object, result)) || Boolean(value)) {
+            result[key] = value;
+        }
+    });
+    return result;
+}
+function flatten(object) {
+    var result = [];
+    objectApply(object, function (value, key) {
+        result.push([key, value]);
+    });
+    return result;
+}
+function any(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array)) {
+            return true;
+        }
+    }
+    return false;
+}
+function collections_all(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (!test(array[i], i, array)) {
+            return false;
+        }
+    }
+    return true;
+}
+function encodeParamsObject(data) {
+    return mapObject(data, function (value) {
+        if (typeof value === 'object') {
+            value = safeJSONStringify(value);
+        }
+        return encodeURIComponent(encode(value.toString()));
+    });
+}
+function buildQueryString(data) {
+    var params = filterObject(data, function (value) {
+        return value !== undefined;
+    });
+    var query = map(flatten(encodeParamsObject(params)), util.method('join', '=')).join('&');
+    return query;
+}
+function decycleObject(object) {
+    var objects = [], paths = [];
+    return (function derez(value, path) {
+        var i, name, nu;
+        switch (typeof value) {
+            case 'object':
+                if (!value) {
+                    return null;
+                }
+                for (i = 0; i < objects.length; i += 1) {
+                    if (objects[i] === value) {
+                        return { $ref: paths[i] };
+                    }
+                }
+                objects.push(value);
+                paths.push(path);
+                if (Object.prototype.toString.apply(value) === '[object Array]') {
+                    nu = [];
+                    for (i = 0; i < value.length; i += 1) {
+                        nu[i] = derez(value[i], path + '[' + i + ']');
+                    }
+                }
+                else {
+                    nu = {};
+                    for (name in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, name)) {
+                            nu[name] = derez(value[name], path + '[' + JSON.stringify(name) + ']');
+                        }
+                    }
+                }
+                return nu;
+            case 'number':
+            case 'string':
+            case 'boolean':
+                return value;
+        }
+    })(object, '$');
+}
+function safeJSONStringify(source) {
+    try {
+        return JSON.stringify(source);
+    }
+    catch (e) {
+        return JSON.stringify(decycleObject(source));
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/logger.ts
+
+
+class logger_Logger {
+    constructor() {
+        this.globalLog = (message) => {
+            if (window.console && window.console.log) {
+                window.console.log(message);
+            }
+        };
+    }
+    debug(...args) {
+        this.log(this.globalLog, args);
+    }
+    warn(...args) {
+        this.log(this.globalLogWarn, args);
+    }
+    error(...args) {
+        this.log(this.globalLogError, args);
+    }
+    globalLogWarn(message) {
+        if (window.console && window.console.warn) {
+            window.console.warn(message);
+        }
+        else {
+            this.globalLog(message);
+        }
+    }
+    globalLogError(message) {
+        if (window.console && window.console.error) {
+            window.console.error(message);
+        }
+        else {
+            this.globalLogWarn(message);
+        }
+    }
+    log(defaultLoggingFunction, ...args) {
+        var message = stringify.apply(this, arguments);
+        if (core_pusher.log) {
+            core_pusher.log(message);
+        }
+        else if (core_pusher.logToConsole) {
+            const log = defaultLoggingFunction.bind(this);
+            log(message);
+        }
+    }
+}
+/* harmony default export */ var logger = (new logger_Logger());
+
+// CONCATENATED MODULE: ./src/runtimes/web/auth/jsonp_auth.ts
+
+var jsonp = function (context, query, authOptions, authRequestType, callback) {
+    if (authOptions.headers !== undefined ||
+        authOptions.headersProvider != null) {
+        logger.warn(`To send headers with the ${authRequestType.toString()} request, you must use AJAX, rather than JSONP.`);
+    }
+    var callbackName = context.nextAuthCallbackID.toString();
+    context.nextAuthCallbackID++;
+    var document = context.getDocument();
+    var script = document.createElement('script');
+    context.auth_callbacks[callbackName] = function (data) {
+        callback(null, data);
+    };
+    var callback_name = "Pusher.auth_callbacks['" + callbackName + "']";
+    script.src =
+        authOptions.endpoint +
+            '?callback=' +
+            encodeURIComponent(callback_name) +
+            '&' +
+            query;
+    var head = document.getElementsByTagName('head')[0] || document.documentElement;
+    head.insertBefore(script, head.firstChild);
+};
+/* harmony default export */ var jsonp_auth = (jsonp);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_request.ts
+class ScriptRequest {
+    constructor(src) {
+        this.src = src;
+    }
+    send(receiver) {
+        var self = this;
+        var errorString = 'Error loading ' + self.src;
+        self.script = document.createElement('script');
+        self.script.id = receiver.id;
+        self.script.src = self.src;
+        self.script.type = 'text/javascript';
+        self.script.charset = 'UTF-8';
+        if (self.script.addEventListener) {
+            self.script.onerror = function () {
+                receiver.callback(errorString);
+            };
+            self.script.onload = function () {
+                receiver.callback(null);
+            };
+        }
+        else {
+            self.script.onreadystatechange = function () {
+                if (self.script.readyState === 'loaded' ||
+                    self.script.readyState === 'complete') {
+                    receiver.callback(null);
+                }
+            };
+        }
+        if (self.script.async === undefined &&
+            document.attachEvent &&
+            /opera/i.test(navigator.userAgent)) {
+            self.errorScript = document.createElement('script');
+            self.errorScript.id = receiver.id + '_error';
+            self.errorScript.text = receiver.name + "('" + errorString + "');";
+            self.script.async = self.errorScript.async = false;
+        }
+        else {
+            self.script.async = true;
+        }
+        var head = document.getElementsByTagName('head')[0];
+        head.insertBefore(self.script, head.firstChild);
+        if (self.errorScript) {
+            head.insertBefore(self.errorScript, self.script.nextSibling);
+        }
+    }
+    cleanup() {
+        if (this.script) {
+            this.script.onload = this.script.onerror = null;
+            this.script.onreadystatechange = null;
+        }
+        if (this.script && this.script.parentNode) {
+            this.script.parentNode.removeChild(this.script);
+        }
+        if (this.errorScript && this.errorScript.parentNode) {
+            this.errorScript.parentNode.removeChild(this.errorScript);
+        }
+        this.script = null;
+        this.errorScript = null;
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/jsonp_request.ts
+
+
+class jsonp_request_JSONPRequest {
+    constructor(url, data) {
+        this.url = url;
+        this.data = data;
+    }
+    send(receiver) {
+        if (this.request) {
+            return;
+        }
+        var query = buildQueryString(this.data);
+        var url = this.url + '/' + receiver.number + '?' + query;
+        this.request = runtime.createScriptRequest(url);
+        this.request.send(receiver);
+    }
+    cleanup() {
+        if (this.request) {
+            this.request.cleanup();
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/web/timeline/jsonp_timeline.ts
+
+
+var getAgent = function (sender, useTLS) {
+    return function (data, callback) {
+        var scheme = 'http' + (useTLS ? 's' : '') + '://';
+        var url = scheme + (sender.host || sender.options.host) + sender.options.path;
+        var request = runtime.createJSONPRequest(url, data);
+        var receiver = runtime.ScriptReceivers.create(function (error, result) {
+            ScriptReceivers.remove(receiver);
+            request.cleanup();
+            if (result && result.host) {
+                sender.host = result.host;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        request.send(receiver);
+    };
+};
+var jsonp_timeline_jsonp = {
+    name: 'jsonp',
+    getAgent
+};
+/* harmony default export */ var jsonp_timeline = (jsonp_timeline_jsonp);
+
+// CONCATENATED MODULE: ./src/core/transports/url_schemes.ts
+
+function getGenericURL(baseScheme, params, path) {
+    var scheme = baseScheme + (params.useTLS ? 's' : '');
+    var host = params.useTLS ? params.hostTLS : params.hostNonTLS;
+    return scheme + '://' + host + path;
+}
+function getGenericPath(key, queryString) {
+    var path = '/app/' + key;
+    var query = '?protocol=' +
+        defaults.PROTOCOL +
+        '&client=js' +
+        '&version=' +
+        defaults.VERSION +
+        (queryString ? '&' + queryString : '');
+    return path + query;
+}
+var ws = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '') + getGenericPath(key, 'flash=false');
+        return getGenericURL('ws', params, path);
+    }
+};
+var http = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '/pusher') + getGenericPath(key);
+        return getGenericURL('http', params, path);
+    }
+};
+var sockjs = {
+    getInitial: function (key, params) {
+        return getGenericURL('http', params, params.httpPath || '/pusher');
+    },
+    getPath: function (key, params) {
+        return getGenericPath(key);
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/events/callback_registry.ts
+
+class callback_registry_CallbackRegistry {
+    constructor() {
+        this._callbacks = {};
+    }
+    get(name) {
+        return this._callbacks[prefix(name)];
+    }
+    add(name, callback, context) {
+        var prefixedEventName = prefix(name);
+        this._callbacks[prefixedEventName] =
+            this._callbacks[prefixedEventName] || [];
+        this._callbacks[prefixedEventName].push({
+            fn: callback,
+            context: context
+        });
+    }
+    remove(name, callback, context) {
+        if (!name && !callback && !context) {
+            this._callbacks = {};
+            return;
+        }
+        var names = name ? [prefix(name)] : keys(this._callbacks);
+        if (callback || context) {
+            this.removeCallback(names, callback, context);
+        }
+        else {
+            this.removeAllCallbacks(names);
+        }
+    }
+    removeCallback(names, callback, context) {
+        apply(names, function (name) {
+            this._callbacks[name] = filter(this._callbacks[name] || [], function (binding) {
+                return ((callback && callback !== binding.fn) ||
+                    (context && context !== binding.context));
+            });
+            if (this._callbacks[name].length === 0) {
+                delete this._callbacks[name];
+            }
+        }, this);
+    }
+    removeAllCallbacks(names) {
+        apply(names, function (name) {
+            delete this._callbacks[name];
+        }, this);
+    }
+}
+function prefix(name) {
+    return '_' + name;
+}
+
+// CONCATENATED MODULE: ./src/core/events/dispatcher.ts
+
+
+class dispatcher_Dispatcher {
+    constructor(failThrough) {
+        this.callbacks = new callback_registry_CallbackRegistry();
+        this.global_callbacks = [];
+        this.failThrough = failThrough;
+    }
+    bind(eventName, callback, context) {
+        this.callbacks.add(eventName, callback, context);
+        return this;
+    }
+    bind_global(callback) {
+        this.global_callbacks.push(callback);
+        return this;
+    }
+    unbind(eventName, callback, context) {
+        this.callbacks.remove(eventName, callback, context);
+        return this;
+    }
+    unbind_global(callback) {
+        if (!callback) {
+            this.global_callbacks = [];
+            return this;
+        }
+        this.global_callbacks = filter(this.global_callbacks || [], c => c !== callback);
+        return this;
+    }
+    unbind_all() {
+        this.unbind();
+        this.unbind_global();
+        return this;
+    }
+    emit(eventName, data, metadata) {
+        for (var i = 0; i < this.global_callbacks.length; i++) {
+            this.global_callbacks[i](eventName, data);
+        }
+        var callbacks = this.callbacks.get(eventName);
+        var args = [];
+        if (metadata) {
+            args.push(data, metadata);
+        }
+        else if (data) {
+            args.push(data);
+        }
+        if (callbacks && callbacks.length > 0) {
+            for (var i = 0; i < callbacks.length; i++) {
+                callbacks[i].fn.apply(callbacks[i].context || window, args);
+            }
+        }
+        else if (this.failThrough) {
+            this.failThrough(eventName, data);
+        }
+        return this;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/transports/transport_connection.ts
+
+
+
+
+
+class transport_connection_TransportConnection extends dispatcher_Dispatcher {
+    constructor(hooks, name, priority, key, options) {
+        super();
+        this.initialize = runtime.transportConnectionInitializer;
+        this.hooks = hooks;
+        this.name = name;
+        this.priority = priority;
+        this.key = key;
+        this.options = options;
+        this.state = 'new';
+        this.timeline = options.timeline;
+        this.activityTimeout = options.activityTimeout;
+        this.id = this.timeline.generateUniqueID();
+    }
+    handlesActivityChecks() {
+        return Boolean(this.hooks.handlesActivityChecks);
+    }
+    supportsPing() {
+        return Boolean(this.hooks.supportsPing);
+    }
+    connect() {
+        if (this.socket || this.state !== 'initialized') {
+            return false;
+        }
+        var url = this.hooks.urls.getInitial(this.key, this.options);
+        try {
+            this.socket = this.hooks.getSocket(url, this.options);
+        }
+        catch (e) {
+            util.defer(() => {
+                this.onError(e);
+                this.changeState('closed');
+            });
+            return false;
+        }
+        this.bindListeners();
+        logger.debug('Connecting', { transport: this.name, url });
+        this.changeState('connecting');
+        return true;
+    }
+    close() {
+        if (this.socket) {
+            this.socket.close();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    send(data) {
+        if (this.state === 'open') {
+            util.defer(() => {
+                if (this.socket) {
+                    this.socket.send(data);
+                }
+            });
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    ping() {
+        if (this.state === 'open' && this.supportsPing()) {
+            this.socket.ping();
+        }
+    }
+    onOpen() {
+        if (this.hooks.beforeOpen) {
+            this.hooks.beforeOpen(this.socket, this.hooks.urls.getPath(this.key, this.options));
+        }
+        this.changeState('open');
+        this.socket.onopen = undefined;
+    }
+    onError(error) {
+        this.emit('error', { type: 'WebSocketError', error: error });
+        this.timeline.error(this.buildTimelineMessage({ error: error.toString() }));
+    }
+    onClose(closeEvent) {
+        if (closeEvent) {
+            this.changeState('closed', {
+                code: closeEvent.code,
+                reason: closeEvent.reason,
+                wasClean: closeEvent.wasClean
+            });
+        }
+        else {
+            this.changeState('closed');
+        }
+        this.unbindListeners();
+        this.socket = undefined;
+    }
+    onMessage(message) {
+        this.emit('message', message);
+    }
+    onActivity() {
+        this.emit('activity');
+    }
+    bindListeners() {
+        this.socket.onopen = () => {
+            this.onOpen();
+        };
+        this.socket.onerror = error => {
+            this.onError(error);
+        };
+        this.socket.onclose = closeEvent => {
+            this.onClose(closeEvent);
+        };
+        this.socket.onmessage = message => {
+            this.onMessage(message);
+        };
+        if (this.supportsPing()) {
+            this.socket.onactivity = () => {
+                this.onActivity();
+            };
+        }
+    }
+    unbindListeners() {
+        if (this.socket) {
+            this.socket.onopen = undefined;
+            this.socket.onerror = undefined;
+            this.socket.onclose = undefined;
+            this.socket.onmessage = undefined;
+            if (this.supportsPing()) {
+                this.socket.onactivity = undefined;
+            }
+        }
+    }
+    changeState(state, params) {
+        this.state = state;
+        this.timeline.info(this.buildTimelineMessage({
+            state: state,
+            params: params
+        }));
+        this.emit(state, params);
+    }
+    buildTimelineMessage(message) {
+        return extend({ cid: this.id }, message);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/transports/transport.ts
+
+class transport_Transport {
+    constructor(hooks) {
+        this.hooks = hooks;
+    }
+    isSupported(environment) {
+        return this.hooks.isSupported(environment);
+    }
+    createConnection(name, priority, key, options) {
+        return new transport_connection_TransportConnection(this.hooks, name, priority, key, options);
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/transports/transports.ts
+
+
+
+
+var WSTransport = new transport_Transport({
+    urls: ws,
+    handlesActivityChecks: false,
+    supportsPing: false,
+    isInitialized: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    isSupported: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    getSocket: function (url) {
+        return runtime.createWebSocket(url);
+    }
+});
+var httpConfiguration = {
+    urls: http,
+    handlesActivityChecks: false,
+    supportsPing: true,
+    isInitialized: function () {
+        return true;
+    }
+};
+var streamingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createStreamingSocket(url);
+    }
+}, httpConfiguration);
+var pollingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createPollingSocket(url);
+    }
+}, httpConfiguration);
+var xhrConfiguration = {
+    isSupported: function () {
+        return runtime.isXHRSupported();
+    }
+};
+var XHRStreamingTransport = new transport_Transport((extend({}, streamingConfiguration, xhrConfiguration)));
+var XHRPollingTransport = new transport_Transport(extend({}, pollingConfiguration, xhrConfiguration));
+var Transports = {
+    ws: WSTransport,
+    xhr_streaming: XHRStreamingTransport,
+    xhr_polling: XHRPollingTransport
+};
+/* harmony default export */ var transports = (Transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transports.ts
+
+
+
+
+
+
+var SockJSTransport = new transport_Transport({
+    file: 'sockjs',
+    urls: sockjs,
+    handlesActivityChecks: true,
+    supportsPing: false,
+    isSupported: function () {
+        return true;
+    },
+    isInitialized: function () {
+        return window.SockJS !== undefined;
+    },
+    getSocket: function (url, options) {
+        return new window.SockJS(url, null, {
+            js_path: Dependencies.getPath('sockjs', {
+                useTLS: options.useTLS
+            }),
+            ignore_null_origin: options.ignoreNullOrigin
+        });
+    },
+    beforeOpen: function (socket, path) {
+        socket.send(JSON.stringify({
+            path: path
+        }));
+    }
+});
+var xdrConfiguration = {
+    isSupported: function (environment) {
+        var yes = runtime.isXDRSupported(environment.useTLS);
+        return yes;
+    }
+};
+var XDRStreamingTransport = new transport_Transport((extend({}, streamingConfiguration, xdrConfiguration)));
+var XDRPollingTransport = new transport_Transport(extend({}, pollingConfiguration, xdrConfiguration));
+transports.xdr_streaming = XDRStreamingTransport;
+transports.xdr_polling = XDRPollingTransport;
+transports.sockjs = SockJSTransport;
+/* harmony default export */ var transports_transports = (transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/net_info.ts
+
+class net_info_NetInfo extends dispatcher_Dispatcher {
+    constructor() {
+        super();
+        var self = this;
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('online', function () {
+                self.emit('online');
+            }, false);
+            window.addEventListener('offline', function () {
+                self.emit('offline');
+            }, false);
+        }
+    }
+    isOnline() {
+        if (window.navigator.onLine === undefined) {
+            return true;
+        }
+        else {
+            return window.navigator.onLine;
+        }
+    }
+}
+var net_info_Network = new net_info_NetInfo();
+
+// CONCATENATED MODULE: ./src/core/transports/assistant_to_the_transport_manager.ts
+
+
+class assistant_to_the_transport_manager_AssistantToTheTransportManager {
+    constructor(manager, transport, options) {
+        this.manager = manager;
+        this.transport = transport;
+        this.minPingDelay = options.minPingDelay;
+        this.maxPingDelay = options.maxPingDelay;
+        this.pingDelay = undefined;
+    }
+    createConnection(name, priority, key, options) {
+        options = extend({}, options, {
+            activityTimeout: this.pingDelay
+        });
+        var connection = this.transport.createConnection(name, priority, key, options);
+        var openTimestamp = null;
+        var onOpen = function () {
+            connection.unbind('open', onOpen);
+            connection.bind('closed', onClosed);
+            openTimestamp = util.now();
+        };
+        var onClosed = closeEvent => {
+            connection.unbind('closed', onClosed);
+            if (closeEvent.code === 1002 || closeEvent.code === 1003) {
+                this.manager.reportDeath();
+            }
+            else if (!closeEvent.wasClean && openTimestamp) {
+                var lifespan = util.now() - openTimestamp;
+                if (lifespan < 2 * this.maxPingDelay) {
+                    this.manager.reportDeath();
+                    this.pingDelay = Math.max(lifespan / 2, this.minPingDelay);
+                }
+            }
+        };
+        connection.bind('open', onOpen);
+        return connection;
+    }
+    isSupported(environment) {
+        return this.manager.isAlive() && this.transport.isSupported(environment);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/connection/protocol/protocol.ts
+const Protocol = {
+    decodeMessage: function (messageEvent) {
+        try {
+            var messageData = JSON.parse(messageEvent.data);
+            var pusherEventData = messageData.data;
+            if (typeof pusherEventData === 'string') {
+                try {
+                    pusherEventData = JSON.parse(messageData.data);
+                }
+                catch (e) { }
+            }
+            var pusherEvent = {
+                event: messageData.event,
+                channel: messageData.channel,
+                data: pusherEventData
+            };
+            if (messageData.user_id) {
+                pusherEvent.user_id = messageData.user_id;
+            }
+            return pusherEvent;
+        }
+        catch (e) {
+            throw { type: 'MessageParseError', error: e, data: messageEvent.data };
+        }
+    },
+    encodeMessage: function (event) {
+        return JSON.stringify(event);
+    },
+    processHandshake: function (messageEvent) {
+        var message = Protocol.decodeMessage(messageEvent);
+        if (message.event === 'pusher:connection_established') {
+            if (!message.data.activity_timeout) {
+                throw 'No activity timeout specified in handshake';
+            }
+            return {
+                action: 'connected',
+                id: message.data.socket_id,
+                activityTimeout: message.data.activity_timeout * 1000
+            };
+        }
+        else if (message.event === 'pusher:error') {
+            return {
+                action: this.getCloseAction(message.data),
+                error: this.getCloseError(message.data)
+            };
+        }
+        else {
+            throw 'Invalid handshake';
+        }
+    },
+    getCloseAction: function (closeEvent) {
+        if (closeEvent.code < 4000) {
+            if (closeEvent.code >= 1002 && closeEvent.code <= 1004) {
+                return 'backoff';
+            }
+            else {
+                return null;
+            }
+        }
+        else if (closeEvent.code === 4000) {
+            return 'tls_only';
+        }
+        else if (closeEvent.code < 4100) {
+            return 'refused';
+        }
+        else if (closeEvent.code < 4200) {
+            return 'backoff';
+        }
+        else if (closeEvent.code < 4300) {
+            return 'retry';
+        }
+        else {
+            return 'refused';
+        }
+    },
+    getCloseError: function (closeEvent) {
+        if (closeEvent.code !== 1000 && closeEvent.code !== 1001) {
+            return {
+                type: 'PusherError',
+                data: {
+                    code: closeEvent.code,
+                    message: closeEvent.reason || closeEvent.message
+                }
+            };
+        }
+        else {
+            return null;
+        }
+    }
+};
+/* harmony default export */ var protocol_protocol = (Protocol);
+
+// CONCATENATED MODULE: ./src/core/connection/connection.ts
+
+
+
+
+class connection_Connection extends dispatcher_Dispatcher {
+    constructor(id, transport) {
+        super();
+        this.id = id;
+        this.transport = transport;
+        this.activityTimeout = transport.activityTimeout;
+        this.bindListeners();
+    }
+    handlesActivityChecks() {
+        return this.transport.handlesActivityChecks();
+    }
+    send(data) {
+        return this.transport.send(data);
+    }
+    send_event(name, data, channel) {
+        var event = { event: name, data: data };
+        if (channel) {
+            event.channel = channel;
+        }
+        logger.debug('Event sent', event);
+        return this.send(protocol_protocol.encodeMessage(event));
+    }
+    ping() {
+        if (this.transport.supportsPing()) {
+            this.transport.ping();
+        }
+        else {
+            this.send_event('pusher:ping', {});
+        }
+    }
+    close() {
+        this.transport.close();
+    }
+    bindListeners() {
+        var listeners = {
+            message: (messageEvent) => {
+                var pusherEvent;
+                try {
+                    pusherEvent = protocol_protocol.decodeMessage(messageEvent);
+                }
+                catch (e) {
+                    this.emit('error', {
+                        type: 'MessageParseError',
+                        error: e,
+                        data: messageEvent.data
+                    });
+                }
+                if (pusherEvent !== undefined) {
+                    logger.debug('Event recd', pusherEvent);
+                    switch (pusherEvent.event) {
+                        case 'pusher:error':
+                            this.emit('error', {
+                                type: 'PusherError',
+                                data: pusherEvent.data
+                            });
+                            break;
+                        case 'pusher:ping':
+                            this.emit('ping');
+                            break;
+                        case 'pusher:pong':
+                            this.emit('pong');
+                            break;
+                    }
+                    this.emit('message', pusherEvent);
+                }
+            },
+            activity: () => {
+                this.emit('activity');
+            },
+            error: error => {
+                this.emit('error', error);
+            },
+            closed: closeEvent => {
+                unbindListeners();
+                if (closeEvent && closeEvent.code) {
+                    this.handleCloseEvent(closeEvent);
+                }
+                this.transport = null;
+                this.emit('closed');
+            }
+        };
+        var unbindListeners = () => {
+            objectApply(listeners, (listener, event) => {
+                this.transport.unbind(event, listener);
+            });
+        };
+        objectApply(listeners, (listener, event) => {
+            this.transport.bind(event, listener);
+        });
+    }
+    handleCloseEvent(closeEvent) {
+        var action = protocol_protocol.getCloseAction(closeEvent);
+        var error = protocol_protocol.getCloseError(closeEvent);
+        if (error) {
+            this.emit('error', error);
+        }
+        if (action) {
+            this.emit(action, { action: action, error: error });
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/connection/handshake/index.ts
+
+
+
+class handshake_Handshake {
+    constructor(transport, callback) {
+        this.transport = transport;
+        this.callback = callback;
+        this.bindListeners();
+    }
+    close() {
+        this.unbindListeners();
+        this.transport.close();
+    }
+    bindListeners() {
+        this.onMessage = m => {
+            this.unbindListeners();
+            var result;
+            try {
+                result = protocol_protocol.processHandshake(m);
+            }
+            catch (e) {
+                this.finish('error', { error: e });
+                this.transport.close();
+                return;
+            }
+            if (result.action === 'connected') {
+                this.finish('connected', {
+                    connection: new connection_Connection(result.id, this.transport),
+                    activityTimeout: result.activityTimeout
+                });
+            }
+            else {
+                this.finish(result.action, { error: result.error });
+                this.transport.close();
+            }
+        };
+        this.onClosed = closeEvent => {
+            this.unbindListeners();
+            var action = protocol_protocol.getCloseAction(closeEvent) || 'backoff';
+            var error = protocol_protocol.getCloseError(closeEvent);
+            this.finish(action, { error: error });
+        };
+        this.transport.bind('message', this.onMessage);
+        this.transport.bind('closed', this.onClosed);
+    }
+    unbindListeners() {
+        this.transport.unbind('message', this.onMessage);
+        this.transport.unbind('closed', this.onClosed);
+    }
+    finish(action, params) {
+        this.callback(extend({ transport: this.transport, action: action }, params));
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline_sender.ts
+
+class timeline_sender_TimelineSender {
+    constructor(timeline, options) {
+        this.timeline = timeline;
+        this.options = options || {};
+    }
+    send(useTLS, callback) {
+        if (this.timeline.isEmpty()) {
+            return;
+        }
+        this.timeline.send(runtime.TimelineTransport.getAgent(this, useTLS), callback);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/channels/channel.ts
+
+
+
+
+
+class channel_Channel extends dispatcher_Dispatcher {
+    constructor(name, pusher) {
+        super(function (event, data) {
+            logger.debug('No callbacks on ' + name + ' for ' + event);
+        });
+        this.name = name;
+        this.pusher = pusher;
+        this.subscribed = false;
+        this.subscriptionPending = false;
+        this.subscriptionCancelled = false;
+    }
+    authorize(socketId, callback) {
+        return callback(null, { auth: '' });
+    }
+    trigger(event, data) {
+        if (event.indexOf('client-') !== 0) {
+            throw new BadEventName("Event '" + event + "' does not start with 'client-'");
+        }
+        if (!this.subscribed) {
+            var suffix = url_store.buildLogSuffix('triggeringClientEvents');
+            logger.warn(`Client event triggered before channel 'subscription_succeeded' event . ${suffix}`);
+        }
+        return this.pusher.send_event(event, data, this.name);
+    }
+    disconnect() {
+        this.subscribed = false;
+        this.subscriptionPending = false;
+    }
+    handleEvent(event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName === 'pusher_internal:subscription_succeeded') {
+            this.handleSubscriptionSucceededEvent(event);
+        }
+        else if (eventName === 'pusher_internal:subscription_count') {
+            this.handleSubscriptionCountEvent(event);
+        }
+        else if (eventName.indexOf('pusher_internal:') !== 0) {
+            var metadata = {};
+            this.emit(eventName, data, metadata);
+        }
+    }
+    handleSubscriptionSucceededEvent(event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.emit('pusher:subscription_succeeded', event.data);
+        }
+    }
+    handleSubscriptionCountEvent(event) {
+        if (event.data.subscription_count) {
+            this.subscriptionCount = event.data.subscription_count;
+        }
+        this.emit('pusher:subscription_count', event.data);
+    }
+    subscribe() {
+        if (this.subscribed) {
+            return;
+        }
+        this.subscriptionPending = true;
+        this.subscriptionCancelled = false;
+        this.authorize(this.pusher.connection.socket_id, (error, data) => {
+            if (error) {
+                this.subscriptionPending = false;
+                logger.error(error.toString());
+                this.emit('pusher:subscription_error', Object.assign({}, {
+                    type: 'AuthError',
+                    error: error.message
+                }, error instanceof HTTPAuthError ? { status: error.status } : {}));
+            }
+            else {
+                this.pusher.send_event('pusher:subscribe', {
+                    auth: data.auth,
+                    channel_data: data.channel_data,
+                    channel: this.name
+                });
+            }
+        });
+    }
+    unsubscribe() {
+        this.subscribed = false;
+        this.pusher.send_event('pusher:unsubscribe', {
+            channel: this.name
+        });
+    }
+    cancelSubscription() {
+        this.subscriptionCancelled = true;
+    }
+    reinstateSubscription() {
+        this.subscriptionCancelled = false;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/channels/private_channel.ts
+
+class private_channel_PrivateChannel extends channel_Channel {
+    authorize(socketId, callback) {
+        return this.pusher.config.channelAuthorizer({
+            channelName: this.name,
+            socketId: socketId
+        }, callback);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/channels/members.ts
+
+class members_Members {
+    constructor() {
+        this.reset();
+    }
+    get(id) {
+        if (Object.prototype.hasOwnProperty.call(this.members, id)) {
+            return {
+                id: id,
+                info: this.members[id]
+            };
+        }
+        else {
+            return null;
+        }
+    }
+    each(callback) {
+        objectApply(this.members, (member, id) => {
+            callback(this.get(id));
+        });
+    }
+    setMyID(id) {
+        this.myID = id;
+    }
+    onSubscription(subscriptionData) {
+        this.members = subscriptionData.presence.hash;
+        this.count = subscriptionData.presence.count;
+        this.me = this.get(this.myID);
+    }
+    addMember(memberData) {
+        if (this.get(memberData.user_id) === null) {
+            this.count++;
+        }
+        this.members[memberData.user_id] = memberData.user_info;
+        return this.get(memberData.user_id);
+    }
+    removeMember(memberData) {
+        var member = this.get(memberData.user_id);
+        if (member) {
+            delete this.members[memberData.user_id];
+            this.count--;
+        }
+        return member;
+    }
+    reset() {
+        this.members = {};
+        this.count = 0;
+        this.myID = null;
+        this.me = null;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/channels/presence_channel.ts
+var __awaiter = ( false) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+class presence_channel_PresenceChannel extends private_channel_PrivateChannel {
+    constructor(name, pusher) {
+        super(name, pusher);
+        this.members = new members_Members();
+    }
+    authorize(socketId, callback) {
+        super.authorize(socketId, (error, authData) => __awaiter(this, void 0, void 0, function* () {
+            if (!error) {
+                authData = authData;
+                if (authData.channel_data != null) {
+                    var channelData = JSON.parse(authData.channel_data);
+                    this.members.setMyID(channelData.user_id);
+                }
+                else {
+                    yield this.pusher.user.signinDonePromise;
+                    if (this.pusher.user.user_data != null) {
+                        this.members.setMyID(this.pusher.user.user_data.id);
+                    }
+                    else {
+                        let suffix = url_store.buildLogSuffix('authorizationEndpoint');
+                        logger.error(`Invalid auth response for channel '${this.name}', ` +
+                            `expected 'channel_data' field. ${suffix}, ` +
+                            `or the user should be signed in.`);
+                        callback('Invalid auth response');
+                        return;
+                    }
+                }
+            }
+            callback(error, authData);
+        }));
+    }
+    handleEvent(event) {
+        var eventName = event.event;
+        if (eventName.indexOf('pusher_internal:') === 0) {
+            this.handleInternalEvent(event);
+        }
+        else {
+            var data = event.data;
+            var metadata = {};
+            if (event.user_id) {
+                metadata.user_id = event.user_id;
+            }
+            this.emit(eventName, data, metadata);
+        }
+    }
+    handleInternalEvent(event) {
+        var eventName = event.event;
+        var data = event.data;
+        switch (eventName) {
+            case 'pusher_internal:subscription_succeeded':
+                this.handleSubscriptionSucceededEvent(event);
+                break;
+            case 'pusher_internal:subscription_count':
+                this.handleSubscriptionCountEvent(event);
+                break;
+            case 'pusher_internal:member_added':
+                var addedMember = this.members.addMember(data);
+                this.emit('pusher:member_added', addedMember);
+                break;
+            case 'pusher_internal:member_removed':
+                var removedMember = this.members.removeMember(data);
+                if (removedMember) {
+                    this.emit('pusher:member_removed', removedMember);
+                }
+                break;
+        }
+    }
+    handleSubscriptionSucceededEvent(event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.members.onSubscription(event.data);
+            this.emit('pusher:subscription_succeeded', this.members);
+        }
+    }
+    disconnect() {
+        this.members.reset();
+        super.disconnect();
+    }
+}
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/utf8/lib/utf8.js
+var utf8 = __nested_webpack_require_20109__(1);
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/base64/lib/base64.js
+var base64 = __nested_webpack_require_20109__(0);
+
+// CONCATENATED MODULE: ./src/core/channels/encrypted_channel.ts
+
+
+
+
+
+class encrypted_channel_EncryptedChannel extends private_channel_PrivateChannel {
+    constructor(name, pusher, nacl) {
+        super(name, pusher);
+        this.key = null;
+        this.nacl = nacl;
+    }
+    authorize(socketId, callback) {
+        super.authorize(socketId, (error, authData) => {
+            if (error) {
+                callback(error, authData);
+                return;
+            }
+            let sharedSecret = authData['shared_secret'];
+            if (!sharedSecret) {
+                callback(new Error(`No shared_secret key in auth payload for encrypted channel: ${this.name}`), null);
+                return;
+            }
+            this.key = Object(base64["decode"])(sharedSecret);
+            delete authData['shared_secret'];
+            callback(null, authData);
+        });
+    }
+    trigger(event, data) {
+        throw new UnsupportedFeature('Client events are not currently supported for encrypted channels');
+    }
+    handleEvent(event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName.indexOf('pusher_internal:') === 0 ||
+            eventName.indexOf('pusher:') === 0) {
+            super.handleEvent(event);
+            return;
+        }
+        this.handleEncryptedEvent(eventName, data);
+    }
+    handleEncryptedEvent(event, data) {
+        if (!this.key) {
+            logger.debug('Received encrypted event before key has been retrieved from the authEndpoint');
+            return;
+        }
+        if (!data.ciphertext || !data.nonce) {
+            logger.error('Unexpected format for encrypted event, expected object with `ciphertext` and `nonce` fields, got: ' +
+                data);
+            return;
+        }
+        let cipherText = Object(base64["decode"])(data.ciphertext);
+        if (cipherText.length < this.nacl.secretbox.overheadLength) {
+            logger.error(`Expected encrypted event ciphertext length to be ${this.nacl.secretbox.overheadLength}, got: ${cipherText.length}`);
+            return;
+        }
+        let nonce = Object(base64["decode"])(data.nonce);
+        if (nonce.length < this.nacl.secretbox.nonceLength) {
+            logger.error(`Expected encrypted event nonce length to be ${this.nacl.secretbox.nonceLength}, got: ${nonce.length}`);
+            return;
+        }
+        let bytes = this.nacl.secretbox.open(cipherText, nonce, this.key);
+        if (bytes === null) {
+            logger.debug('Failed to decrypt an event, probably because it was encrypted with a different key. Fetching a new key from the authEndpoint...');
+            this.authorize(this.pusher.connection.socket_id, (error, authData) => {
+                if (error) {
+                    logger.error(`Failed to make a request to the authEndpoint: ${authData}. Unable to fetch new key, so dropping encrypted event`);
+                    return;
+                }
+                bytes = this.nacl.secretbox.open(cipherText, nonce, this.key);
+                if (bytes === null) {
+                    logger.error(`Failed to decrypt event with new key. Dropping encrypted event`);
+                    return;
+                }
+                this.emit(event, this.getDataToEmit(bytes));
+                return;
+            });
+            return;
+        }
+        this.emit(event, this.getDataToEmit(bytes));
+    }
+    getDataToEmit(bytes) {
+        let raw = Object(utf8["decode"])(bytes);
+        try {
+            return JSON.parse(raw);
+        }
+        catch (_a) {
+            return raw;
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/connection/connection_manager.ts
+
+
+
+
+
+class connection_manager_ConnectionManager extends dispatcher_Dispatcher {
+    constructor(key, options) {
+        super();
+        this.state = 'initialized';
+        this.connection = null;
+        this.key = key;
+        this.options = options;
+        this.timeline = this.options.timeline;
+        this.usingTLS = this.options.useTLS;
+        this.errorCallbacks = this.buildErrorCallbacks();
+        this.connectionCallbacks = this.buildConnectionCallbacks(this.errorCallbacks);
+        this.handshakeCallbacks = this.buildHandshakeCallbacks(this.errorCallbacks);
+        var Network = runtime.getNetwork();
+        Network.bind('online', () => {
+            this.timeline.info({ netinfo: 'online' });
+            if (this.state === 'connecting' || this.state === 'unavailable') {
+                this.retryIn(0);
+            }
+        });
+        Network.bind('offline', () => {
+            this.timeline.info({ netinfo: 'offline' });
+            if (this.connection) {
+                this.sendActivityCheck();
+            }
+        });
+        this.updateStrategy();
+    }
+    switchCluster(key) {
+        this.key = key;
+        this.updateStrategy();
+        this.retryIn(0);
+    }
+    connect() {
+        if (this.connection || this.runner) {
+            return;
+        }
+        if (!this.strategy.isSupported()) {
+            this.updateState('failed');
+            return;
+        }
+        this.updateState('connecting');
+        this.startConnecting();
+        this.setUnavailableTimer();
+    }
+    send(data) {
+        if (this.connection) {
+            return this.connection.send(data);
+        }
+        else {
+            return false;
+        }
+    }
+    send_event(name, data, channel) {
+        if (this.connection) {
+            return this.connection.send_event(name, data, channel);
+        }
+        else {
+            return false;
+        }
+    }
+    disconnect() {
+        this.disconnectInternally();
+        this.updateState('disconnected');
+    }
+    isUsingTLS() {
+        return this.usingTLS;
+    }
+    startConnecting() {
+        var callback = (error, handshake) => {
+            if (error) {
+                this.runner = this.strategy.connect(0, callback);
+            }
+            else {
+                if (handshake.action === 'error') {
+                    this.emit('error', {
+                        type: 'HandshakeError',
+                        error: handshake.error
+                    });
+                    this.timeline.error({ handshakeError: handshake.error });
+                }
+                else {
+                    this.abortConnecting();
+                    this.handshakeCallbacks[handshake.action](handshake);
+                }
+            }
+        };
+        this.runner = this.strategy.connect(0, callback);
+    }
+    abortConnecting() {
+        if (this.runner) {
+            this.runner.abort();
+            this.runner = null;
+        }
+    }
+    disconnectInternally() {
+        this.abortConnecting();
+        this.clearRetryTimer();
+        this.clearUnavailableTimer();
+        if (this.connection) {
+            var connection = this.abandonConnection();
+            connection.close();
+        }
+    }
+    updateStrategy() {
+        this.strategy = this.options.getStrategy({
+            key: this.key,
+            timeline: this.timeline,
+            useTLS: this.usingTLS
+        });
+    }
+    retryIn(delay) {
+        this.timeline.info({ action: 'retry', delay: delay });
+        if (delay > 0) {
+            this.emit('connecting_in', Math.round(delay / 1000));
+        }
+        this.retryTimer = new timers_OneOffTimer(delay || 0, () => {
+            this.disconnectInternally();
+            this.connect();
+        });
+    }
+    clearRetryTimer() {
+        if (this.retryTimer) {
+            this.retryTimer.ensureAborted();
+            this.retryTimer = null;
+        }
+    }
+    setUnavailableTimer() {
+        this.unavailableTimer = new timers_OneOffTimer(this.options.unavailableTimeout, () => {
+            this.updateState('unavailable');
+        });
+    }
+    clearUnavailableTimer() {
+        if (this.unavailableTimer) {
+            this.unavailableTimer.ensureAborted();
+        }
+    }
+    sendActivityCheck() {
+        this.stopActivityCheck();
+        this.connection.ping();
+        this.activityTimer = new timers_OneOffTimer(this.options.pongTimeout, () => {
+            this.timeline.error({ pong_timed_out: this.options.pongTimeout });
+            this.retryIn(0);
+        });
+    }
+    resetActivityCheck() {
+        this.stopActivityCheck();
+        if (this.connection && !this.connection.handlesActivityChecks()) {
+            this.activityTimer = new timers_OneOffTimer(this.activityTimeout, () => {
+                this.sendActivityCheck();
+            });
+        }
+    }
+    stopActivityCheck() {
+        if (this.activityTimer) {
+            this.activityTimer.ensureAborted();
+        }
+    }
+    buildConnectionCallbacks(errorCallbacks) {
+        return extend({}, errorCallbacks, {
+            message: message => {
+                this.resetActivityCheck();
+                this.emit('message', message);
+            },
+            ping: () => {
+                this.send_event('pusher:pong', {});
+            },
+            activity: () => {
+                this.resetActivityCheck();
+            },
+            error: error => {
+                this.emit('error', error);
+            },
+            closed: () => {
+                this.abandonConnection();
+                if (this.shouldRetry()) {
+                    this.retryIn(1000);
+                }
+            }
+        });
+    }
+    buildHandshakeCallbacks(errorCallbacks) {
+        return extend({}, errorCallbacks, {
+            connected: (handshake) => {
+                this.activityTimeout = Math.min(this.options.activityTimeout, handshake.activityTimeout, handshake.connection.activityTimeout || Infinity);
+                this.clearUnavailableTimer();
+                this.setConnection(handshake.connection);
+                this.socket_id = this.connection.id;
+                this.updateState('connected', { socket_id: this.socket_id });
+            }
+        });
+    }
+    buildErrorCallbacks() {
+        let withErrorEmitted = callback => {
+            return (result) => {
+                if (result.error) {
+                    this.emit('error', { type: 'WebSocketError', error: result.error });
+                }
+                callback(result);
+            };
+        };
+        return {
+            tls_only: withErrorEmitted(() => {
+                this.usingTLS = true;
+                this.updateStrategy();
+                this.retryIn(0);
+            }),
+            refused: withErrorEmitted(() => {
+                this.disconnect();
+            }),
+            backoff: withErrorEmitted(() => {
+                this.retryIn(1000);
+            }),
+            retry: withErrorEmitted(() => {
+                this.retryIn(0);
+            })
+        };
+    }
+    setConnection(connection) {
+        this.connection = connection;
+        for (var event in this.connectionCallbacks) {
+            this.connection.bind(event, this.connectionCallbacks[event]);
+        }
+        this.resetActivityCheck();
+    }
+    abandonConnection() {
+        if (!this.connection) {
+            return;
+        }
+        this.stopActivityCheck();
+        for (var event in this.connectionCallbacks) {
+            this.connection.unbind(event, this.connectionCallbacks[event]);
+        }
+        var connection = this.connection;
+        this.connection = null;
+        return connection;
+    }
+    updateState(newState, data) {
+        var previousState = this.state;
+        this.state = newState;
+        if (previousState !== newState) {
+            var newStateDescription = newState;
+            if (newStateDescription === 'connected') {
+                newStateDescription += ' with new socket ID ' + data.socket_id;
+            }
+            logger.debug('State changed', previousState + ' -> ' + newStateDescription);
+            this.timeline.info({ state: newState, params: data });
+            this.emit('state_change', { previous: previousState, current: newState });
+            this.emit(newState, data);
+        }
+    }
+    shouldRetry() {
+        return this.state === 'connecting' || this.state === 'connected';
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/channels/channels.ts
+
+
+
+
+class channels_Channels {
+    constructor() {
+        this.channels = {};
+    }
+    add(name, pusher) {
+        if (!this.channels[name]) {
+            this.channels[name] = createChannel(name, pusher);
+        }
+        return this.channels[name];
+    }
+    all() {
+        return values(this.channels);
+    }
+    find(name) {
+        return this.channels[name];
+    }
+    remove(name) {
+        var channel = this.channels[name];
+        delete this.channels[name];
+        return channel;
+    }
+    disconnect() {
+        objectApply(this.channels, function (channel) {
+            channel.disconnect();
+        });
+    }
+}
+function createChannel(name, pusher) {
+    if (name.indexOf('private-encrypted-') === 0) {
+        if (pusher.config.nacl) {
+            return factory.createEncryptedChannel(name, pusher, pusher.config.nacl);
+        }
+        let errMsg = 'Tried to subscribe to a private-encrypted- channel but no nacl implementation available';
+        let suffix = url_store.buildLogSuffix('encryptedChannelSupport');
+        throw new UnsupportedFeature(`${errMsg}. ${suffix}`);
+    }
+    else if (name.indexOf('private-') === 0) {
+        return factory.createPrivateChannel(name, pusher);
+    }
+    else if (name.indexOf('presence-') === 0) {
+        return factory.createPresenceChannel(name, pusher);
+    }
+    else if (name.indexOf('#') === 0) {
+        throw new BadChannelName('Cannot create a channel with name "' + name + '".');
+    }
+    else {
+        return factory.createChannel(name, pusher);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/utils/factory.ts
+
+
+
+
+
+
+
+
+
+var Factory = {
+    createChannels() {
+        return new channels_Channels();
+    },
+    createConnectionManager(key, options) {
+        return new connection_manager_ConnectionManager(key, options);
+    },
+    createChannel(name, pusher) {
+        return new channel_Channel(name, pusher);
+    },
+    createPrivateChannel(name, pusher) {
+        return new private_channel_PrivateChannel(name, pusher);
+    },
+    createPresenceChannel(name, pusher) {
+        return new presence_channel_PresenceChannel(name, pusher);
+    },
+    createEncryptedChannel(name, pusher, nacl) {
+        return new encrypted_channel_EncryptedChannel(name, pusher, nacl);
+    },
+    createTimelineSender(timeline, options) {
+        return new timeline_sender_TimelineSender(timeline, options);
+    },
+    createHandshake(transport, callback) {
+        return new handshake_Handshake(transport, callback);
+    },
+    createAssistantToTheTransportManager(manager, transport, options) {
+        return new assistant_to_the_transport_manager_AssistantToTheTransportManager(manager, transport, options);
+    }
+};
+/* harmony default export */ var factory = (Factory);
+
+// CONCATENATED MODULE: ./src/core/transports/transport_manager.ts
+
+class transport_manager_TransportManager {
+    constructor(options) {
+        this.options = options || {};
+        this.livesLeft = this.options.lives || Infinity;
+    }
+    getAssistant(transport) {
+        return factory.createAssistantToTheTransportManager(this, transport, {
+            minPingDelay: this.options.minPingDelay,
+            maxPingDelay: this.options.maxPingDelay
+        });
+    }
+    isAlive() {
+        return this.livesLeft > 0;
+    }
+    reportDeath() {
+        this.livesLeft -= 1;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/sequential_strategy.ts
+
+
+
+class sequential_strategy_SequentialStrategy {
+    constructor(strategies, options) {
+        this.strategies = strategies;
+        this.loop = Boolean(options.loop);
+        this.failFast = Boolean(options.failFast);
+        this.timeout = options.timeout;
+        this.timeoutLimit = options.timeoutLimit;
+    }
+    isSupported() {
+        return any(this.strategies, util.method('isSupported'));
+    }
+    connect(minPriority, callback) {
+        var strategies = this.strategies;
+        var current = 0;
+        var timeout = this.timeout;
+        var runner = null;
+        var tryNextStrategy = (error, handshake) => {
+            if (handshake) {
+                callback(null, handshake);
+            }
+            else {
+                current = current + 1;
+                if (this.loop) {
+                    current = current % strategies.length;
+                }
+                if (current < strategies.length) {
+                    if (timeout) {
+                        timeout = timeout * 2;
+                        if (this.timeoutLimit) {
+                            timeout = Math.min(timeout, this.timeoutLimit);
+                        }
+                    }
+                    runner = this.tryStrategy(strategies[current], minPriority, { timeout, failFast: this.failFast }, tryNextStrategy);
+                }
+                else {
+                    callback(true);
+                }
+            }
+        };
+        runner = this.tryStrategy(strategies[current], minPriority, { timeout: timeout, failFast: this.failFast }, tryNextStrategy);
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    }
+    tryStrategy(strategy, minPriority, options, callback) {
+        var timer = null;
+        var runner = null;
+        if (options.timeout > 0) {
+            timer = new timers_OneOffTimer(options.timeout, function () {
+                runner.abort();
+                callback(true);
+            });
+        }
+        runner = strategy.connect(minPriority, function (error, handshake) {
+            if (error && timer && timer.isRunning() && !options.failFast) {
+                return;
+            }
+            if (timer) {
+                timer.ensureAborted();
+            }
+            callback(error, handshake);
+        });
+        return {
+            abort: function () {
+                if (timer) {
+                    timer.ensureAborted();
+                }
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                runner.forceMinPriority(p);
+            }
+        };
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/best_connected_ever_strategy.ts
+
+
+class best_connected_ever_strategy_BestConnectedEverStrategy {
+    constructor(strategies) {
+        this.strategies = strategies;
+    }
+    isSupported() {
+        return any(this.strategies, util.method('isSupported'));
+    }
+    connect(minPriority, callback) {
+        return connect(this.strategies, minPriority, function (i, runners) {
+            return function (error, handshake) {
+                runners[i].error = error;
+                if (error) {
+                    if (allRunnersFailed(runners)) {
+                        callback(true);
+                    }
+                    return;
+                }
+                apply(runners, function (runner) {
+                    runner.forceMinPriority(handshake.transport.priority);
+                });
+                callback(null, handshake);
+            };
+        });
+    }
+}
+function connect(strategies, minPriority, callbackBuilder) {
+    var runners = map(strategies, function (strategy, i, _, rs) {
+        return strategy.connect(minPriority, callbackBuilder(i, rs));
+    });
+    return {
+        abort: function () {
+            apply(runners, abortRunner);
+        },
+        forceMinPriority: function (p) {
+            apply(runners, function (runner) {
+                runner.forceMinPriority(p);
+            });
+        }
+    };
+}
+function allRunnersFailed(runners) {
+    return collections_all(runners, function (runner) {
+        return Boolean(runner.error);
+    });
+}
+function abortRunner(runner) {
+    if (!runner.error && !runner.aborted) {
+        runner.abort();
+        runner.aborted = true;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/websocket_prioritized_cached_strategy.ts
+
+
+
+
+class websocket_prioritized_cached_strategy_WebSocketPrioritizedCachedStrategy {
+    constructor(strategy, transports, options) {
+        this.strategy = strategy;
+        this.transports = transports;
+        this.ttl = options.ttl || 1800 * 1000;
+        this.usingTLS = options.useTLS;
+        this.timeline = options.timeline;
+    }
+    isSupported() {
+        return this.strategy.isSupported();
+    }
+    connect(minPriority, callback) {
+        var usingTLS = this.usingTLS;
+        var info = fetchTransportCache(usingTLS);
+        var cacheSkipCount = info && info.cacheSkipCount ? info.cacheSkipCount : 0;
+        var strategies = [this.strategy];
+        if (info && info.timestamp + this.ttl >= util.now()) {
+            var transport = this.transports[info.transport];
+            if (transport) {
+                if (['ws', 'wss'].includes(info.transport) || cacheSkipCount > 3) {
+                    this.timeline.info({
+                        cached: true,
+                        transport: info.transport,
+                        latency: info.latency
+                    });
+                    strategies.push(new sequential_strategy_SequentialStrategy([transport], {
+                        timeout: info.latency * 2 + 1000,
+                        failFast: true
+                    }));
+                }
+                else {
+                    cacheSkipCount++;
+                }
+            }
+        }
+        var startTimestamp = util.now();
+        var runner = strategies
+            .pop()
+            .connect(minPriority, function cb(error, handshake) {
+            if (error) {
+                flushTransportCache(usingTLS);
+                if (strategies.length > 0) {
+                    startTimestamp = util.now();
+                    runner = strategies.pop().connect(minPriority, cb);
+                }
+                else {
+                    callback(error);
+                }
+            }
+            else {
+                storeTransportCache(usingTLS, handshake.transport.name, util.now() - startTimestamp, cacheSkipCount);
+                callback(null, handshake);
+            }
+        });
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    }
+}
+function getTransportCacheKey(usingTLS) {
+    return 'pusherTransport' + (usingTLS ? 'TLS' : 'NonTLS');
+}
+function fetchTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            var serializedCache = storage[getTransportCacheKey(usingTLS)];
+            if (serializedCache) {
+                return JSON.parse(serializedCache);
+            }
+        }
+        catch (e) {
+            flushTransportCache(usingTLS);
+        }
+    }
+    return null;
+}
+function storeTransportCache(usingTLS, transport, latency, cacheSkipCount) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            storage[getTransportCacheKey(usingTLS)] = safeJSONStringify({
+                timestamp: util.now(),
+                transport: transport,
+                latency: latency,
+                cacheSkipCount: cacheSkipCount
+            });
+        }
+        catch (e) {
+        }
+    }
+}
+function flushTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            delete storage[getTransportCacheKey(usingTLS)];
+        }
+        catch (e) {
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/delayed_strategy.ts
+
+class delayed_strategy_DelayedStrategy {
+    constructor(strategy, { delay: number }) {
+        this.strategy = strategy;
+        this.options = { delay: number };
+    }
+    isSupported() {
+        return this.strategy.isSupported();
+    }
+    connect(minPriority, callback) {
+        var strategy = this.strategy;
+        var runner;
+        var timer = new timers_OneOffTimer(this.options.delay, function () {
+            runner = strategy.connect(minPriority, callback);
+        });
+        return {
+            abort: function () {
+                timer.ensureAborted();
+                if (runner) {
+                    runner.abort();
+                }
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/if_strategy.ts
+class IfStrategy {
+    constructor(test, trueBranch, falseBranch) {
+        this.test = test;
+        this.trueBranch = trueBranch;
+        this.falseBranch = falseBranch;
+    }
+    isSupported() {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.isSupported();
+    }
+    connect(minPriority, callback) {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.connect(minPriority, callback);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/first_connected_strategy.ts
+class FirstConnectedStrategy {
+    constructor(strategy) {
+        this.strategy = strategy;
+    }
+    isSupported() {
+        return this.strategy.isSupported();
+    }
+    connect(minPriority, callback) {
+        var runner = this.strategy.connect(minPriority, function (error, handshake) {
+            if (handshake) {
+                runner.abort();
+            }
+            callback(error, handshake);
+        });
+        return runner;
+    }
+}
+
+// CONCATENATED MODULE: ./src/runtimes/web/default_strategy.ts
+
+
+
+
+
+
+
+function testSupportsStrategy(strategy) {
+    return function () {
+        return strategy.isSupported();
+    };
+}
+var getDefaultStrategy = function (config, baseOptions, defineTransport) {
+    var definedTransports = {};
+    function defineTransportStrategy(name, type, priority, options, manager) {
+        var transport = defineTransport(config, name, type, priority, options, manager);
+        definedTransports[name] = transport;
+        return transport;
+    }
+    var ws_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.wsHost + ':' + config.wsPort,
+        hostTLS: config.wsHost + ':' + config.wssPort,
+        httpPath: config.wsPath
+    });
+    var wss_options = Object.assign({}, ws_options, {
+        useTLS: true
+    });
+    var sockjs_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.httpHost + ':' + config.httpPort,
+        hostTLS: config.httpHost + ':' + config.httpsPort,
+        httpPath: config.httpPath
+    });
+    var timeouts = {
+        loop: true,
+        timeout: 15000,
+        timeoutLimit: 60000
+    };
+    var ws_manager = new transport_manager_TransportManager({
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var streaming_manager = new transport_manager_TransportManager({
+        lives: 2,
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var ws_transport = defineTransportStrategy('ws', 'ws', 3, ws_options, ws_manager);
+    var wss_transport = defineTransportStrategy('wss', 'ws', 3, wss_options, ws_manager);
+    var sockjs_transport = defineTransportStrategy('sockjs', 'sockjs', 1, sockjs_options);
+    var xhr_streaming_transport = defineTransportStrategy('xhr_streaming', 'xhr_streaming', 1, sockjs_options, streaming_manager);
+    var xdr_streaming_transport = defineTransportStrategy('xdr_streaming', 'xdr_streaming', 1, sockjs_options, streaming_manager);
+    var xhr_polling_transport = defineTransportStrategy('xhr_polling', 'xhr_polling', 1, sockjs_options);
+    var xdr_polling_transport = defineTransportStrategy('xdr_polling', 'xdr_polling', 1, sockjs_options);
+    var ws_loop = new sequential_strategy_SequentialStrategy([ws_transport], timeouts);
+    var wss_loop = new sequential_strategy_SequentialStrategy([wss_transport], timeouts);
+    var sockjs_loop = new sequential_strategy_SequentialStrategy([sockjs_transport], timeouts);
+    var streaming_loop = new sequential_strategy_SequentialStrategy([
+        new IfStrategy(testSupportsStrategy(xhr_streaming_transport), xhr_streaming_transport, xdr_streaming_transport)
+    ], timeouts);
+    var polling_loop = new sequential_strategy_SequentialStrategy([
+        new IfStrategy(testSupportsStrategy(xhr_polling_transport), xhr_polling_transport, xdr_polling_transport)
+    ], timeouts);
+    var http_loop = new sequential_strategy_SequentialStrategy([
+        new IfStrategy(testSupportsStrategy(streaming_loop), new best_connected_ever_strategy_BestConnectedEverStrategy([
+            streaming_loop,
+            new delayed_strategy_DelayedStrategy(polling_loop, { delay: 4000 })
+        ]), polling_loop)
+    ], timeouts);
+    var http_fallback_loop = new IfStrategy(testSupportsStrategy(http_loop), http_loop, sockjs_loop);
+    var wsStrategy;
+    if (baseOptions.useTLS) {
+        wsStrategy = new best_connected_ever_strategy_BestConnectedEverStrategy([
+            ws_loop,
+            new delayed_strategy_DelayedStrategy(http_fallback_loop, { delay: 2000 })
+        ]);
+    }
+    else {
+        wsStrategy = new best_connected_ever_strategy_BestConnectedEverStrategy([
+            ws_loop,
+            new delayed_strategy_DelayedStrategy(wss_loop, { delay: 2000 }),
+            new delayed_strategy_DelayedStrategy(http_fallback_loop, { delay: 5000 })
+        ]);
+    }
+    return new websocket_prioritized_cached_strategy_WebSocketPrioritizedCachedStrategy(new FirstConnectedStrategy(new IfStrategy(testSupportsStrategy(ws_transport), wsStrategy, http_fallback_loop)), definedTransports, {
+        ttl: 1800000,
+        timeline: baseOptions.timeline,
+        useTLS: baseOptions.useTLS
+    });
+};
+/* harmony default export */ var default_strategy = (getDefaultStrategy);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transport_connection_initializer.ts
+
+/* harmony default export */ var transport_connection_initializer = (function () {
+    var self = this;
+    self.timeline.info(self.buildTimelineMessage({
+        transport: self.name + (self.options.useTLS ? 's' : '')
+    }));
+    if (self.hooks.isInitialized()) {
+        self.changeState('initialized');
+    }
+    else if (self.hooks.file) {
+        self.changeState('initializing');
+        Dependencies.load(self.hooks.file, { useTLS: self.options.useTLS }, function (error, callback) {
+            if (self.hooks.isInitialized()) {
+                self.changeState('initialized');
+                callback(true);
+            }
+            else {
+                if (error) {
+                    self.onError(error);
+                }
+                self.onClose();
+                callback(false);
+            }
+        });
+    }
+    else {
+        self.onClose();
+    }
+});
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http_xdomain_request.ts
+
+var http_xdomain_request_hooks = {
+    getRequest: function (socket) {
+        var xdr = new window.XDomainRequest();
+        xdr.ontimeout = function () {
+            socket.emit('error', new RequestTimedOut());
+            socket.close();
+        };
+        xdr.onerror = function (e) {
+            socket.emit('error', e);
+            socket.close();
+        };
+        xdr.onprogress = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+        };
+        xdr.onload = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+            socket.emit('finished', 200);
+            socket.close();
+        };
+        return xdr;
+    },
+    abortRequest: function (xdr) {
+        xdr.ontimeout = xdr.onerror = xdr.onprogress = xdr.onload = null;
+        xdr.abort();
+    }
+};
+/* harmony default export */ var http_xdomain_request = (http_xdomain_request_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_request.ts
+
+
+const MAX_BUFFER_LENGTH = 256 * 1024;
+class http_request_HTTPRequest extends dispatcher_Dispatcher {
+    constructor(hooks, method, url) {
+        super();
+        this.hooks = hooks;
+        this.method = method;
+        this.url = url;
+    }
+    start(payload) {
+        this.position = 0;
+        this.xhr = this.hooks.getRequest(this);
+        this.unloader = () => {
+            this.close();
+        };
+        runtime.addUnloadListener(this.unloader);
+        this.xhr.open(this.method, this.url, true);
+        if (this.xhr.setRequestHeader) {
+            this.xhr.setRequestHeader('Content-Type', 'application/json');
+        }
+        this.xhr.send(payload);
+    }
+    close() {
+        if (this.unloader) {
+            runtime.removeUnloadListener(this.unloader);
+            this.unloader = null;
+        }
+        if (this.xhr) {
+            this.hooks.abortRequest(this.xhr);
+            this.xhr = null;
+        }
+    }
+    onChunk(status, data) {
+        while (true) {
+            var chunk = this.advanceBuffer(data);
+            if (chunk) {
+                this.emit('chunk', { status: status, data: chunk });
+            }
+            else {
+                break;
+            }
+        }
+        if (this.isBufferTooLong(data)) {
+            this.emit('buffer_too_long');
+        }
+    }
+    advanceBuffer(buffer) {
+        var unreadData = buffer.slice(this.position);
+        var endOfLinePosition = unreadData.indexOf('\n');
+        if (endOfLinePosition !== -1) {
+            this.position += endOfLinePosition + 1;
+            return unreadData.slice(0, endOfLinePosition);
+        }
+        else {
+            return null;
+        }
+    }
+    isBufferTooLong(buffer) {
+        return this.position === buffer.length && buffer.length > MAX_BUFFER_LENGTH;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/http/state.ts
+var State;
+(function (State) {
+    State[State["CONNECTING"] = 0] = "CONNECTING";
+    State[State["OPEN"] = 1] = "OPEN";
+    State[State["CLOSED"] = 3] = "CLOSED";
+})(State || (State = {}));
+/* harmony default export */ var state = (State);
+
+// CONCATENATED MODULE: ./src/core/http/http_socket.ts
+
+
+
+var autoIncrement = 1;
+class http_socket_HTTPSocket {
+    constructor(hooks, url) {
+        this.hooks = hooks;
+        this.session = randomNumber(1000) + '/' + randomString(8);
+        this.location = getLocation(url);
+        this.readyState = state.CONNECTING;
+        this.openStream();
+    }
+    send(payload) {
+        return this.sendRaw(JSON.stringify([payload]));
+    }
+    ping() {
+        this.hooks.sendHeartbeat(this);
+    }
+    close(code, reason) {
+        this.onClose(code, reason, true);
+    }
+    sendRaw(payload) {
+        if (this.readyState === state.OPEN) {
+            try {
+                runtime.createSocketRequest('POST', getUniqueURL(getSendURL(this.location, this.session))).start(payload);
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    reconnect() {
+        this.closeStream();
+        this.openStream();
+    }
+    onClose(code, reason, wasClean) {
+        this.closeStream();
+        this.readyState = state.CLOSED;
+        if (this.onclose) {
+            this.onclose({
+                code: code,
+                reason: reason,
+                wasClean: wasClean
+            });
+        }
+    }
+    onChunk(chunk) {
+        if (chunk.status !== 200) {
+            return;
+        }
+        if (this.readyState === state.OPEN) {
+            this.onActivity();
+        }
+        var payload;
+        var type = chunk.data.slice(0, 1);
+        switch (type) {
+            case 'o':
+                payload = JSON.parse(chunk.data.slice(1) || '{}');
+                this.onOpen(payload);
+                break;
+            case 'a':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                for (var i = 0; i < payload.length; i++) {
+                    this.onEvent(payload[i]);
+                }
+                break;
+            case 'm':
+                payload = JSON.parse(chunk.data.slice(1) || 'null');
+                this.onEvent(payload);
+                break;
+            case 'h':
+                this.hooks.onHeartbeat(this);
+                break;
+            case 'c':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                this.onClose(payload[0], payload[1], true);
+                break;
+        }
+    }
+    onOpen(options) {
+        if (this.readyState === state.CONNECTING) {
+            if (options && options.hostname) {
+                this.location.base = replaceHost(this.location.base, options.hostname);
+            }
+            this.readyState = state.OPEN;
+            if (this.onopen) {
+                this.onopen();
+            }
+        }
+        else {
+            this.onClose(1006, 'Server lost session', true);
+        }
+    }
+    onEvent(event) {
+        if (this.readyState === state.OPEN && this.onmessage) {
+            this.onmessage({ data: event });
+        }
+    }
+    onActivity() {
+        if (this.onactivity) {
+            this.onactivity();
+        }
+    }
+    onError(error) {
+        if (this.onerror) {
+            this.onerror(error);
+        }
+    }
+    openStream() {
+        this.stream = runtime.createSocketRequest('POST', getUniqueURL(this.hooks.getReceiveURL(this.location, this.session)));
+        this.stream.bind('chunk', chunk => {
+            this.onChunk(chunk);
+        });
+        this.stream.bind('finished', status => {
+            this.hooks.onFinished(this, status);
+        });
+        this.stream.bind('buffer_too_long', () => {
+            this.reconnect();
+        });
+        try {
+            this.stream.start();
+        }
+        catch (error) {
+            util.defer(() => {
+                this.onError(error);
+                this.onClose(1006, 'Could not start streaming', false);
+            });
+        }
+    }
+    closeStream() {
+        if (this.stream) {
+            this.stream.unbind_all();
+            this.stream.close();
+            this.stream = null;
+        }
+    }
+}
+function getLocation(url) {
+    var parts = /([^\?]*)\/*(\??.*)/.exec(url);
+    return {
+        base: parts[1],
+        queryString: parts[2]
+    };
+}
+function getSendURL(url, session) {
+    return url.base + '/' + session + '/xhr_send';
+}
+function getUniqueURL(url) {
+    var separator = url.indexOf('?') === -1 ? '?' : '&';
+    return url + separator + 't=' + +new Date() + '&n=' + autoIncrement++;
+}
+function replaceHost(url, hostname) {
+    var urlParts = /(https?:\/\/)([^\/:]+)((\/|:)?.*)/.exec(url);
+    return urlParts[1] + hostname + urlParts[3];
+}
+function randomNumber(max) {
+    return runtime.randomInt(max);
+}
+function randomString(length) {
+    var result = [];
+    for (var i = 0; i < length; i++) {
+        result.push(randomNumber(32).toString(32));
+    }
+    return result.join('');
+}
+/* harmony default export */ var http_socket = (http_socket_HTTPSocket);
+
+// CONCATENATED MODULE: ./src/core/http/http_streaming_socket.ts
+var http_streaming_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr_streaming' + url.queryString;
+    },
+    onHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+    }
+};
+/* harmony default export */ var http_streaming_socket = (http_streaming_socket_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_polling_socket.ts
+var http_polling_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr' + url.queryString;
+    },
+    onHeartbeat: function () {
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        if (status === 200) {
+            socket.reconnect();
+        }
+        else {
+            socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+        }
+    }
+};
+/* harmony default export */ var http_polling_socket = (http_polling_socket_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http_xhr_request.ts
+
+var http_xhr_request_hooks = {
+    getRequest: function (socket) {
+        var Constructor = runtime.getXHRAPI();
+        var xhr = new Constructor();
+        xhr.onreadystatechange = xhr.onprogress = function () {
+            switch (xhr.readyState) {
+                case 3:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    break;
+                case 4:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    socket.emit('finished', xhr.status);
+                    socket.close();
+                    break;
+            }
+        };
+        return xhr;
+    },
+    abortRequest: function (xhr) {
+        xhr.onreadystatechange = null;
+        xhr.abort();
+    }
+};
+/* harmony default export */ var http_xhr_request = (http_xhr_request_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http.ts
+
+
+
+
+
+var HTTP = {
+    createStreamingSocket(url) {
+        return this.createSocket(http_streaming_socket, url);
+    },
+    createPollingSocket(url) {
+        return this.createSocket(http_polling_socket, url);
+    },
+    createSocket(hooks, url) {
+        return new http_socket(hooks, url);
+    },
+    createXHR(method, url) {
+        return this.createRequest(http_xhr_request, method, url);
+    },
+    createRequest(hooks, method, url) {
+        return new http_request_HTTPRequest(hooks, method, url);
+    }
+};
+/* harmony default export */ var http_http = (HTTP);
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http.ts
+
+
+http_http.createXDR = function (method, url) {
+    return this.createRequest(http_xdomain_request, method, url);
+};
+/* harmony default export */ var web_http_http = (http_http);
+
+// CONCATENATED MODULE: ./src/runtimes/web/runtime.ts
+
+
+
+
+
+
+
+
+
+
+
+
+var Runtime = {
+    nextAuthCallbackID: 1,
+    auth_callbacks: {},
+    ScriptReceivers: ScriptReceivers,
+    DependenciesReceivers: DependenciesReceivers,
+    getDefaultStrategy: default_strategy,
+    Transports: transports_transports,
+    transportConnectionInitializer: transport_connection_initializer,
+    HTTPFactory: web_http_http,
+    TimelineTransport: jsonp_timeline,
+    getXHRAPI() {
+        return window.XMLHttpRequest;
+    },
+    getWebSocketAPI() {
+        return window.WebSocket || window.MozWebSocket;
+    },
+    setup(PusherClass) {
+        window.Pusher = PusherClass;
+        var initializeOnDocumentBody = () => {
+            this.onDocumentBody(PusherClass.ready);
+        };
+        if (!window.JSON) {
+            Dependencies.load('json2', {}, initializeOnDocumentBody);
+        }
+        else {
+            initializeOnDocumentBody();
+        }
+    },
+    getDocument() {
+        return document;
+    },
+    getProtocol() {
+        return this.getDocument().location.protocol;
+    },
+    getAuthorizers() {
+        return { ajax: xhr_auth, jsonp: jsonp_auth };
+    },
+    onDocumentBody(callback) {
+        if (document.body) {
+            callback();
+        }
+        else {
+            setTimeout(() => {
+                this.onDocumentBody(callback);
+            }, 0);
+        }
+    },
+    createJSONPRequest(url, data) {
+        return new jsonp_request_JSONPRequest(url, data);
+    },
+    createScriptRequest(src) {
+        return new ScriptRequest(src);
+    },
+    getLocalStorage() {
+        try {
+            return window.localStorage;
+        }
+        catch (e) {
+            return undefined;
+        }
+    },
+    createXHR() {
+        if (this.getXHRAPI()) {
+            return this.createXMLHttpRequest();
+        }
+        else {
+            return this.createMicrosoftXHR();
+        }
+    },
+    createXMLHttpRequest() {
+        var Constructor = this.getXHRAPI();
+        return new Constructor();
+    },
+    createMicrosoftXHR() {
+        return new ActiveXObject('Microsoft.XMLHTTP');
+    },
+    getNetwork() {
+        return net_info_Network;
+    },
+    createWebSocket(url) {
+        var Constructor = this.getWebSocketAPI();
+        return new Constructor(url);
+    },
+    createSocketRequest(method, url) {
+        if (this.isXHRSupported()) {
+            return this.HTTPFactory.createXHR(method, url);
+        }
+        else if (this.isXDRSupported(url.indexOf('https:') === 0)) {
+            return this.HTTPFactory.createXDR(method, url);
+        }
+        else {
+            throw 'Cross-origin HTTP requests are not supported';
+        }
+    },
+    isXHRSupported() {
+        var Constructor = this.getXHRAPI();
+        return (Boolean(Constructor) && new Constructor().withCredentials !== undefined);
+    },
+    isXDRSupported(useTLS) {
+        var protocol = useTLS ? 'https:' : 'http:';
+        var documentProtocol = this.getProtocol();
+        return (Boolean(window['XDomainRequest']) && documentProtocol === protocol);
+    },
+    addUnloadListener(listener) {
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('unload', listener, false);
+        }
+        else if (window.attachEvent !== undefined) {
+            window.attachEvent('onunload', listener);
+        }
+    },
+    removeUnloadListener(listener) {
+        if (window.addEventListener !== undefined) {
+            window.removeEventListener('unload', listener, false);
+        }
+        else if (window.detachEvent !== undefined) {
+            window.detachEvent('onunload', listener);
+        }
+    },
+    randomInt(max) {
+        const random = function () {
+            const crypto = window.crypto || window['msCrypto'];
+            const random = crypto.getRandomValues(new Uint32Array(1))[0];
+            return random / Math.pow(2, 32);
+        };
+        return Math.floor(random() * max);
+    }
+};
+/* harmony default export */ var runtime = (Runtime);
+
+// CONCATENATED MODULE: ./src/core/timeline/level.ts
+var TimelineLevel;
+(function (TimelineLevel) {
+    TimelineLevel[TimelineLevel["ERROR"] = 3] = "ERROR";
+    TimelineLevel[TimelineLevel["INFO"] = 6] = "INFO";
+    TimelineLevel[TimelineLevel["DEBUG"] = 7] = "DEBUG";
+})(TimelineLevel || (TimelineLevel = {}));
+/* harmony default export */ var timeline_level = (TimelineLevel);
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline.ts
+
+
+
+class timeline_Timeline {
+    constructor(key, session, options) {
+        this.key = key;
+        this.session = session;
+        this.events = [];
+        this.options = options || {};
+        this.sent = 0;
+        this.uniqueID = 0;
+    }
+    log(level, event) {
+        if (level <= this.options.level) {
+            this.events.push(extend({}, event, { timestamp: util.now() }));
+            if (this.options.limit && this.events.length > this.options.limit) {
+                this.events.shift();
+            }
+        }
+    }
+    error(event) {
+        this.log(timeline_level.ERROR, event);
+    }
+    info(event) {
+        this.log(timeline_level.INFO, event);
+    }
+    debug(event) {
+        this.log(timeline_level.DEBUG, event);
+    }
+    isEmpty() {
+        return this.events.length === 0;
+    }
+    send(sendfn, callback) {
+        var data = extend({
+            session: this.session,
+            bundle: this.sent + 1,
+            key: this.key,
+            lib: 'js',
+            version: this.options.version,
+            cluster: this.options.cluster,
+            features: this.options.features,
+            timeline: this.events
+        }, this.options.params);
+        this.events = [];
+        sendfn(data, (error, result) => {
+            if (!error) {
+                this.sent++;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        return true;
+    }
+    generateUniqueID() {
+        this.uniqueID++;
+        return this.uniqueID;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/transport_strategy.ts
+
+
+
+
+class transport_strategy_TransportStrategy {
+    constructor(name, priority, transport, options) {
+        this.name = name;
+        this.priority = priority;
+        this.transport = transport;
+        this.options = options || {};
+    }
+    isSupported() {
+        return this.transport.isSupported({
+            useTLS: this.options.useTLS
+        });
+    }
+    connect(minPriority, callback) {
+        if (!this.isSupported()) {
+            return failAttempt(new UnsupportedStrategy(), callback);
+        }
+        else if (this.priority < minPriority) {
+            return failAttempt(new TransportPriorityTooLow(), callback);
+        }
+        var connected = false;
+        var transport = this.transport.createConnection(this.name, this.priority, this.options.key, this.options);
+        var handshake = null;
+        var onInitialized = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.connect();
+        };
+        var onOpen = function () {
+            handshake = factory.createHandshake(transport, function (result) {
+                connected = true;
+                unbindListeners();
+                callback(null, result);
+            });
+        };
+        var onError = function (error) {
+            unbindListeners();
+            callback(error);
+        };
+        var onClosed = function () {
+            unbindListeners();
+            var serializedTransport;
+            serializedTransport = safeJSONStringify(transport);
+            callback(new TransportClosed(serializedTransport));
+        };
+        var unbindListeners = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.unbind('open', onOpen);
+            transport.unbind('error', onError);
+            transport.unbind('closed', onClosed);
+        };
+        transport.bind('initialized', onInitialized);
+        transport.bind('open', onOpen);
+        transport.bind('error', onError);
+        transport.bind('closed', onClosed);
+        transport.initialize();
+        return {
+            abort: () => {
+                if (connected) {
+                    return;
+                }
+                unbindListeners();
+                if (handshake) {
+                    handshake.close();
+                }
+                else {
+                    transport.close();
+                }
+            },
+            forceMinPriority: p => {
+                if (connected) {
+                    return;
+                }
+                if (this.priority < p) {
+                    if (handshake) {
+                        handshake.close();
+                    }
+                    else {
+                        transport.close();
+                    }
+                }
+            }
+        };
+    }
+}
+function failAttempt(error, callback) {
+    util.defer(function () {
+        callback(error);
+    });
+    return {
+        abort: function () { },
+        forceMinPriority: function () { }
+    };
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/strategy_builder.ts
+
+
+
+
+
+const { Transports: strategy_builder_Transports } = runtime;
+var strategy_builder_defineTransport = function (config, name, type, priority, options, manager) {
+    var transportClass = strategy_builder_Transports[type];
+    if (!transportClass) {
+        throw new UnsupportedTransport(type);
+    }
+    var enabled = (!config.enabledTransports ||
+        arrayIndexOf(config.enabledTransports, name) !== -1) &&
+        (!config.disabledTransports ||
+            arrayIndexOf(config.disabledTransports, name) === -1);
+    var transport;
+    if (enabled) {
+        options = Object.assign({ ignoreNullOrigin: config.ignoreNullOrigin }, options);
+        transport = new transport_strategy_TransportStrategy(name, priority, manager ? manager.getAssistant(transportClass) : transportClass, options);
+    }
+    else {
+        transport = strategy_builder_UnsupportedStrategy;
+    }
+    return transport;
+};
+var strategy_builder_UnsupportedStrategy = {
+    isSupported: function () {
+        return false;
+    },
+    connect: function (_, callback) {
+        var deferred = util.defer(function () {
+            callback(new UnsupportedStrategy());
+        });
+        return {
+            abort: function () {
+                deferred.ensureAborted();
+            },
+            forceMinPriority: function () { }
+        };
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/options.ts
+
+function validateOptions(options) {
+    if (options == null) {
+        throw 'You must pass an options object';
+    }
+    if (options.cluster == null) {
+        throw 'Options object must provide a cluster';
+    }
+    if ('disableStats' in options) {
+        logger.warn('The disableStats option is deprecated in favor of enableStats');
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/auth/user_authenticator.ts
+
+
+const composeChannelQuery = (params, authOptions) => {
+    var query = 'socket_id=' + encodeURIComponent(params.socketId);
+    for (var key in authOptions.params) {
+        query +=
+            '&' +
+                encodeURIComponent(key) +
+                '=' +
+                encodeURIComponent(authOptions.params[key]);
+    }
+    if (authOptions.paramsProvider != null) {
+        let dynamicParams = authOptions.paramsProvider();
+        for (var key in dynamicParams) {
+            query +=
+                '&' +
+                    encodeURIComponent(key) +
+                    '=' +
+                    encodeURIComponent(dynamicParams[key]);
+        }
+    }
+    return query;
+};
+const UserAuthenticator = (authOptions) => {
+    if (typeof runtime.getAuthorizers()[authOptions.transport] === 'undefined') {
+        throw `'${authOptions.transport}' is not a recognized auth transport`;
+    }
+    return (params, callback) => {
+        const query = composeChannelQuery(params, authOptions);
+        runtime.getAuthorizers()[authOptions.transport](runtime, query, authOptions, AuthRequestType.UserAuthentication, callback);
+    };
+};
+/* harmony default export */ var user_authenticator = (UserAuthenticator);
+
+// CONCATENATED MODULE: ./src/core/auth/channel_authorizer.ts
+
+
+const channel_authorizer_composeChannelQuery = (params, authOptions) => {
+    var query = 'socket_id=' + encodeURIComponent(params.socketId);
+    query += '&channel_name=' + encodeURIComponent(params.channelName);
+    for (var key in authOptions.params) {
+        query +=
+            '&' +
+                encodeURIComponent(key) +
+                '=' +
+                encodeURIComponent(authOptions.params[key]);
+    }
+    if (authOptions.paramsProvider != null) {
+        let dynamicParams = authOptions.paramsProvider();
+        for (var key in dynamicParams) {
+            query +=
+                '&' +
+                    encodeURIComponent(key) +
+                    '=' +
+                    encodeURIComponent(dynamicParams[key]);
+        }
+    }
+    return query;
+};
+const ChannelAuthorizer = (authOptions) => {
+    if (typeof runtime.getAuthorizers()[authOptions.transport] === 'undefined') {
+        throw `'${authOptions.transport}' is not a recognized auth transport`;
+    }
+    return (params, callback) => {
+        const query = channel_authorizer_composeChannelQuery(params, authOptions);
+        runtime.getAuthorizers()[authOptions.transport](runtime, query, authOptions, AuthRequestType.ChannelAuthorization, callback);
+    };
+};
+/* harmony default export */ var channel_authorizer = (ChannelAuthorizer);
+
+// CONCATENATED MODULE: ./src/core/auth/deprecated_channel_authorizer.ts
+const ChannelAuthorizerProxy = (pusher, authOptions, channelAuthorizerGenerator) => {
+    const deprecatedAuthorizerOptions = {
+        authTransport: authOptions.transport,
+        authEndpoint: authOptions.endpoint,
+        auth: {
+            params: authOptions.params,
+            headers: authOptions.headers
+        }
+    };
+    return (params, callback) => {
+        const channel = pusher.channel(params.channelName);
+        const channelAuthorizer = channelAuthorizerGenerator(channel, deprecatedAuthorizerOptions);
+        channelAuthorizer.authorize(params.socketId, callback);
+    };
+};
+
+// CONCATENATED MODULE: ./src/core/config.ts
+
+
+
+
+
+function getConfig(opts, pusher) {
+    let config = {
+        activityTimeout: opts.activityTimeout || defaults.activityTimeout,
+        cluster: opts.cluster,
+        httpPath: opts.httpPath || defaults.httpPath,
+        httpPort: opts.httpPort || defaults.httpPort,
+        httpsPort: opts.httpsPort || defaults.httpsPort,
+        pongTimeout: opts.pongTimeout || defaults.pongTimeout,
+        statsHost: opts.statsHost || defaults.stats_host,
+        unavailableTimeout: opts.unavailableTimeout || defaults.unavailableTimeout,
+        wsPath: opts.wsPath || defaults.wsPath,
+        wsPort: opts.wsPort || defaults.wsPort,
+        wssPort: opts.wssPort || defaults.wssPort,
+        enableStats: getEnableStatsConfig(opts),
+        httpHost: getHttpHost(opts),
+        useTLS: shouldUseTLS(opts),
+        wsHost: getWebsocketHost(opts),
+        userAuthenticator: buildUserAuthenticator(opts),
+        channelAuthorizer: buildChannelAuthorizer(opts, pusher)
+    };
+    if ('disabledTransports' in opts)
+        config.disabledTransports = opts.disabledTransports;
+    if ('enabledTransports' in opts)
+        config.enabledTransports = opts.enabledTransports;
+    if ('ignoreNullOrigin' in opts)
+        config.ignoreNullOrigin = opts.ignoreNullOrigin;
+    if ('timelineParams' in opts)
+        config.timelineParams = opts.timelineParams;
+    if ('nacl' in opts) {
+        config.nacl = opts.nacl;
+    }
+    return config;
+}
+function getHttpHost(opts) {
+    if (opts.httpHost) {
+        return opts.httpHost;
+    }
+    if (opts.cluster) {
+        return `sockjs-${opts.cluster}.pusher.com`;
+    }
+    return defaults.httpHost;
+}
+function getWebsocketHost(opts) {
+    if (opts.wsHost) {
+        return opts.wsHost;
+    }
+    return getWebsocketHostFromCluster(opts.cluster);
+}
+function getWebsocketHostFromCluster(cluster) {
+    return `ws-${cluster}.pusher.com`;
+}
+function shouldUseTLS(opts) {
+    if (runtime.getProtocol() === 'https:') {
+        return true;
+    }
+    else if (opts.forceTLS === false) {
+        return false;
+    }
+    return true;
+}
+function getEnableStatsConfig(opts) {
+    if ('enableStats' in opts) {
+        return opts.enableStats;
+    }
+    if ('disableStats' in opts) {
+        return !opts.disableStats;
+    }
+    return false;
+}
+const hasCustomHandler = (auth) => {
+    return 'customHandler' in auth && auth['customHandler'] != null;
+};
+function buildUserAuthenticator(opts) {
+    const userAuthentication = Object.assign(Object.assign({}, defaults.userAuthentication), opts.userAuthentication);
+    if (hasCustomHandler(userAuthentication)) {
+        return userAuthentication['customHandler'];
+    }
+    return user_authenticator(userAuthentication);
+}
+function buildChannelAuth(opts, pusher) {
+    let channelAuthorization;
+    if ('channelAuthorization' in opts) {
+        channelAuthorization = Object.assign(Object.assign({}, defaults.channelAuthorization), opts.channelAuthorization);
+    }
+    else {
+        channelAuthorization = {
+            transport: opts.authTransport || defaults.authTransport,
+            endpoint: opts.authEndpoint || defaults.authEndpoint
+        };
+        if ('auth' in opts) {
+            if ('params' in opts.auth)
+                channelAuthorization.params = opts.auth.params;
+            if ('headers' in opts.auth)
+                channelAuthorization.headers = opts.auth.headers;
+        }
+        if ('authorizer' in opts) {
+            return {
+                customHandler: ChannelAuthorizerProxy(pusher, channelAuthorization, opts.authorizer)
+            };
+        }
+    }
+    return channelAuthorization;
+}
+function buildChannelAuthorizer(opts, pusher) {
+    const channelAuthorization = buildChannelAuth(opts, pusher);
+    if (hasCustomHandler(channelAuthorization)) {
+        return channelAuthorization['customHandler'];
+    }
+    return channel_authorizer(channelAuthorization);
+}
+
+// CONCATENATED MODULE: ./src/core/watchlist.ts
+
+
+class watchlist_WatchlistFacade extends dispatcher_Dispatcher {
+    constructor(pusher) {
+        super(function (eventName, data) {
+            logger.debug(`No callbacks on watchlist events for ${eventName}`);
+        });
+        this.pusher = pusher;
+        this.bindWatchlistInternalEvent();
+    }
+    handleEvent(pusherEvent) {
+        pusherEvent.data.events.forEach(watchlistEvent => {
+            this.emit(watchlistEvent.name, watchlistEvent);
+        });
+    }
+    bindWatchlistInternalEvent() {
+        this.pusher.connection.bind('message', pusherEvent => {
+            var eventName = pusherEvent.event;
+            if (eventName === 'pusher_internal:watchlist_events') {
+                this.handleEvent(pusherEvent);
+            }
+        });
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/utils/flat_promise.ts
+function flatPromise() {
+    let resolve, reject;
+    const promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+    });
+    return { promise, resolve, reject };
+}
+/* harmony default export */ var flat_promise = (flatPromise);
+
+// CONCATENATED MODULE: ./src/core/user.ts
+
+
+
+
+
+class user_UserFacade extends dispatcher_Dispatcher {
+    constructor(pusher) {
+        super(function (eventName, data) {
+            logger.debug('No callbacks on user for ' + eventName);
+        });
+        this.signin_requested = false;
+        this.user_data = null;
+        this.serverToUserChannel = null;
+        this.signinDonePromise = null;
+        this._signinDoneResolve = null;
+        this._onAuthorize = (err, authData) => {
+            if (err) {
+                logger.warn(`Error during signin: ${err}`);
+                this._cleanup();
+                return;
+            }
+            this.pusher.send_event('pusher:signin', {
+                auth: authData.auth,
+                user_data: authData.user_data
+            });
+        };
+        this.pusher = pusher;
+        this.pusher.connection.bind('state_change', ({ previous, current }) => {
+            if (previous !== 'connected' && current === 'connected') {
+                this._signin();
+            }
+            if (previous === 'connected' && current !== 'connected') {
+                this._cleanup();
+                this._newSigninPromiseIfNeeded();
+            }
+        });
+        this.watchlist = new watchlist_WatchlistFacade(pusher);
+        this.pusher.connection.bind('message', event => {
+            var eventName = event.event;
+            if (eventName === 'pusher:signin_success') {
+                this._onSigninSuccess(event.data);
+            }
+            if (this.serverToUserChannel &&
+                this.serverToUserChannel.name === event.channel) {
+                this.serverToUserChannel.handleEvent(event);
+            }
+        });
+    }
+    signin() {
+        if (this.signin_requested) {
+            return;
+        }
+        this.signin_requested = true;
+        this._signin();
+    }
+    _signin() {
+        if (!this.signin_requested) {
+            return;
+        }
+        this._newSigninPromiseIfNeeded();
+        if (this.pusher.connection.state !== 'connected') {
+            return;
+        }
+        this.pusher.config.userAuthenticator({
+            socketId: this.pusher.connection.socket_id
+        }, this._onAuthorize);
+    }
+    _onSigninSuccess(data) {
+        try {
+            this.user_data = JSON.parse(data.user_data);
+        }
+        catch (e) {
+            logger.error(`Failed parsing user data after signin: ${data.user_data}`);
+            this._cleanup();
+            return;
+        }
+        if (typeof this.user_data.id !== 'string' || this.user_data.id === '') {
+            logger.error(`user_data doesn't contain an id. user_data: ${this.user_data}`);
+            this._cleanup();
+            return;
+        }
+        this._signinDoneResolve();
+        this._subscribeChannels();
+    }
+    _subscribeChannels() {
+        const ensure_subscribed = channel => {
+            if (channel.subscriptionPending && channel.subscriptionCancelled) {
+                channel.reinstateSubscription();
+            }
+            else if (!channel.subscriptionPending &&
+                this.pusher.connection.state === 'connected') {
+                channel.subscribe();
+            }
+        };
+        this.serverToUserChannel = new channel_Channel(`#server-to-user-${this.user_data.id}`, this.pusher);
+        this.serverToUserChannel.bind_global((eventName, data) => {
+            if (eventName.indexOf('pusher_internal:') === 0 ||
+                eventName.indexOf('pusher:') === 0) {
+                return;
+            }
+            this.emit(eventName, data);
+        });
+        ensure_subscribed(this.serverToUserChannel);
+    }
+    _cleanup() {
+        this.user_data = null;
+        if (this.serverToUserChannel) {
+            this.serverToUserChannel.unbind_all();
+            this.serverToUserChannel.disconnect();
+            this.serverToUserChannel = null;
+        }
+        if (this.signin_requested) {
+            this._signinDoneResolve();
+        }
+    }
+    _newSigninPromiseIfNeeded() {
+        if (!this.signin_requested) {
+            return;
+        }
+        if (this.signinDonePromise && !this.signinDonePromise.done) {
+            return;
+        }
+        const { promise, resolve, reject: _ } = flat_promise();
+        promise.done = false;
+        const setDone = () => {
+            promise.done = true;
+        };
+        promise.then(setDone).catch(setDone);
+        this.signinDonePromise = promise;
+        this._signinDoneResolve = resolve;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/pusher.ts
+
+
+
+
+
+
+
+
+
+
+
+
+
+class pusher_Pusher {
+    static ready() {
+        pusher_Pusher.isReady = true;
+        for (var i = 0, l = pusher_Pusher.instances.length; i < l; i++) {
+            pusher_Pusher.instances[i].connect();
+        }
+    }
+    static getClientFeatures() {
+        return keys(filterObject({ ws: runtime.Transports.ws }, function (t) {
+            return t.isSupported({});
+        }));
+    }
+    constructor(app_key, options) {
+        checkAppKey(app_key);
+        validateOptions(options);
+        this.key = app_key;
+        this.options = options;
+        this.config = getConfig(this.options, this);
+        this.channels = factory.createChannels();
+        this.global_emitter = new dispatcher_Dispatcher();
+        this.sessionID = runtime.randomInt(1000000000);
+        this.timeline = new timeline_Timeline(this.key, this.sessionID, {
+            cluster: this.config.cluster,
+            features: pusher_Pusher.getClientFeatures(),
+            params: this.config.timelineParams || {},
+            limit: 50,
+            level: timeline_level.INFO,
+            version: defaults.VERSION
+        });
+        if (this.config.enableStats) {
+            this.timelineSender = factory.createTimelineSender(this.timeline, {
+                host: this.config.statsHost,
+                path: '/timeline/v2/' + runtime.TimelineTransport.name
+            });
+        }
+        var getStrategy = (options) => {
+            return runtime.getDefaultStrategy(this.config, options, strategy_builder_defineTransport);
+        };
+        this.connection = factory.createConnectionManager(this.key, {
+            getStrategy: getStrategy,
+            timeline: this.timeline,
+            activityTimeout: this.config.activityTimeout,
+            pongTimeout: this.config.pongTimeout,
+            unavailableTimeout: this.config.unavailableTimeout,
+            useTLS: Boolean(this.config.useTLS)
+        });
+        this.connection.bind('connected', () => {
+            this.subscribeAll();
+            if (this.timelineSender) {
+                this.timelineSender.send(this.connection.isUsingTLS());
+            }
+        });
+        this.connection.bind('message', event => {
+            var eventName = event.event;
+            var internal = eventName.indexOf('pusher_internal:') === 0;
+            if (event.channel) {
+                var channel = this.channel(event.channel);
+                if (channel) {
+                    channel.handleEvent(event);
+                }
+            }
+            if (!internal) {
+                this.global_emitter.emit(event.event, event.data);
+            }
+        });
+        this.connection.bind('connecting', () => {
+            this.channels.disconnect();
+        });
+        this.connection.bind('disconnected', () => {
+            this.channels.disconnect();
+        });
+        this.connection.bind('error', err => {
+            logger.warn(err);
+        });
+        pusher_Pusher.instances.push(this);
+        this.timeline.info({ instances: pusher_Pusher.instances.length });
+        this.user = new user_UserFacade(this);
+        if (pusher_Pusher.isReady) {
+            this.connect();
+        }
+    }
+    switchCluster(options) {
+        const { appKey, cluster } = options;
+        this.key = appKey;
+        this.options = Object.assign(Object.assign({}, this.options), { cluster });
+        this.config = getConfig(this.options, this);
+        this.connection.switchCluster(this.key);
+    }
+    channel(name) {
+        return this.channels.find(name);
+    }
+    allChannels() {
+        return this.channels.all();
+    }
+    connect() {
+        this.connection.connect();
+        if (this.timelineSender) {
+            if (!this.timelineSenderTimer) {
+                var usingTLS = this.connection.isUsingTLS();
+                var timelineSender = this.timelineSender;
+                this.timelineSenderTimer = new timers_PeriodicTimer(60000, function () {
+                    timelineSender.send(usingTLS);
+                });
+            }
+        }
+    }
+    disconnect() {
+        this.connection.disconnect();
+        if (this.timelineSenderTimer) {
+            this.timelineSenderTimer.ensureAborted();
+            this.timelineSenderTimer = null;
+        }
+    }
+    bind(event_name, callback, context) {
+        this.global_emitter.bind(event_name, callback, context);
+        return this;
+    }
+    unbind(event_name, callback, context) {
+        this.global_emitter.unbind(event_name, callback, context);
+        return this;
+    }
+    bind_global(callback) {
+        this.global_emitter.bind_global(callback);
+        return this;
+    }
+    unbind_global(callback) {
+        this.global_emitter.unbind_global(callback);
+        return this;
+    }
+    unbind_all(callback) {
+        this.global_emitter.unbind_all();
+        return this;
+    }
+    subscribeAll() {
+        var channelName;
+        for (channelName in this.channels.channels) {
+            if (this.channels.channels.hasOwnProperty(channelName)) {
+                this.subscribe(channelName);
+            }
+        }
+    }
+    subscribe(channel_name) {
+        var channel = this.channels.add(channel_name, this);
+        if (channel.subscriptionPending && channel.subscriptionCancelled) {
+            channel.reinstateSubscription();
+        }
+        else if (!channel.subscriptionPending &&
+            this.connection.state === 'connected') {
+            channel.subscribe();
+        }
+        return channel;
+    }
+    unsubscribe(channel_name) {
+        var channel = this.channels.find(channel_name);
+        if (channel && channel.subscriptionPending) {
+            channel.cancelSubscription();
+        }
+        else {
+            channel = this.channels.remove(channel_name);
+            if (channel && channel.subscribed) {
+                channel.unsubscribe();
+            }
+        }
+    }
+    send_event(event_name, data, channel) {
+        return this.connection.send_event(event_name, data, channel);
+    }
+    shouldUseTLS() {
+        return this.config.useTLS;
+    }
+    signin() {
+        this.user.signin();
+    }
+}
+pusher_Pusher.instances = [];
+pusher_Pusher.isReady = false;
+pusher_Pusher.logToConsole = false;
+pusher_Pusher.Runtime = runtime;
+pusher_Pusher.ScriptReceivers = runtime.ScriptReceivers;
+pusher_Pusher.DependenciesReceivers = runtime.DependenciesReceivers;
+pusher_Pusher.auth_callbacks = runtime.auth_callbacks;
+/* harmony default export */ var core_pusher = __nested_webpack_exports__["default"] = (pusher_Pusher);
+function checkAppKey(key) {
+    if (key === null || key === undefined) {
+        throw 'You must pass your app key when you instantiate Pusher.';
+    }
+}
+runtime.setup(pusher_Pusher);
+
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=pusher.js.map
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/app": 0,
+/******/ 			"css/app": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;
